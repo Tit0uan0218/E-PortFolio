@@ -792,6 +792,260 @@
 
         /* make the AC container use Bootstrap gutters only so 3 cards fit per row */
         #acContainer { gap: 0; }
+
+        @media (min-width: 992px) {
+            .col-lg-2-4 {
+                flex: 0 0 auto;
+                width: 20%;
+            }
+        }
+
+        .dashboard-card {
+            border-radius:18px;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-stat-card {
+            background: rgba(15,23,42,0.02);
+            border: 1px solid rgba(15,23,42,0.06);
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* CV Fullscreen Overlay */
+        .cv-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .cv-overlay-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: none;
+            border: 0;
+            color: #fff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 10000;
+            transition: color 0.2s ease;
+        }
+        .cv-overlay-close-btn:hover {
+            color: #38bdf8;
+        }
+        .cv-overlay-content {
+            width: 100%;
+            height: 100%;
+            max-width: 1000px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .cv-overlay-content object {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #f8fafc;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode h4,
+        body.dark-mode h5,
+        body.dark-mode h6,
+        body.dark-mode .navbar-brand {
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode p,
+        body.dark-mode span,
+        body.dark-mode li,
+        body.dark-mode label,
+        body.dark-mode td,
+        body.dark-mode th {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .text-muted,
+        body.dark-mode .card-text.text-muted,
+        body.dark-mode small.text-muted {
+            color: #94a3b8 !important;
+        }
+
+        /* Navbar in Dark Mode */
+        body.dark-mode .navbar {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .navbar .nav-link,
+        body.dark-mode .navbar .dropdown-toggle {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .navbar .nav-link:hover,
+        body.dark-mode .navbar .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .navbar .dropdown-menu {
+            background-color: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .navbar .dropdown-item {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .navbar .dropdown-item:hover {
+            background-color: #334155 !important;
+            color: #ffffff !important;
+        }
+
+        /* Cards and Sections in Dark Mode */
+        body.dark-mode .card,
+        body.dark-mode .list-group-item {
+            background-color: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        body.dark-mode .card.h-100.shadow-sm {
+            background-color: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.dark-mode .accordion-item {
+            background-color: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.dark-mode .accordion-button {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .accordion-button:not(.collapsed) {
+            background-color: #334155 !important;
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .accordion-button::after {
+            filter: invert(1);
+        }
+
+        /* Intro cards */
+        body.dark-mode .intro-mini-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.dark-mode .intro-map-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.dark-mode .intro-map-links {
+            background: rgba(30, 41, 59, 0.9) !important;
+        }
+
+        /* Forms in Dark Mode */
+        body.dark-mode .form-control {
+            background-color: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .form-control:focus {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.05) !important;
+        }
+
+        /* Filters */
+        body.dark-mode #acFilters .btn-outline-dark,
+        body.dark-mode #acFilters3 .btn-outline-dark {
+            color: #cbd5e1 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body.dark-mode #acFilters .btn-outline-dark:hover,
+        body.dark-mode #acFilters .btn-outline-dark.active,
+        body.dark-mode #acFilters3 .btn-outline-dark:hover,
+        body.dark-mode #acFilters3 .btn-outline-dark.active {
+            background-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        /* Resource inside card containers */
+        body.dark-mode .card-body div[style*="background: rgba(15, 23, 42, 0.02)"] {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Footers in Dark Mode */
+        body.dark-mode footer {
+            background: #0f172a !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.dark-mode footer p {
+            color: #94a3b8 !important;
+        }
+
+        /* Dashboard specific Dark Mode overrides */
+        body.dark-mode .dashboard-card {
+            border-color: rgba(255,255,255,0.08);
+            background: rgba(30, 41, 59, 0.7);
+        }
+
+        body.dark-mode .dashboard-stat-card {
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark-mode .circle-bg {
+            stroke: rgba(255,255,255,0.1) !important;
+        }
+
+        body.dark-mode .dashboard-chart-text {
+            fill: #ffffff !important;
+        }
+
+        body.dark-mode .btn-outline-secondary {
+            color: #cbd5e1;
+            border-color: #cbd5e1;
+        }
+        body.dark-mode .btn-outline-secondary:hover {
+            background-color: #cbd5e1;
+            color: #1e293b;
+        }
     </style>
 </head>
 <body>
@@ -816,6 +1070,9 @@
                     <li class="nav-item"><a class="nav-link" href="#cv" data-nav-page="cv" data-en="Resume">CV</a></li>
                 </ul>
                 <button id="translateBtn" class="btn btn-outline-primary ms-2" type="button" data-en="Translate to French">Traduire en Anglais</button>
+                <button id="themeToggleBtn" class="btn btn-outline-secondary ms-2" type="button" aria-label="Theme toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -1009,6 +1266,9 @@
                 <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" class="btn btn-brand" download>
                     <i class="fas fa-download me-2"></i> <span data-en="Download PDF">Télécharger en PDF</span>
                 </a>
+                <button id="cvFullscreenBtn" class="btn btn-outline-brand ms-2" type="button">
+                    <i class="fas fa-expand me-2"></i> <span data-en="Fullscreen">Plein écran</span>
+                </button>
             </div>
 
             <div class="pdf-preview">
@@ -1129,6 +1389,7 @@
                     <!-- BUT RT2 Content -->
                     <div class="tab-pane fade show active" id="content-rt2" role="tabpanel">
                         <div class="p-3">
+                            <div id="acDashboard2" class="mb-4"></div>
                             <div id="acFilters" class="text-center mb-4"></div>
                             <div id="acContainer" class="row g-4" style="width:100%; margin:0; --gap:1.5rem;"></div>
                         </div>
@@ -1142,6 +1403,7 @@
                     <!-- BUT RT3 Content -->
                     <div class="tab-pane fade" id="content-rt3" role="tabpanel">
                         <div class="p-3">
+                            <div id="acDashboard3" class="mb-4"></div>
                             <div id="acFilters3" class="text-center mb-4"></div>
                             <div id="acContainer3" class="row g-4" style="width:100%; margin:0; --gap:1.5rem;"></div>
                         </div>
@@ -1377,6 +1639,10 @@
         const sections = pageIds.map((id) => document.getElementById(id));
         const scrollBtn = document.getElementById("scrollToTopBtn");
         const translateBtn = document.getElementById("translateBtn");
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+        const cvFullscreenBtn = document.getElementById("cvFullscreenBtn");
+        const cvOverlay = document.getElementById("cvOverlay");
+        const closeCvOverlay = document.getElementById("closeCvOverlay");
         let isFrench = true;
         let isInitialized = false;
 
@@ -1503,6 +1769,56 @@
         translateBtn.addEventListener("click", () => {
             isFrench = !isFrench;
             updateLanguageUI();
+        });
+
+        // Dark Mode Logic
+        themeToggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            updateThemeIcon();
+        });
+
+        function updateThemeIcon() {
+            const isDark = document.body.classList.contains("dark-mode");
+            const icon = themeToggleBtn.querySelector("i");
+            if (icon) {
+                if (isDark) {
+                    icon.className = "fas fa-sun";
+                } else {
+                    icon.className = "fas fa-moon";
+                }
+            }
+        }
+
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+        updateThemeIcon();
+
+        // CV Overlay Logic
+        cvFullscreenBtn.addEventListener("click", () => {
+            cvOverlay.style.display = "flex";
+            document.body.style.overflow = "hidden"; // disable background scrolling
+        });
+
+        function hideCvOverlay() {
+            cvOverlay.style.display = "none";
+            document.body.style.overflow = ""; // restore scrolling
+        }
+
+        closeCvOverlay.addEventListener("click", hideCvOverlay);
+        cvOverlay.addEventListener("click", (e) => {
+            if (e.target === cvOverlay) {
+                hideCvOverlay();
+            }
+        });
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && cvOverlay.style.display === "flex") {
+                hideCvOverlay();
+            }
         });
 
         updateLanguageUI();
@@ -2066,6 +2382,10 @@
         // show ALL by default
         let currentFilterRT2 = 'ALL';
         let currentFilterRT3 = 'ALL';
+        let searchTextRT2 = '';
+        let searchTextRT3 = '';
+        let selectedLevelRT2 = 'ALL';
+        let selectedLevelRT3 = 'ALL';
 
         function setFilter(comp, year) {
             if (year === 'rt2') {
@@ -2076,18 +2396,40 @@
             renderAcSection(year);
         }
 
-        function renderAcSection(year) {
-            const containerId = year === 'rt2' ? 'acContainer' : 'acContainer3';
-            const filtersElId = year === 'rt2' ? 'acFilters' : 'acFilters3';
-            const container = document.getElementById(containerId);
-            const filtersEl = document.getElementById(filtersElId);
-            if (!container || !filtersEl) return;
+        function renderDashboard(year) {
+            const dashboardElId = year === 'rt2' ? 'acDashboard2' : 'acDashboard3';
+            const dashboardEl = document.getElementById(dashboardElId);
+            if (!dashboardEl) return;
 
             const itemsList = year === 'rt2' ? acItemsRT2 : acItemsRT3;
             const strongCodes = year === 'rt2' ? strongAcCodesRT2 : strongAcCodesRT3;
-            const currentFilter = year === 'rt2' ? currentFilterRT2 : currentFilterRT3;
 
-            // color map per competence (visible-light / custom rainbow: rose -> violet -> bleu -> vert -> jaune)
+            if (!itemsList || !itemsList.length) {
+                dashboardEl.innerHTML = '';
+                return;
+            }
+
+            // Stats computations
+            const totalAc = itemsList.length;
+            const strongCount = strongCodes.size;
+            
+            let sumLevels = 0;
+            itemsList.forEach(item => {
+                sumLevels += avg(item.levels);
+            });
+            const avgLevel = totalAc > 0 ? (sumLevels / totalAc).toFixed(1) : '0.0';
+
+            // Group by competence to calculate competence-specific progress
+            const comps = {};
+            itemsList.forEach(item => {
+                if (!comps[item.competence]) {
+                    comps[item.competence] = { count: 0, sumLvl: 0 };
+                }
+                comps[item.competence].count++;
+                comps[item.competence].sumLvl += avg(item.levels);
+            });
+
+            // Color map per competence
             const colorMap = {
                 'RT1': '#FF2D95',  // rose
                 'RT2': '#8E44AD',  // violet
@@ -2097,14 +2439,89 @@
                 'DEFAULT': '#6c757d'
             };
 
-            // Group by competence
+            // HTML building
+            let html = `
+                <div class="dashboard-card shadow-sm">
+                    <h4 class="mb-4" style="font-weight:700; display:flex; align-items:center; gap:8px;">
+                        📊 ${isFrench ? 'Tableau de bord de progression' : 'Progression Dashboard'}
+                    </h4>
+                    <div class="row g-3 mb-4">
+                        <!-- Stat 1 -->
+                        <div class="col-12 col-sm-4 text-center border-end">
+                            <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
+                                ${isFrench ? 'Apprentissages Critiques' : 'Learning Outcomes'}
+                            </div>
+                            <div style="font-size:1.8rem; font-weight:800; color:#007AFF;">${totalAc}</div>
+                        </div>
+                        <!-- Stat 2 -->
+                        <div class="col-12 col-sm-4 text-center border-end">
+                            <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
+                                ${isFrench ? 'Niveau Moyen' : 'Average Level'}
+                            </div>
+                            <div style="font-size:1.8rem; font-weight:800; color:#34C759;">${avgLevel} <span class="text-muted" style="font-size:1rem; font-weight:500;">/ 4</span></div>
+                        </div>
+                        <!-- Stat 3 -->
+                        <div class="col-12 col-sm-4 text-center">
+                            <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
+                                ${isFrench ? 'Compétences Fortes' : 'Strong Competencies'}
+                            </div>
+                            <div style="font-size:1.8rem; font-weight:800; color:#FF9500;">${strongCount}</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 justify-content-center">
+            `;
+
+            // Competence stats cards
+            const sortedComps = Object.keys(comps).sort();
+            sortedComps.forEach(comp => {
+                const compColor = colorMap[comp] || colorMap.DEFAULT;
+                const compData = comps[comp];
+                const pct = Math.round(((compData.sumLvl / compData.count) / 4) * 100);
+
+                html += `
+                    <div class="col-6 col-md-4 col-lg-2-4 text-center">
+                        <div class="dashboard-stat-card shadow-sm">
+                            <span class="badge" style="background:${compColor}; color:#fff; font-weight:700; font-size:0.85rem; padding:4px 8px; border-radius:10px;">${comp}</span>
+                            
+                            <svg width="60" height="60" viewBox="0 0 36 36" class="circular-chart mt-2 mb-2">
+                                <path stroke="#e2e8f0" stroke-width="3.5" fill="none" class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path stroke="${compColor}" stroke-dasharray="${pct}, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <text x="18" y="21" font-size="8.5" font-family="'Segoe UI', sans-serif" font-weight="800" text-anchor="middle" class="dashboard-chart-text" fill="#1e293b">${pct}%</text>
+                            </svg>
+                            
+                            <div class="small text-muted">${compData.count} AC</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            dashboardEl.innerHTML = html;
+        }
+
+        function renderAcSection(year) {
+            const filtersElId = year === 'rt2' ? 'acFilters' : 'acFilters3';
+            const filtersEl = document.getElementById(filtersElId);
+            if (!filtersEl) return;
+
+            // Render Dashboard
+            renderDashboard(year);
+
+            const itemsList = year === 'rt2' ? acItemsRT2 : acItemsRT3;
+            const currentFilter = year === 'rt2' ? currentFilterRT2 : currentFilterRT3;
+            const activeLevel = year === 'rt2' ? selectedLevelRT2 : selectedLevelRT3;
+
+            // Group by competence to find available keys
             const groups = itemsList.reduce((acc, item) => {
                 if (!acc[item.competence]) acc[item.competence] = [];
                 acc[item.competence].push(item);
                 return acc;
             }, {});
 
-            // preferred order: RT1, RT2, RT3, ROM1, ROM2, then others alphabetically
             const preferred = ['RT1','RT2','RT3','ROM1','ROM2'];
             const competenceKeys = Object.keys(groups).sort((a,b) => {
                 const ia = preferred.indexOf(a) >= 0 ? preferred.indexOf(a) : preferred.length + a.localeCompare(b);
@@ -2114,29 +2531,35 @@
 
             // Render filters: Tout montrer + Sélection de mes compétences fortes + competences
             filtersEl.innerHTML = '';
+            
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'text-center mb-2';
+
             const allBtn = document.createElement('button');
-            allBtn.className = `btn btn-sm btn-outline-dark me-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
+            allBtn.className = `btn btn-sm btn-outline-dark me-2 mb-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
             allBtn.textContent = isFrench ? 'Tout montrer' : 'Show All';
             allBtn.onclick = () => setFilter('ALL', year);
-            filtersEl.appendChild(allBtn);
+            buttonsContainer.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
-            strongBtn.className = `btn btn-sm btn-outline-success me-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
+            strongBtn.className = `btn btn-sm btn-outline-success me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
             strongBtn.textContent = isFrench ? 'Compétences fortes' : 'Strong Skills';
             strongBtn.onclick = () => setFilter('STRONG', year);
-            filtersEl.appendChild(strongBtn);
+            buttonsContainer.appendChild(strongBtn);
 
             competenceKeys.forEach(k => {
                 const b = document.createElement('button');
-                b.className = `btn btn-sm btn-outline-secondary me-2 ${currentFilter === k ? 'active' : ''}`;
+                b.className = `btn btn-sm btn-outline-secondary me-2 mb-2 ${currentFilter === k ? 'active' : ''}`;
                 b.textContent = k;
                 b.onclick = () => setFilter(k, year);
-                filtersEl.appendChild(b);
+                buttonsContainer.appendChild(b);
             });
+            
+            filtersEl.appendChild(buttonsContainer);
 
             if (currentFilter === 'STRONG') {
                 const strongNote = document.createElement('div');
-                strongNote.className = 'mt-3 text-center text-muted small';
+                strongNote.className = 'mt-1 mb-2 text-center text-muted small';
                 if (isFrench) {
                     strongNote.textContent = year === 'rt2' 
                         ? 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.'
@@ -2149,22 +2572,156 @@
                 filtersEl.appendChild(strongNote);
             }
 
-            // Render cards
-            container.innerHTML = '';
+            // Render Search and Level filter below competence buttons
+            const searchContainer = document.createElement('div');
+            searchContainer.className = 'row g-2 justify-content-center align-items-center mt-3 mb-2';
+            searchContainer.style.maxWidth = '700px';
+            searchContainer.style.margin = '0 auto';
+
+            const searchCol = document.createElement('div');
+            searchCol.className = 'col-12 col-md-7';
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.className = 'form-control shadow-sm';
+            searchInput.placeholder = isFrench 
+                ? '🔍 Rechercher (mot-clé, code, ressource)...' 
+                : '🔍 Search (keyword, code, resource)...';
+            searchInput.value = year === 'rt2' ? searchTextRT2 : searchTextRT3;
+            searchInput.style.borderRadius = '999px';
+            searchInput.style.paddingLeft = '1.25rem';
+            
+            searchInput.oninput = (e) => {
+                if (year === 'rt2') {
+                    searchTextRT2 = e.target.value;
+                } else {
+                    searchTextRT3 = e.target.value;
+                }
+                renderAcCardsOnly(year);
+            };
+            searchCol.appendChild(searchInput);
+
+            const levelCol = document.createElement('div');
+            levelCol.className = 'col-12 col-sm-6 col-md-5';
+            const levelSelect = document.createElement('select');
+            levelSelect.className = 'form-select shadow-sm';
+            levelSelect.style.borderRadius = '999px';
+            levelSelect.style.paddingLeft = '1.25rem';
+            
+            const levelOptions = [
+                { value: 'ALL', fr: '🎯 Tous les niveaux', en: '🎯 All levels' },
+                { value: '1', fr: '⭐ Niveau 1 / 4', en: '⭐ Level 1 / 4' },
+                { value: '2', fr: '⭐⭐ Niveau 2 / 4', en: '⭐⭐ Level 2 / 4' },
+                { value: '3', fr: '⭐⭐⭐ Niveau 3 / 4', en: '⭐⭐⭐ Level 3 / 4' },
+                { value: '4', fr: '👑 Niveau 4 / 4', en: '👑 Level 4 / 4' }
+            ];
+            
+            levelOptions.forEach(opt => {
+                const o = document.createElement('option');
+                o.value = opt.value;
+                o.textContent = isFrench ? opt.fr : opt.en;
+                if (opt.value === activeLevel) o.selected = true;
+                levelSelect.appendChild(o);
+            });
+            
+            levelSelect.onchange = (e) => {
+                if (year === 'rt2') {
+                    selectedLevelRT2 = e.target.value;
+                } else {
+                    selectedLevelRT3 = e.target.value;
+                }
+                renderAcSection(year);
+            };
+            levelCol.appendChild(levelSelect);
+
+            searchContainer.appendChild(searchCol);
+            searchContainer.appendChild(levelCol);
+            filtersEl.appendChild(searchContainer);
+
+            // Render cards container
+            renderAcCardsOnly(year);
+        }
+
+        function renderAcCardsOnly(year) {
+            const containerId = year === 'rt2' ? 'acContainer' : 'acContainer3';
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const itemsList = year === 'rt2' ? acItemsRT2 : acItemsRT3;
+            const strongCodes = year === 'rt2' ? strongAcCodesRT2 : strongAcCodesRT3;
+            const currentFilter = year === 'rt2' ? currentFilterRT2 : currentFilterRT3;
+            const activeLevel = year === 'rt2' ? selectedLevelRT2 : selectedLevelRT3;
+            const searchStr = (year === 'rt2' ? searchTextRT2 : searchTextRT3).toLowerCase().trim();
+
+            const colorMap = {
+                'RT1': '#FF2D95',  // rose
+                'RT2': '#8E44AD',  // violet
+                'RT3': '#007AFF',  // bleu
+                'ROM1': '#5AC8FA',  // bleu clair
+                'ROM2': '#34C759',  // vert
+                'DEFAULT': '#6c757d'
+            };
 
             function isStrong(item) {
                 return !!item && strongCodes.has(item.code);
             }
 
+            // Filter the items list
+            let filteredItems = itemsList.slice();
+
+            // Competence / Strong filters
+            if (currentFilter === 'STRONG') {
+                filteredItems = filteredItems.filter(isStrong);
+            } else if (currentFilter !== 'ALL') {
+                filteredItems = filteredItems.filter(item => item.competence === currentFilter);
+            }
+
+            // Level filter
+            if (activeLevel !== 'ALL') {
+                const targetLvl = parseInt(activeLevel, 10);
+                filteredItems = filteredItems.filter(item => {
+                    const avgLvl = avg(item.levels);
+                    return Math.round(avgLvl) === targetLvl;
+                });
+            }
+
+            // Search filter
+            if (searchStr) {
+                filteredItems = filteredItems.filter(item => {
+                    const inCode = item.code.toLowerCase().includes(searchStr);
+                    const inTitle = item.title.toLowerCase().includes(searchStr);
+                    const inDesc = item.description ? item.description.toLowerCase().includes(searchStr) : false;
+                    const inResources = item.resources ? item.resources.some(r => {
+                        const rLabel = String(r).toLowerCase();
+                        const gloss = resourceGlossary[r];
+                        if (!gloss) return rLabel.includes(searchStr);
+                        if (typeof gloss === 'object') {
+                            return rLabel.includes(searchStr) || gloss.fr.toLowerCase().includes(searchStr) || gloss.en.toLowerCase().includes(searchStr);
+                        }
+                        return rLabel.includes(searchStr) || gloss.toLowerCase().includes(searchStr);
+                    }) : false;
+                    return inCode || inTitle || inDesc || inResources;
+                });
+            }
+
+            // Clear cards container
+            container.innerHTML = '';
+
+            // Group filtered items by competence
+            const groups = filteredItems.reduce((acc, item) => {
+                if (!acc[item.competence]) acc[item.competence] = [];
+                acc[item.competence].push(item);
+                return acc;
+            }, {});
+
+            const preferred = ['RT1','RT2','RT3','ROM1','ROM2'];
+            const competenceKeys = Object.keys(groups).sort((a,b) => {
+                const ia = preferred.indexOf(a) >= 0 ? preferred.indexOf(a) : preferred.length + a.localeCompare(b);
+                const ib = preferred.indexOf(b) >= 0 ? preferred.indexOf(b) : preferred.length + b.localeCompare(a);
+                return ia - ib;
+            });
+
             competenceKeys.forEach(comp => {
                 let items = groups[comp].slice().sort((a, b) => a.code.localeCompare(b.code));
-                if (currentFilter === 'STRONG') {
-                    items = items.filter(isStrong);
-                } else if (currentFilter !== 'ALL' && currentFilter !== comp) {
-                    return;
-                }
-
-                if (!items.length) return;
 
                 const headerRow = document.createElement('div');
                 headerRow.className = 'col-12';
@@ -2182,7 +2739,7 @@
                 const displayLevelPrefix = isFrench ? 'Niveau' : 'Level';
 
                 headerRow.innerHTML = `
-                    <div style="border-left:4px solid ${colorMap[comp] || colorMap.DEFAULT}; padding-left:12px; margin-bottom:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+                    <div style="border-left:4px solid ${colorMap[comp] || colorMap.DEFAULT}; padding-left:12px; margin-bottom:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-top: 1.5rem;">
                         <div style="min-width:0; flex:1 1 auto;">
                             <h3 style="margin:0 0 0.25rem 0; font-weight:700;">${comp} - ${displayTitle}</h3>
                             <p class="text-muted" style="margin:0;">${displayLevelPrefix} ${levelDisplay} - ${displayDesc}</p>
@@ -2283,6 +2840,15 @@
         isInitialized = true;
     })();
 </script>
+<!-- CV Fullscreen Overlay -->
+<div id="cvOverlay" class="cv-overlay" style="display:none;">
+    <button id="closeCvOverlay" class="cv-overlay-close-btn" aria-label="Close fullscreen CV">&times;</button>
+    <div class="cv-overlay-content">
+        <object data="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf#page=1&view=FitH" type="application/pdf" aria-label="CV Titouan FLOCH Fullscreen">
+            <p style="padding:1rem; color:#fff;">Votre navigateur ne peut pas afficher les PDF en ligne. Vous pouvez télécharger le CV <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" download style="color:#38bdf8;">ici</a>.</p>
+        </object>
+    </div>
+</div>
 </body>
 </html>
 
