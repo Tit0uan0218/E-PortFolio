@@ -2104,65 +2104,63 @@
             window.gvizSyncSuccessRT2 = false;
             window.gvizSyncSuccessRT3 = false;
 
-            // --- TIER 1: Sync via Direct CSV (CORS-free, Public, Real-time) ---
-            console.log("Attempting synchronization via Direct CORS-free CSV...");
-            const csvSuccessRT2 = await fetchCsvData('808860009', 'rt2');
-            if (csvSuccessRT2) {
-                window.csvSyncSuccessRT2 = true;
-            }
-            const csvSuccessRT3 = await fetchCsvData('1897392063', 'rt3');
-            if (csvSuccessRT3) {
-                window.csvSyncSuccessRT3 = true;
-            }
+            // --- TIER 1: Sync via CORS-free JSONP (GViz - Real-time, instant for logged-in user or public sheets) ---
+            console.log("Attempting real-time GViz JSONP synchronization...");
+            let scriptRT2 = document.createElement("script");
+            scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
+            scriptRT2.onload = () => {
+                try { document.body.removeChild(scriptRT2); } catch (e) {}
+            };
+            scriptRT2.onerror = () => {
+                try { document.body.removeChild(scriptRT2); } catch (e) {}
+            };
+            document.body.appendChild(scriptRT2);
 
-            // --- TIER 2: Sync via CORS-free JSONP (GViz) ---
-            const needsGvizRT2 = !window.csvSyncSuccessRT2;
-            const needsGvizRT3 = !window.csvSyncSuccessRT3;
+            let scriptRT3 = document.createElement("script");
+            scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
+            scriptRT3.onload = () => {
+                try { document.body.removeChild(scriptRT3); } catch (e) {}
+            };
+            scriptRT3.onerror = () => {
+                try { document.body.removeChild(scriptRT3); } catch (e) {}
+            };
+            document.body.appendChild(scriptRT3);
 
-            if (needsGvizRT2 || needsGvizRT3) {
-                console.log("CSV Direct failed or was incomplete. Attempting real-time GViz JSONP...");
-                let scriptRT2, scriptRT3;
-                if (needsGvizRT2) {
-                    scriptRT2 = document.createElement("script");
-                    scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
-                    scriptRT2.onload = () => {
-                        try { document.body.removeChild(scriptRT2); } catch (e) {}
-                    };
-                    scriptRT2.onerror = () => {
-                        try { document.body.removeChild(scriptRT2); } catch (e) {}
-                    };
-                    document.body.appendChild(scriptRT2);
+            // Wait up to 1.5 seconds for JSONP scripts to load, or resolve immediately if both succeed early
+            await new Promise((resolve) => {
+                const startTime = Date.now();
+                const checkInterval = setInterval(() => {
+                    const rt2Finished = window.gvizSyncSuccessRT2 || !scriptRT2 || !document.body.contains(scriptRT2);
+                    const rt3Finished = window.gvizSyncSuccessRT3 || !scriptRT3 || !document.body.contains(scriptRT3);
+                    if ((rt2Finished && rt3Finished) || (Date.now() - startTime >= 1500)) {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }
+                }, 50);
+            });
+
+            // --- TIER 2: Sync via Direct CSV (CORS-free, Public, Fallback with 5-min cache) ---
+            const needsCsvRT2 = !window.gvizSyncSuccessRT2;
+            const needsCsvRT3 = !window.gvizSyncSuccessRT3;
+
+            if (needsCsvRT2) {
+                console.log("GViz failed or timed out for RT2. Attempting Direct CSV...");
+                const csvSuccessRT2 = await fetchCsvData('808860009', 'rt2');
+                if (csvSuccessRT2) {
+                    window.csvSyncSuccessRT2 = true;
                 }
-
-                if (needsGvizRT3) {
-                    scriptRT3 = document.createElement("script");
-                    scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
-                    scriptRT3.onload = () => {
-                        try { document.body.removeChild(scriptRT3); } catch (e) {}
-                    };
-                    scriptRT3.onerror = () => {
-                        try { document.body.removeChild(scriptRT3); } catch (e) {}
-                    };
-                    document.body.appendChild(scriptRT3);
+            }
+            if (needsCsvRT3) {
+                console.log("GViz failed or timed out for RT3. Attempting Direct CSV...");
+                const csvSuccessRT3 = await fetchCsvData('1897392063', 'rt3');
+                if (csvSuccessRT3) {
+                    window.csvSyncSuccessRT3 = true;
                 }
-
-                // Wait up to 1.5 seconds for JSONP scripts to load, or resolve immediately if both succeed early
-                await new Promise((resolve) => {
-                    const startTime = Date.now();
-                    const checkInterval = setInterval(() => {
-                        const rt2Finished = window.gvizSyncSuccessRT2 || !scriptRT2 || !document.body.contains(scriptRT2);
-                        const rt3Finished = window.gvizSyncSuccessRT3 || !scriptRT3 || !document.body.contains(scriptRT3);
-                        if ((rt2Finished && rt3Finished) || (Date.now() - startTime >= 1500)) {
-                            clearInterval(checkInterval);
-                            resolve();
-                        }
-                    }, 50);
-                });
             }
 
-            // --- TIER 3: Sync via HTML CORS Proxy (Fallback if GViz and CSV failed) ---
-            const needsHtmlRT2 = !window.csvSyncSuccessRT2 && !window.gvizSyncSuccessRT2;
-            const needsHtmlRT3 = !window.csvSyncSuccessRT3 && !window.gvizSyncSuccessRT3;
+            // --- TIER 3: Sync via HTML CORS Proxy (Fallback if GViz and CSV both failed) ---
+            const needsHtmlRT2 = !window.gvizSyncSuccessRT2 && !window.csvSyncSuccessRT2;
+            const needsHtmlRT3 = !window.gvizSyncSuccessRT3 && !window.csvSyncSuccessRT3;
 
             if (needsHtmlRT2) {
                 console.log("GViz and CSV failed or timed out for RT2. Falling back to HTML CORS Proxy...");
