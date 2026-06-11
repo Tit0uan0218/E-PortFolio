@@ -2879,6 +2879,13 @@
                 currentFilterRT3 = comp;
             }
             renderAcSection(year);
+            const filtersElId = year === 'rt2' ? 'acFilters' : 'acFilters3';
+            const filtersEl = document.getElementById(filtersElId);
+            if (filtersEl) {
+                // Adjust scroll position to account for sticky navbar (approx 80px)
+                const y = filtersEl.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }
         }
 
         function renderDashboard(year) {
@@ -2977,7 +2984,7 @@
 
                 html += `
                     <div class="col-6 col-md-4 col-lg-2-4 text-center">
-                        <div class="dashboard-stat-card shadow-sm">
+                        <div class="dashboard-stat-card shadow-sm" style="cursor: pointer; transition: transform 0.2s;" onclick="setFilter('${comp}', '${year}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                             <span class="badge" style="background:${compColor}; color:#fff; font-weight:700; font-size:0.85rem; padding:4px 8px; border-radius:10px;">${comp}</span>
                             
                             <svg width="60" height="60" viewBox="0 0 36 36" class="circular-chart mt-2 mb-2">
