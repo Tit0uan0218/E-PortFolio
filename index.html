@@ -533,25 +533,23 @@
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
             border: 1px solid rgba(200,200,200,0.25);
+            aspect-ratio: 1 / 1.4142; /* A4 aspect ratio */
+            position: relative;
+            width: 100%;
+            overflow: hidden;
         }
 
         #cv .pdf-preview object,
         #cv .pdf-preview iframe,
         #cv .pdf-preview embed {
-            width: 100%;
-            height: 1120px; /* large enough to display a single A4 page without inner scroll */
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
             border: none;
             display: block;
             background: #ffffff;
-        }
-
-        /* on smaller screens, scale down the height so it fits better */
-        @media (max-width: 767.98px) {
-            #cv .pdf-preview object,
-            #cv .pdf-preview iframe,
-            #cv .pdf-preview embed {
-                height: 720px;
-            }
         }
 
         #portfolio .accordion,
@@ -820,51 +818,6 @@
             justify-content: center;
             height: 100%;
         }
-
-        /* CV Fullscreen Overlay */
-        .cv-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(15, 23, 42, 0.95);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-        }
-        .cv-overlay-close-btn {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            background: none;
-            border: 0;
-            color: #fff;
-            font-size: 2.5rem;
-            cursor: pointer;
-            z-index: 10000;
-            transition: color 0.2s ease;
-        }
-        .cv-overlay-close-btn:hover {
-            color: #38bdf8;
-        }
-        .cv-overlay-content {
-            width: 100%;
-            height: 100%;
-            max-width: 1000px;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        .cv-overlay-content object {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
         /* --- Dark Mode Styles --- */
         body.dark-mode {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
@@ -1066,6 +1019,71 @@
         body.dark-mode .btn-outline-secondary:hover {
             background-color: #cbd5e1;
             color: #1e293b;
+        }
+
+        /* Dynamic AC Card styling classes for improved readability and maintenance */
+        .resources-container {
+            background: rgba(15, 23, 42, 0.02);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        .progress-bar-container {
+            height: 8px;
+            background: #eee;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .level-dot.empty {
+            background: #e9ecef !important;
+        }
+
+        /* Dark Mode Overrides for AC Card elements */
+        body.dark-mode .resources-container {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode .progress-bar-container {
+            background: #334155 !important;
+        }
+        body.dark-mode .level-dot.empty {
+            background: #334155 !important;
+        }
+        body.dark-mode .resource-badge {
+            background-color: #334155 !important;
+            color: #f8fafc !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        body.dark-mode .card-body .text-muted,
+        body.dark-mode .card-body .card-text.text-muted,
+        body.dark-mode .card-body small.text-muted {
+            color: #cbd5e1 !important;
+        }
+        
+        /* Outline buttons in Dark Mode inside AC Cards */
+        body.dark-mode .card-body .btn-outline-primary {
+            color: #38bdf8 !important;
+            border-color: #38bdf8 !important;
+        }
+        body.dark-mode .card-body .btn-outline-primary:hover:not(:disabled) {
+            background-color: #38bdf8 !important;
+            color: #0f172a !important;
+        }
+        body.dark-mode .card-body .btn-outline-primary:disabled {
+            color: rgba(148, 163, 184, 0.35) !important;
+            border-color: rgba(148, 163, 184, 0.2) !important;
+            background-color: transparent !important;
+        }
+        body.dark-mode .card-body .btn-outline-success {
+            color: #4ade80 !important;
+            border-color: #4ade80 !important;
+        }
+        body.dark-mode .card-body .btn-outline-success:hover:not(:disabled) {
+            background-color: #4ade80 !important;
+            color: #0f172a !important;
+        }
+        body.dark-mode .card-body .btn-outline-success:disabled {
+            color: rgba(148, 163, 184, 0.35) !important;
+            border-color: rgba(148, 163, 184, 0.2) !important;
+            background-color: transparent !important;
         }
     </style>
 </head>
@@ -1287,13 +1305,10 @@
                 <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" class="btn btn-brand" download>
                     <i class="fas fa-download me-2"></i> <span data-en="Download PDF">Télécharger en PDF</span>
                 </a>
-                <button id="cvFullscreenBtn" class="btn btn-outline-brand ms-2" type="button">
-                    <i class="fas fa-expand me-2"></i> <span data-en="Fullscreen">Plein écran</span>
-                </button>
             </div>
 
             <div class="pdf-preview">
-                <object data="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf#page=1&view=FitH" type="application/pdf" aria-label="Aperçu du CV de Titouan FLOCH">
+                <object data="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf" aria-label="Aperçu du CV de Titouan FLOCH">
                     <p style="padding:1rem; color:#444;">Votre navigateur ne peut pas afficher les PDF en ligne. Vous pouvez télécharger le CV <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" download>ici</a>.</p>
                 </object>
             </div>
@@ -1575,16 +1590,6 @@
     </div>
 </footer>
 
-<!-- CV Fullscreen Overlay -->
-<div id="cvOverlay" class="cv-overlay" style="display:none;">
-    <button id="closeCvOverlay" class="cv-overlay-close-btn" aria-label="Close fullscreen CV">&times;</button>
-    <div class="cv-overlay-content">
-        <object data="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf#page=1&view=FitH" type="application/pdf" aria-label="CV Titouan FLOCH Fullscreen">
-            <p style="padding:1rem; color:#fff;">Votre navigateur ne peut pas afficher les PDF en ligne. Vous pouvez télécharger le CV <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" download style="color:#38bdf8;">ici</a>.</p>
-        </object>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -1671,9 +1676,6 @@
         const scrollBtn = document.getElementById("scrollToTopBtn");
         const translateBtn = document.getElementById("translateBtn");
         const themeToggleBtn = document.getElementById("themeToggleBtn");
-        const cvFullscreenBtn = document.getElementById("cvFullscreenBtn");
-        const cvOverlay = document.getElementById("cvOverlay");
-        const closeCvOverlay = document.getElementById("closeCvOverlay");
         let isFrench = true;
         let isInitialized = false;
 
@@ -1828,29 +1830,6 @@
             document.body.classList.add("dark-mode");
         }
         updateThemeIcon();
-
-        // CV Overlay Logic
-        cvFullscreenBtn.addEventListener("click", () => {
-            cvOverlay.style.display = "flex";
-            document.body.style.overflow = "hidden"; // disable background scrolling
-        });
-
-        function hideCvOverlay() {
-            cvOverlay.style.display = "none";
-            document.body.style.overflow = ""; // restore scrolling
-        }
-
-        closeCvOverlay.addEventListener("click", hideCvOverlay);
-        cvOverlay.addEventListener("click", (e) => {
-            if (e.target === cvOverlay) {
-                hideCvOverlay();
-            }
-        });
-        window.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && cvOverlay.style.display === "flex") {
-                hideCvOverlay();
-            }
-        });
 
         updateLanguageUI();
 
@@ -2811,9 +2790,9 @@
                     for (let d = 1; d <= dotsTotal; d++) {
                         if (d <= filled) {
                             const dotColor = levelColors[filled] || '#6c757d';
-                            dotsHtml += `<span style="display:inline-block;width:12px;height:12px;margin-right:8px;background:${dotColor};border-radius:3px;"></span>`;
+                            dotsHtml += `<span class="level-dot filled" style="display:inline-block;width:12px;height:12px;margin-right:8px;background:${dotColor};border-radius:3px;"></span>`;
                         } else {
-                            dotsHtml += `<span style="display:inline-block;width:12px;height:12px;margin-right:8px;background:#e9ecef;border-radius:3px;"></span>`;
+                            dotsHtml += `<span class="level-dot empty" style="display:inline-block;width:12px;height:12px;margin-right:8px;border-radius:3px;"></span>`;
                         }
                     }
                     dotsHtml += ` <small class="text-muted" style="margin-left:6px;">${filled}/${dotsTotal}</small></div>`;
@@ -2844,11 +2823,11 @@
                                 </div>
                                 <h5 class="card-title mt-3 mb-2" style="font-weight:700; line-height:1.25;">${i.title}</h5>
                                 <p class="card-text text-muted mb-3" style="font-size:0.95rem;">${i.description || ''}</p>
-                                <div class="mb-3 p-2 rounded-3" style="background: rgba(15, 23, 42, 0.02); border: 1px solid rgba(15, 23, 42, 0.08);">
+                                <div class="resources-container mb-3 p-2 rounded-3">
                                     <div class="small text-muted mb-2">${cardResourcesTitle}</div>
                                     <div style="font-size:0.9rem; line-height:1.6;">${resourceHtml}</div>
                                 </div>
-                                <div class="mb-2" style="height:8px; background:#eee; border-radius:6px; overflow:hidden;">
+                                <div class="progress-bar-container mb-2">
                                     <div style="width:${progressPct}%; height:100%; background:${compColor};"></div>
                                 </div>
                                 ${dotsHtml}
