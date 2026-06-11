@@ -1701,7 +1701,10 @@
                                 <!-- Document Switch Tabs (Preuve vs Analyse) -->
                                 <ul class="nav nav-pills card-header-pills" id="acModalViewerTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active btn-sm" id="acModalPreuveTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Document Proof">Preuve</button>
+                                        <button class="nav-link active btn-sm" id="acModalResumeTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Summary">Résumé</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link btn-sm ms-2" id="acModalPreuveTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Document Proof">Preuve</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link btn-sm ms-2" id="acModalAnalyseTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Reflexive Analysis">Analyse</button>
@@ -1711,11 +1714,14 @@
                             </div>
                             <div class="flex-grow-1 p-3 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
                                 <!-- Spinner -->
-                                <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1;">
+                                <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1; display: none;">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
+                                <!-- Resume Container -->
+                                <div id="acModalResumeContainer" class="bg-white p-4 shadow-sm" style="display: block; width: 100%; height: 100%; overflow-y: auto; border-radius: 8px; z-index: 3;">
+                                </div>
                                 <!-- Iframe Viewer -->
-                                <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: block;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
+                                <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: none;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
                                 <!-- No Document Fallback -->
                                 <div id="acModalNoDoc" class="text-center p-5 d-none" style="z-index: 2;">
                                     <i class="fas fa-file-excel text-muted fa-3x mb-3"></i>
@@ -1729,6 +1735,7 @@
         </div>
 </div>
 
+<script src="acSummaries.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -3546,16 +3553,32 @@
             const proofId = getGoogleDriveId(item.proof);
             const analysisId = getGoogleDriveId(item.analysis);
 
+            const resumeTab = document.getElementById('acModalResumeTab');
             const proofTab = document.getElementById('acModalPreuveTab');
             const analysisTab = document.getElementById('acModalAnalyseTab');
             const iframe = document.getElementById('acModalIframe');
             const spinner = document.getElementById('acModalSpinner');
             const noDoc = document.getElementById('acModalNoDoc');
+            const resumeContainer = document.getElementById('acModalResumeContainer');
 
             // Reset tab visibility and active state
+            resumeTab.classList.remove('active', 'disabled');
             proofTab.classList.remove('active', 'disabled');
             analysisTab.classList.remove('active', 'disabled');
             
+            // Set Resume as active by default
+            resumeTab.classList.add('active');
+            
+            // Load Resume Content
+            const summaryHtml = window.acSummariesContent && window.acSummariesContent[item.code] 
+                                ? window.acSummariesContent[item.code] 
+                                : '<div class="alert alert-secondary">Aucun résumé détaillé n\'a pu être généré pour cet AC.</div>';
+            resumeContainer.innerHTML = summaryHtml;
+            resumeContainer.style.display = 'block';
+            iframe.style.display = 'none';
+            spinner.style.display = 'none';
+            noDoc.classList.add('d-none');
+
             if (!proofId) {
                 proofTab.classList.add('disabled');
             }
@@ -3580,11 +3603,19 @@
                 iframe.src = `https://docs.google.com/document/d/${docId}/preview`;
             }
 
+            // Event Listeners for Tabs
+            // (Old click events removed since they are now handled above)
+            
+            // Show Modal
+            const acModal = new bootstrap.Modal(document.getElementById('acDetailsModal'));
+
             // Bind click events on viewer tabs
             proofTab.onclick = () => {
                 if (proofTab.classList.contains('disabled')) return;
                 proofTab.classList.add('active');
                 analysisTab.classList.remove('active');
+                resumeTab.classList.remove('active');
+                resumeContainer.style.display = 'none';
                 loadDocument(proofId);
             };
 
@@ -3592,7 +3623,19 @@
                 if (analysisTab.classList.contains('disabled')) return;
                 analysisTab.classList.add('active');
                 proofTab.classList.remove('active');
+                resumeTab.classList.remove('active');
+                resumeContainer.style.display = 'none';
                 loadDocument(analysisId);
+            };
+
+            resumeTab.onclick = () => {
+                resumeTab.classList.add('active');
+                proofTab.classList.remove('active');
+                analysisTab.classList.remove('active');
+                resumeContainer.style.display = 'block';
+                iframe.style.display = 'none';
+                spinner.style.display = 'none';
+                noDoc.classList.add('d-none');
             };
 
             // Initial load
