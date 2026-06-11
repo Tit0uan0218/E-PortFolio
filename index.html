@@ -991,6 +991,10 @@
             fill: #ffffff !important;
         }
 
+        #acModalViewerTabs .nav-link.active {
+            color: #ffffff !important;
+        }
+
         body.dark-mode #translateBtn {
             color: #38bdf8 !important;
             border-color: #38bdf8 !important;
@@ -2872,7 +2876,7 @@
         let selectedLevelRT2 = 'ALL';
         let selectedLevelRT3 = 'ALL';
 
-        function setFilter(comp, year) {
+        window.setFilter = function(comp, year) {
             if (year === 'rt2') {
                 currentFilterRT2 = comp;
             } else {
@@ -2886,7 +2890,7 @@
                 const y = filtersEl.getBoundingClientRect().top + window.scrollY - 80;
                 window.scrollTo({top: y, behavior: 'smooth'});
             }
-        }
+        };
 
         function renderDashboard(year) {
             const dashboardElId = year === 'rt2' ? 'acDashboard2' : 'acDashboard3';
