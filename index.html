@@ -1322,7 +1322,55 @@
         window.addEventListener('unhandledrejection', function(e) { showJsError('UnhandledRejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))); });
         // light style for AC resource badges (override dark badge styles)
         const _acResourceStyle = `
-            .resource-badge{display:inline-block;background:#f8fafc;color:#1f2d3d;border:1px solid rgba(15,23,42,0.06);padding:0.35rem 0.6rem;border-radius:999px;font-weight:600;box-shadow:none}
+            .resource-badge {
+                display: inline-block;
+                background: #f8fafc;
+                color: #1f2d3d;
+                border: 1px solid rgba(15, 23, 42, 0.06);
+                padding: 0.35rem 0.6rem;
+                border-radius: 999px;
+                font-weight: 600;
+                box-shadow: none;
+                position: relative;
+                cursor: help;
+            }
+            .resource-badge::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                bottom: 125%;
+                left: 50%;
+                transform: translateX(-50%) translateY(4px);
+                background: rgba(15, 23, 42, 0.95);
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                white-space: nowrap;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.15s ease, transform 0.15s ease;
+                z-index: 1000;
+            }
+            .resource-badge::before {
+                content: '';
+                position: absolute;
+                bottom: 110%;
+                left: 50%;
+                transform: translateX(-50%) translateY(4px);
+                border-width: 5px;
+                border-style: solid;
+                border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.15s ease, transform 0.15s ease;
+                z-index: 1000;
+            }
+            .resource-badge:hover::after, .resource-badge:hover::before {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         `;
         document.head.insertAdjacentHTML('beforeend', `<style>${_acResourceStyle}</style>`);
         const pageIds = ["index", "home", "loisirs", "cv", "portfolio", "contact", "mentions"];
@@ -1564,6 +1612,44 @@
         });
 
         // --- Apprentissages Critiques (AC) data and rendering (RT2-focused) ---
+
+        const resourceGlossary = {
+            // Semestre 3
+            'R3.01': 'Réseaux campus',
+            'R3.02': 'Réseaux opérateurs',
+            'R3.03': 'Services réseaux avancés',
+            'R3.04': 'Services d\'annuaires',
+            'R3.05': 'Transmissions numériques',
+            'R3.06': 'Fibres optiques',
+            'R3.07': 'Réseaux d\'accès',
+            'R3.08': 'Consolidation de la programmation',
+            'R3.09': 'Programmation événementielle',
+            'R3.10': 'Bases de données',
+            'R3.11': 'Anglais professionnel',
+            'R3.12': 'Expression-Communication',
+            'R3.13': 'Projet Personnel et Professionnel (PPP)',
+            'R3.14': 'Analyse de Fourier',
+            'R3.15': 'Gestion de projet',
+            'R3.ROM.16': 'Téléphonie sur IP (ToIP)',
+            'SAÉ3.01': 'Systèmes de transmission',
+            'SAÉ3.02': 'Développement d\'applications de communication',
+            'SAÉ3.ROM.03': 'Projet Réseau Opérateur/Téléphonie',
+            'SAÉ3.ROM.04': 'Déploiement de Téléphonie d\'entreprise',
+
+            // Semestre 4
+            'R4.01': 'Infrastructures de sécurité',
+            'R4.02': 'Transmissions avancées',
+            'R4.03': 'Physique des télécommunications',
+            'R4.04': 'Réseaux cellulaires',
+            'R4.05': 'Automatisation des tâches d\'administration (DevOps)',
+            'R4.06': 'Anglais professionnel',
+            'R4.07': 'Expression-Communication',
+            'R4.ROM.09': 'DevOps pour les réseaux opérateurs',
+            'R4.ROM.10': 'Opérateurs de téléphonie',
+            'SAÉ4.PORTFOLIO': 'Création du Portfolio et auto-évaluation',
+            'SAÉ4.STAGE': 'Stage professionnel en entreprise',
+            'SAÉ4.ROM.01': 'Opérations réseaux opérateurs'
+        };
 
         const competenceMeta = {
             RT1: {
@@ -2095,10 +2181,11 @@
 
                     const resourceHtml = Array.isArray(i.resources) && i.resources.length
                         ? i.resources.map((resource, index) => {
-                            const label = resource && String(resource).trim() ? String(resource).trim() : `Ressource ${index + 1} à compléter dans le code`;
-                            return `<span class="resource-badge me-2 mb-2">${label}</span>`;
+                            const label = resource && String(resource).trim() ? String(resource).trim() : `Ressource ${index + 1}`;
+                            const title = resourceGlossary[label] || label;
+                            return `<span class="resource-badge me-2 mb-2" data-tooltip="${title}">${label}</span>`;
                         }).join('')
-                        : '<span class="text-muted">Ressources associées à compléter dans le code</span>';
+                        : '<span class="text-muted">Ressources associées</span>';
 
                     col.innerHTML = `
                         <div class="card h-100 shadow-sm" style="border-radius:16px; border-top:6px solid ${compColor}; display:flex; flex-direction:column; justify-content:space-between; min-height:240px;">
