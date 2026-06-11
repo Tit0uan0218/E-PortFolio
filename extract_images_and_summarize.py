@@ -83,7 +83,9 @@ for filepath in files:
                     if el['type'] == 'text':
                         line_clean = el['val']
                         # Trigger on "Analyse R..." or "Auto-évaluation..."
-                        if 'Analyse R' in line_clean or 'analyse r' in line_clean.lower() or 'auto-évaluation' in line_clean.lower() or 'auto évaluation' in line_clean.lower():
+                        lc = line_clean.lower()
+                        is_trigger = 'analyse r' in lc or 'auto-évaluation' in lc or 'auto évaluation' in lc
+                        if is_trigger and not capture_analyse:
                             capture_analyse = True
                         elif capture_analyse:
                             if line_clean: analyse_text += f"<p class='mb-2'>{line_clean}</p>"
