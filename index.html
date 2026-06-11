@@ -1141,45 +1141,9 @@
 
                     <!-- BUT RT3 Content -->
                     <div class="tab-pane fade" id="content-rt3" role="tabpanel">
-                        <div class="accordion accordion-rt3" id="accordionRT3">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkills3" aria-expanded="true" data-en="Skills">
-                                        Compétences
-                                    </button>
-                                </h2>
-                                <div id="collapseSkills3" class="accordion-collapse collapse show" data-bs-parent="#accordionRT3">
-                                    <div class="accordion-body">
-                                        <p class="text-muted">Contenu à ajouter.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProjects3" data-en="Completed Projects">
-                                        Projets Réalisés
-                                    </button>
-                                </h2>
-                                <div id="collapseProjects3" class="accordion-collapse collapse" data-bs-parent="#accordionRT3">
-                                    <div class="accordion-body">
-                                        <p class="text-muted">Contenu à ajouter.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyses3" data-en="Reflective Analyses">
-                                        Analyses Réflexives
-                                    </button>
-                                </h2>
-                                <div id="collapseAnalyses3" class="accordion-collapse collapse" data-bs-parent="#accordionRT3">
-                                    <div class="accordion-body">
-                                        <p class="text-muted">Contenu à ajouter.</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="p-3">
+                            <div id="acFilters3" class="text-center mb-4"></div>
+                            <div id="acContainer3" class="row g-4" style="width:100%; margin:0; --gap:1.5rem;"></div>
                         </div>
 
                         <!-- Sub-category banner for BUT RT3 (bottom of RT3 tab) -->
@@ -1629,7 +1593,7 @@
             }
         };
 
-        const acFallbackItems = [
+        const acFallbackItemsRT2 = [
             { code: 'AC21.01', title: 'Configurer et dépanner le routage dynamique dans un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1LtMtop2W2EklInWxzN0TeYDGMzwuVi0AJ5U3qqBSO0Q/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1l2lD9cuz9cbmnmlYxbzf9jO94lYx9J5bJ5tkKZOtU5A/edit?usp=drive_link', resources: ['R3.02', 'R3.01', 'SAÉ3.02', 'SAÉ3.ROM.03'] },
             { code: 'AC21.02', title: 'Configurer et expliquer une politique simple de QoS et les fonctions de base de la sécurité d’un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [3], proof: 'https://docs.google.com/document/d/183LTrX8ExmySEsoPgN5srQvuaduiJaaAhgCdCImNL6I/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1T9RWx9axYizGA61nhUj-16hh463p7SplqHaZMoiv9YY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.01'] },
             { code: 'AC21.03', title: 'Déployer des postes clients et des solutions virtualisées adaptées à une situation donnée', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1Y4Wz22WMQXalfabetyKyV69Cz-SyWR2-rwOaPDBqleo/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/17yuK4IuvZCYmDJ3XpPWwdvfzHqbhiigEZd25QYDh5Ts/edit?usp=drive_link', resources: ['R3.03', 'R3.04', 'SAÉ3.ROM.03'] },
@@ -1656,10 +1620,10 @@
             { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['SAÉ3.ROM.03'] }
         ];
 
-        let acItems = acFallbackItems.map(item => ({ ...item }));
+        const acFallbackItemsRT3 = [
+        ];
 
-        const fallbackStrongAcCodes = new Set([
-            'AC21.01',
+        const fallbackStrongAcCodesRT2 = new Set([
             'AC21.03',
             'AC21.05',
             'AC21.06',
@@ -1670,34 +1634,74 @@
             'AC25.01ROM',
             'AC25.02ROM'
         ]);
-        let strongAcCodes = new Set(fallbackStrongAcCodes);
+
+        const fallbackStrongAcCodesRT3 = new Set([
+        ]);
+
+        let acItemsRT2 = acFallbackItemsRT2.map(item => ({ ...item }));
+        let acItemsRT3 = acFallbackItemsRT3.map(item => ({ ...item }));
+        let strongAcCodesRT2 = new Set(fallbackStrongAcCodesRT2);
+        let strongAcCodesRT3 = new Set(fallbackStrongAcCodesRT3);
+
+        function getCompetenceFromCode(code) {
+            if (!code || code.length < 4) return "RT1";
+            const char = code.charAt(3);
+            if (char === "1") return "RT1";
+            if (char === "2") return "RT2";
+            if (char === "3") return "RT3";
+            if (char === "4") return "ROM1";
+            if (char === "5") return "ROM2";
+            return "RT1";
+        }
 
         async function loadAcData() {
-            window.gvizSyncSuccess = false;
+            window.gvizSyncSuccessRT2 = false;
+            window.gvizSyncSuccessRT3 = false;
 
-            // --- TIER 1: Sync via CORS-free JSONP (100% reliable for text, resources, levels, strong status) ---
-            const script = document.createElement("script");
-            script.src = "https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallback&gid=808860009";
-            document.body.appendChild(script);
+            // --- TIER 1: Sync via CORS-free JSONP ---
+            const scriptRT2 = document.createElement("script");
+            scriptRT2.src = "https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009";
+            document.body.appendChild(scriptRT2);
 
-            // Wait up to 1.5 seconds for the JSONP script to load and set window.gvizSyncSuccess
+            const scriptRT3 = document.createElement("script");
+            scriptRT3.src = "https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063";
+            document.body.appendChild(scriptRT3);
+
+            // Wait up to 1.5 seconds for JSONP scripts to load
             await new Promise((resolve) => {
                 setTimeout(() => {
                     resolve();
                 }, 1500);
             });
 
-            if (window.gvizSyncSuccess) {
-                try { document.body.removeChild(script); } catch (e) {}
-                return;
+            // Clean up scripts
+            try { document.body.removeChild(scriptRT2); } catch (e) {}
+            try { document.body.removeChild(scriptRT3); } catch (e) {}
+
+            // --- TIER 2: Sync via HTML CORS Proxy (If JSONP failed) ---
+            if (!window.gvizSyncSuccessRT2) {
+                const rt2Success = await fetchHtmlProxy('808860009', 'rt2');
+                if (!rt2Success) {
+                    console.warn("Utilisation des données locales de secours pour RT2.");
+                    acItemsRT2 = acFallbackItemsRT2.map(item => ({ ...item }));
+                    strongAcCodesRT2 = new Set(fallbackStrongAcCodesRT2);
+                    renderAcSection('rt2');
+                }
             }
+            if (!window.gvizSyncSuccessRT3) {
+                const rt3Success = await fetchHtmlProxy('1897392063', 'rt3');
+                if (!rt3Success) {
+                    console.warn("Utilisation des données locales de secours pour RT3.");
+                    acItemsRT3 = acFallbackItemsRT3.map(item => ({ ...item }));
+                    strongAcCodesRT3 = new Set(fallbackStrongAcCodesRT3);
+                    renderAcSection('rt3');
+                }
+            }
+        }
 
-            // Clean up script tag if failed/timed out
-            try { document.body.removeChild(script); } catch (e) {}
-
-            // --- TIER 2: Sync via HTML CORS Proxy (Fallback to update links as well if proxy works) ---
-            console.log("JSONP sync timed out or failed. Falling back to HTML CORS Proxy...");
-            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pubhtml/sheet?headers=false&gid=808860009";
+        async function fetchHtmlProxy(gid, year) {
+            console.log(`JSONP sync timed out or failed for ${year.toUpperCase()}. Falling back to HTML CORS Proxy...`);
+            const sheetUrl = `https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pubhtml/sheet?headers=false&gid=${gid}`;
             const proxies = [
                 "https://corsproxy.io/?" + encodeURIComponent(sheetUrl),
                 "https://api.allorigins.win/raw?url=" + encodeURIComponent(sheetUrl)
@@ -1715,7 +1719,7 @@
                         break;
                     }
                 } catch (err) {
-                    console.warn(`Échec de récupération via le proxy HTML ${i + 1}`);
+                    console.warn(`Échec de récupération via le proxy HTML ${i + 1} pour ${year.toUpperCase()}`);
                 }
             }
 
@@ -1782,15 +1786,7 @@
                                 parsedStrongCodes.add(code);
                             }
 
-                            let competence = "RT1";
-                            if (code.startsWith("AC24")) competence = "ROM1";
-                            else if (code.startsWith("AC25")) competence = "ROM2";
-                            else {
-                                const numStr = code.substring(2, 4);
-                                if (numStr === "21") competence = "RT1";
-                                else if (numStr === "22") competence = "RT2";
-                                else if (numStr === "23") competence = "RT3";
-                            }
+                            const competence = getCompetenceFromCode(code);
 
                             const competenceMetaDesc = {
                                 RT1: 'Administrer un réseau',
@@ -1814,27 +1810,29 @@
                     });
 
                     if (newAcItems.length > 0) {
-                        acItems = newAcItems;
-                        strongAcCodes.clear();
-                        parsedStrongCodes.forEach(code => strongAcCodes.add(code));
-                        console.log("Synchronisation Google Sheets réussie en temps réel (via HTML) !");
-                        renderAcSection();
-                        return;
+                        if (year === 'rt2') {
+                            acItemsRT2 = newAcItems;
+                            strongAcCodesRT2.clear();
+                            parsedStrongCodes.forEach(code => strongAcCodesRT2.add(code));
+                            console.log("Synchronisation Google Sheets réussie via HTML pour RT2 !");
+                            renderAcSection('rt2');
+                        } else {
+                            acItemsRT3 = newAcItems;
+                            strongAcCodesRT3.clear();
+                            parsedStrongCodes.forEach(code => strongAcCodesRT3.add(code));
+                            console.log("Synchronisation Google Sheets réussie via HTML pour RT3 !");
+                            renderAcSection('rt3');
+                        }
+                        return true;
                     }
                 } catch (error) {
-                    console.warn("Erreur lors du parsing HTML, utilisation des données locales...", error);
+                    console.warn(`Erreur lors du parsing HTML pour ${year.toUpperCase()}, utilisation des données locales...`, error);
                 }
             }
-
-            // --- TIER 3: Local Fallback (Loads offline data) ---
-            console.warn("Utilisation des données locales de secours.");
-            acItems = acFallbackItems.map(item => ({ ...item }));
-            strongAcCodes = new Set(fallbackStrongAcCodes);
-            renderAcSection();
+            return false;
         }
 
-        // JSONP Callback handler
-        window.myCallback = function(data) {
+        function handleGvizData(data, year) {
             try {
                 if (!data || !data.table || !data.table.rows) {
                     throw new Error("Format JSON invalide");
@@ -1881,7 +1879,8 @@
                         else if (r1.length > 0) level = 1;
 
                         // Maps link URLs from local fallback data
-                        const fallbackItem = acFallbackItems.find(item => item.code === code);
+                        const fallbackList = year === 'rt2' ? acFallbackItemsRT2 : acFallbackItemsRT3;
+                        const fallbackItem = fallbackList.find(item => item.code === code);
                         const proof = fallbackItem ? fallbackItem.proof : "";
                         const analysis = fallbackItem ? fallbackItem.analysis : "";
 
@@ -1891,15 +1890,7 @@
                             parsedStrongCodes.add(code);
                         }
 
-                        let competence = "RT1";
-                        if (code.startsWith("AC24")) competence = "ROM1";
-                        else if (code.startsWith("AC25")) competence = "ROM2";
-                        else {
-                            const numStr = code.substring(2, 4);
-                            if (numStr === "21") competence = "RT1";
-                            else if (numStr === "22") competence = "RT2";
-                            else if (numStr === "23") competence = "RT3";
-                        }
+                        const competence = getCompetenceFromCode(code);
 
                         const competenceMetaDesc = {
                             RT1: 'Administrer un réseau',
@@ -1923,16 +1914,34 @@
                 });
 
                 if (newAcItems.length > 0) {
-                    acItems = newAcItems;
-                    strongAcCodes.clear();
-                    parsedStrongCodes.forEach(code => strongAcCodes.add(code));
-                    console.log("Synchronisation Google Sheets réussie en temps réel (via JSONP) !");
-                    renderAcSection();
-                    window.gvizSyncSuccess = true;
+                    if (year === 'rt2') {
+                        acItemsRT2 = newAcItems;
+                        strongAcCodesRT2.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodesRT2.add(code));
+                        console.log("Synchronisation Google Sheets réussie en temps réel pour RT2 (via JSONP) !");
+                        renderAcSection('rt2');
+                        window.gvizSyncSuccessRT2 = true;
+                    } else {
+                        acItemsRT3 = newAcItems;
+                        strongAcCodesRT3.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodesRT3.add(code));
+                        console.log("Synchronisation Google Sheets réussie en temps réel pour RT3 (via JSONP) !");
+                        renderAcSection('rt3');
+                        window.gvizSyncSuccessRT3 = true;
+                    }
                 }
             } catch (error) {
-                console.warn("Erreur lors du traitement de la synchronisation JSONP :", error);
+                console.warn(`Erreur lors du traitement de la synchronisation JSONP pour ${year.toUpperCase()} :`, error);
             }
+        }
+
+        // JSONP Callback handlers
+        window.myCallbackRT2 = function(data) {
+            handleGvizData(data, 'rt2');
+        };
+
+        window.myCallbackRT3 = function(data) {
+            handleGvizData(data, 'rt3');
         };
 
         function parseRessourcesList(cell) {
@@ -1948,17 +1957,28 @@
         }
 
         // show ALL by default
-        let currentFilter = 'ALL';
+        let currentFilterRT2 = 'ALL';
+        let currentFilterRT3 = 'ALL';
 
-        function setFilter(comp) {
-            currentFilter = comp;
-            renderAcSection();
+        function setFilter(comp, year) {
+            if (year === 'rt2') {
+                currentFilterRT2 = comp;
+            } else {
+                currentFilterRT3 = comp;
+            }
+            renderAcSection(year);
         }
 
-        function renderAcSection() {
-            const container = document.getElementById('acContainer');
-            const filtersEl = document.getElementById('acFilters');
+        function renderAcSection(year) {
+            const containerId = year === 'rt2' ? 'acContainer' : 'acContainer3';
+            const filtersElId = year === 'rt2' ? 'acFilters' : 'acFilters3';
+            const container = document.getElementById(containerId);
+            const filtersEl = document.getElementById(filtersElId);
             if (!container || !filtersEl) return;
+
+            const itemsList = year === 'rt2' ? acItemsRT2 : acItemsRT3;
+            const strongCodes = year === 'rt2' ? strongAcCodesRT2 : strongAcCodesRT3;
+            const currentFilter = year === 'rt2' ? currentFilterRT2 : currentFilterRT3;
 
             // color map per competence (visible-light / custom rainbow: rose -> violet -> bleu -> vert -> jaune)
             const colorMap = {
@@ -1971,7 +1991,7 @@
             };
 
             // Group by competence
-            const groups = acItems.reduce((acc, item) => {
+            const groups = itemsList.reduce((acc, item) => {
                 if (!acc[item.competence]) acc[item.competence] = [];
                 acc[item.competence].push(item);
                 return acc;
@@ -1990,60 +2010,60 @@
             const allBtn = document.createElement('button');
             allBtn.className = `btn btn-sm btn-outline-dark me-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
             allBtn.textContent = 'Tout montrer';
-            allBtn.onclick = () => setFilter('ALL');
+            allBtn.onclick = () => setFilter('ALL', year);
             filtersEl.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
             strongBtn.className = `btn btn-sm btn-outline-success me-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
             strongBtn.textContent = 'Compétences fortes';
-            strongBtn.onclick = () => setFilter('STRONG');
+            strongBtn.onclick = () => setFilter('STRONG', year);
             filtersEl.appendChild(strongBtn);
 
             competenceKeys.forEach(k => {
                 const b = document.createElement('button');
                 b.className = `btn btn-sm btn-outline-secondary me-2 ${currentFilter === k ? 'active' : ''}`;
                 b.textContent = k;
-                b.onclick = () => setFilter(k);
+                b.onclick = () => setFilter(k, year);
                 filtersEl.appendChild(b);
             });
 
             if (currentFilter === 'STRONG') {
                 const strongNote = document.createElement('div');
                 strongNote.className = 'mt-3 text-center text-muted small';
-                strongNote.textContent = 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.';
+                strongNote.textContent = year === 'rt2' 
+                    ? 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.'
+                    : 'Voici une sélection personnelle de mes compétences fortes en 3ème année de R&T.';
                 filtersEl.appendChild(strongNote);
             }
 
             // Render cards
             container.innerHTML = '';
 
-            // helper to decide if an item belongs to the strict strong selection
             function isStrong(item) {
-                return !!item && strongAcCodes.has(item.code);
+                return !!item && strongCodes.has(item.code);
             }
 
             competenceKeys.forEach(comp => {
-                // collect items for this competence
                 let items = groups[comp].slice().sort((a, b) => a.code.localeCompare(b.code));
-                // filter by global filter
                 if (currentFilter === 'STRONG') {
                     items = items.filter(isStrong);
                 } else if (currentFilter !== 'ALL' && currentFilter !== comp) {
-                    return; // skip this competence section
+                    return;
                 }
 
-                // if no items after filtering, skip
                 if (!items.length) return;
 
-                // section header
                 const headerRow = document.createElement('div');
                 headerRow.className = 'col-12';
                 const meta = competenceMeta[comp] || { title: comp, level: '', description: items[0] && items[0].description ? items[0].description : '' };
+                
+                const levelDisplay = year === 'rt3' ? (comp.startsWith('ROM') ? '2' : '3') : meta.level;
+
                 headerRow.innerHTML = `
                     <div style="border-left:4px solid ${colorMap[comp] || colorMap.DEFAULT}; padding-left:12px; margin-bottom:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
                         <div style="min-width:0; flex:1 1 auto;">
                             <h3 style="margin:0 0 0.25rem 0; font-weight:700;">${comp} - ${meta.title}</h3>
-                            <p class="text-muted" style="margin:0;">Niveau ${meta.level} - ${meta.description}</p>
+                            <p class="text-muted" style="margin:0;">Niveau ${levelDisplay} - ${meta.description}</p>
                         </div>
                         <div style="flex:0 0 auto; margin-top:0.2rem;">
                             <span class="badge" style="background:${colorMap[comp] || colorMap.DEFAULT}; color:#fff; font-size:0.95rem; padding:0.6rem 0.9rem; border-radius:999px;">${items.length} AC</span>
@@ -2059,14 +2079,12 @@
                     const progressPct = Math.round((avgLevel / 4) * 100);
                     const compColor = colorMap[i.competence] || colorMap.DEFAULT;
 
-                    // visual dots for levels
                     const dotsTotal = 4;
                     const filled = Math.round(avgLevel);
                     const levelColors = {1:'#e74c3c',2:'#f39c12',3:'#f1c40f',4:'#2ecc71'};
                     let dotsHtml = '<div style="margin-bottom:6px; display:flex; align-items:center;">';
                     for (let d = 1; d <= dotsTotal; d++) {
                         if (d <= filled) {
-                            // use the color of the filled level so all filled squares match
                             const dotColor = levelColors[filled] || '#6c757d';
                             dotsHtml += `<span style="display:inline-block;width:12px;height:12px;margin-right:8px;background:${dotColor};border-radius:3px;"></span>`;
                         } else {
@@ -2113,6 +2131,16 @@
                     container.appendChild(col);
                 });
             });
+
+            // If empty, display a message
+            if (container.children.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'col-12 text-center py-5';
+                emptyMsg.innerHTML = `
+                    <p class="text-muted mb-0">Aucun apprentissage critique (AC) trouvé pour cette sélection.</p>
+                `;
+                container.appendChild(emptyMsg);
+            }
         }
 
         // initial render
