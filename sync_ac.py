@@ -15,25 +15,43 @@ def fetch_and_parse_sheet(gid):
         print(f"Error fetching Google Sheet GID {gid}: {e}")
         return [], []
 
+    # Detect strikethrough classes from HTML stylesheets
+    strikethrough_classes = set()
+    style_blocks = re.findall(r'<style[^>]*>(.*?)</style>', html_content, re.DOTALL)
+    for block in style_blocks:
+        rules = re.findall(r'\.([a-zA-Z0-9_-]+)\s*\{([^}]+)\}', block)
+        for cls, rule_content in rules:
+            if 'text-decoration' in rule_content and 'line-through' in rule_content:
+                strikethrough_classes.add(cls)
+
     # Parse HTML structure
     class WaffleHTMLParser(HTMLParser):
-        def __init__(self):
+        def __init__(self, strikethrough_classes):
             super().__init__()
+            self.strikethrough_classes = strikethrough_classes
             self.rows = []
             self.current_row = []
-            self.current_cell = {"text": "", "link": ""}
+            self.current_cell = {"text": "", "link": "", "is_strikethrough": False}
             self.in_cell = False
             self.in_link = False
+            self.strikethrough_stack = []
 
         def handle_starttag(self, tag, attrs):
+            attrs_dict = dict(attrs)
+            classes = attrs_dict.get('class', '').split()
+            is_strike_class = any(c in self.strikethrough_classes for c in classes)
+            is_strike_tag = tag in ('s', 'strike', 'del')
+            
+            if is_strike_class or is_strike_tag:
+                self.strikethrough_stack.append(tag)
+
             if tag == 'tr':
                 self.current_row = []
             elif tag == 'td':
                 self.in_cell = True
-                self.current_cell = {"text": "", "link": ""}
+                self.current_cell = {"text": "", "link": "", "is_strikethrough": is_strike_class}
             elif tag == 'a' and self.in_cell:
                 self.in_link = True
-                attrs_dict = dict(attrs)
                 href = attrs_dict.get('href', '')
                 if href:
                     if 'q=' in href:
@@ -45,7 +63,8 @@ def fetch_and_parse_sheet(gid):
 
         def handle_data(self, data):
             if self.in_cell:
-                self.current_cell['text'] += data
+                if not self.strikethrough_stack and not self.current_cell.get('is_strikethrough'):
+                    self.current_cell['text'] += data
 
         def handle_endtag(self, tag):
             if tag == 'tr':
@@ -56,8 +75,11 @@ def fetch_and_parse_sheet(gid):
                 self.current_row.append(self.current_cell)
             elif tag == 'a':
                 self.in_link = False
+            
+            if self.strikethrough_stack and self.strikethrough_stack[-1] == tag:
+                self.strikethrough_stack.pop()
 
-    parser = WaffleHTMLParser()
+    parser = WaffleHTMLParser(strikethrough_classes)
     parser.feed(html_content)
 
     new_ac_items = []
@@ -113,15 +135,17 @@ def fetch_and_parse_sheet(gid):
             r3 = parse_resources(row[ac_idx + 3]["text"]) if ac_idx + 3 < len(row) else []
             r4 = parse_resources(row[ac_idx + 4]["text"]) if ac_idx + 4 < len(row) else []
             
-            # We only keep resources from 2/4, 3/4, and 4/4 as per the portfolio's logic
-            resources = list(dict.fromkeys(r2 + r3 + r4))
+            # Keep resources from all levels (1/4 to 4/4)
+            resources = list(dict.fromkeys(r1 + r2 + r3 + r4))
             
-            # Calculate level based on highest populated column
-            level = 1
-            if r4: level = 4
-            elif r3: level = 3
-            elif r2: level = 2
-            elif r1: level = 1
+            # Calculate level based on weighted average of resources
+            total_resources = len(r1) + len(r2) + len(r3) + len(r4)
+            if total_resources > 0:
+                weighted_sum = (1 * len(r1)) + (2 * len(r2)) + (3 * len(r3)) + (4 * len(r4))
+                level = int((weighted_sum / total_resources) + 0.5)
+                level = max(1, min(4, level))
+            else:
+                level = 1
             
             proof = row[ac_idx + 5]["link"] if ac_idx + 5 < len(row) else ""
             analysis = row[ac_idx + 6]["link"] if ac_idx + 6 < len(row) else ""
