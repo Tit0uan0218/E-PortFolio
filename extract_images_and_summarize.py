@@ -109,7 +109,7 @@ for filepath in files:
                         import re
                         line_clean = el['val']
                         line_clean = re.sub(r'\[.*?\]', '', line_clean).strip()
-                        line_clean = re.sub(r'([.?!])\s*(Voici\s+.*?:)', r'\1</p><p class="mb-2 mt-4 text-center text-muted" style="font-weight: 600;">\2', line_clean)
+                        line_clean = re.sub(r'([.?!])\s*(Voici\s+.*?:)', r"\1</p><p class='mb-2'>\2", line_clean)
                         if not line_clean:
                             continue
                         
