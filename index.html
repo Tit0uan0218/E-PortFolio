@@ -1378,6 +1378,7 @@
         const scrollBtn = document.getElementById("scrollToTopBtn");
         const translateBtn = document.getElementById("translateBtn");
         let isFrench = true;
+        let isInitialized = false;
 
         function showPage(pageId) {
             const validPageId = pageIds.includes(pageId) ? pageId : "index";
@@ -1493,8 +1494,10 @@
             if (rootTitle) {
                 rootTitle.textContent = isFrench ? 'Mon E-Portfolio' : 'My E-Portfolio';
             }
-            renderAcSection('rt2');
-            renderAcSection('rt3');
+            if (isInitialized) {
+                renderAcSection('rt2');
+                renderAcSection('rt3');
+            }
         }
 
         translateBtn.addEventListener("click", () => {
@@ -2277,6 +2280,7 @@
         showPortfolioTab(portfolioView);
 
         showPage(pageFromHash());
+        isInitialized = true;
     })();
 </script>
 </body>
