@@ -1085,6 +1085,49 @@
             border-color: rgba(148, 163, 184, 0.2) !important;
             background-color: transparent !important;
         }
+        
+        /* Custom styles for AC modal */
+        #acModalIframe {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Dark Mode overrides for AC Modal */
+        body.dark-mode #acModal .modal-content {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode #acModal .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode #acModal .bg-white,
+        body.dark-mode #acModal .col-lg-4,
+        body.dark-mode #acModal .col-lg-8 {
+            background-color: #1e293b !important;
+        }
+        body.dark-mode #acModal .border-end {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            background-color: #1e293b !important;
+        }
+        body.dark-mode #acModal .border-bottom {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode #acModal .text-dark {
+            color: #f8fafc !important;
+        }
+        body.dark-mode #acModal .modal-body {
+            background-color: #0f172a !important;
+        }
+        body.dark-mode #acModal iframe {
+            background-color: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode #acModal .nav-link:not(.active) {
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode #acModal .nav-link:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
     </style>
 </head>
 <body>
@@ -1523,6 +1566,91 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-en="Close">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AC Detail Modal -->
+        <div class="modal fade" id="acModal" tabindex="-1" aria-labelledby="acModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content shadow-lg" style="border-radius: 16px; overflow: hidden; border: none;">
+                    <div class="modal-header text-white" id="acModalHeader" style="border: none; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                        <h5 class="modal-title" id="acModalLabel" style="font-weight: 700;">
+                            <span id="acModalCode" class="badge me-2" style="font-size: 0.95rem; padding: 6px 12px; border-radius: 20px;">ACXX.XX</span>
+                            <span id="acModalTitle">Titre de l'AC</span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0" style="background-color: #f8fafc;">
+                        <div class="container-fluid p-0">
+                            <div class="row g-0">
+                                <!-- Left side: Details & Description -->
+                                <div class="col-12 col-lg-4 p-4 border-end" style="background-color: #ffffff;">
+                                    <div class="mb-4">
+                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Competence">Compétence</h6>
+                                        <div class="d-flex align-items-center gap-2 mt-2">
+                                            <span id="acModalCompBadge" class="badge" style="font-size: 0.85rem; padding: 5px 10px; border-radius: 10px;">RT1</span>
+                                            <span id="acModalCompTitle" class="fw-bold text-dark" style="font-size: 0.95rem;">Administrer un réseau</span>
+                                        </div>
+                                        <p id="acModalCompDesc" class="text-muted small mt-2 mb-0">Description de la compétence.</p>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Description / Criteria">Description de l'AC</h6>
+                                        <p id="acModalAcDesc" class="text-dark mt-2 mb-0" style="font-size: 0.95rem; line-height: 1.6;"></p>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Acquisition Level">Niveau d'acquisition</h6>
+                                        <div id="acModalLevelDots" class="mt-2"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Associated Resources">Ressources associées</h6>
+                                        <div id="acModalResources" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 mt-4 pt-3 border-top">
+                                        <a id="acModalProofLink" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-sm shadow-sm" style="border-radius: 8px;">
+                                            <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Proof in New Tab">Ouvrir la preuve dans Drive</span>
+                                        </a>
+                                        <a id="acModalAnalysisLink" href="#" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm" style="border-radius: 8px;">
+                                            <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Analysis in New Tab">Ouvrir l'analyse dans Drive</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Right side: Document / Images Viewer -->
+                                <div class="col-12 col-lg-8 d-flex flex-column" style="min-height: 500px; max-height: 80vh;">
+                                    <div class="bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+                                        <!-- Document Switch Tabs (Preuve vs Analyse) -->
+                                        <ul class="nav nav-pills card-header-pills" id="acModalViewerTabs" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active btn-sm" id="acModalPreuveTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Document Proof">Preuve</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link btn-sm ms-2" id="acModalAnalyseTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Reflexive Analysis">Analyse</button>
+                                            </li>
+                                        </ul>
+                                        <span class="text-muted small" data-en="Preview Document"><i class="fas fa-eye me-1"></i> Aperçu du document</span>
+                                    </div>
+                                    <div class="flex-grow-1 p-3 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
+                                        <!-- Spinner -->
+                                        <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1;">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <!-- Iframe Viewer -->
+                                        <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: block;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
+                                        <!-- No Document Fallback -->
+                                        <div id="acModalNoDoc" class="text-center p-5 d-none" style="z-index: 2;">
+                                            <i class="fas fa-file-excel text-muted fa-3x mb-3"></i>
+                                            <p class="text-muted" data-en="No document available for preview.">Aucun document disponible pour l'aperçu.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3250,7 +3378,7 @@
                     const cardAnalysisLabel = isFrench ? 'Analyse' : 'Analysis';
 
                     col.innerHTML = `
-                        <div class="card h-100 shadow-sm" style="border-radius:16px; border-top:6px solid ${compColor}; display:flex; flex-direction:column; justify-content:space-between; min-height:240px;">
+                        <div class="card h-100 shadow-sm" style="border-radius:16px; border-top:6px solid ${compColor}; display:flex; flex-direction:column; justify-content:space-between; min-height:240px; cursor:pointer;" onclick="openAcDetails('${year}', '${i.code}')">
                             <div class="card-body d-flex flex-column" style="padding:1rem 1.25rem;">
                                 <div class="d-flex justify-content-between align-items-start gap-3">
                                     <span class="ac-badge" style="background:${compColor}; color:#fff; padding:6px 10px; border-radius:20px; font-weight:700;">${i.code}</span>
@@ -3269,7 +3397,7 @@
                                 <div class="mb-3">
                                     <small class="text-muted">${cardCompLabel}: ${i.competence}</small>
                                 </div>
-                                <div class="mt-auto d-flex gap-2 flex-wrap">
+                                <div class="mt-auto d-flex gap-2 flex-wrap" onclick="event.stopPropagation()">
                                     ${i.proof ? `<a href="${i.proof}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">↗ ${cardProofLabel}</a>` : `<button type="button" class="btn btn-sm btn-outline-primary" disabled>↗ ${cardProofLabel}</button>`}
                                     ${i.analysis && String(i.analysis).startsWith('http') ? `<a href="${i.analysis}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">↗ ${cardAnalysisLabel}</a>` : `<button type="button" class="btn btn-sm btn-outline-success" disabled>↗ ${cardAnalysisLabel}</button>`}
                                 </div>
@@ -3291,6 +3419,175 @@
                 container.appendChild(emptyMsg);
             }
         }
+
+        window.openAcDetails = function(year, code) {
+            const itemsList = year === 'rt2' ? acItemsRT2 : acItemsRT3;
+            const item = itemsList.find(i => i.code === code);
+            if (!item) return;
+
+            const colorMap = {
+                'RT1': '#FF2D95',  // rose
+                'RT2': '#8E44AD',  // violet
+                'RT3': '#007AFF',  // bleu
+                'ROM1': '#5AC8FA',  // bleu clair
+                'ROM2': '#34C759',  // vert
+                'DEFAULT': '#6c757d'
+            };
+            const compColor = colorMap[item.competence] || colorMap.DEFAULT;
+
+            // Set code, title, header colors
+            document.getElementById('acModalCode').textContent = item.code;
+            document.getElementById('acModalCode').style.backgroundColor = compColor;
+            document.getElementById('acModalTitle').textContent = item.title;
+            document.getElementById('acModalHeader').style.background = `linear-gradient(135deg, ${compColor} 0%, #0f172a 100%)`;
+
+            // Competence details
+            const meta = competenceMeta[item.competence] || { title: item.competence, description: '' };
+            document.getElementById('acModalCompBadge').textContent = item.competence;
+            document.getElementById('acModalCompBadge').style.backgroundColor = compColor;
+            document.getElementById('acModalCompTitle').textContent = isFrench ? meta.title : (meta.title_en || meta.title);
+            document.getElementById('acModalCompDesc').textContent = isFrench ? meta.description : (meta.description_en || meta.description);
+
+            // AC Description
+            document.getElementById('acModalAcDesc').textContent = item.description || '';
+
+            // Level Dots
+            const avgLevel = avg(item.levels);
+            const filled = Math.round(avgLevel);
+            const dotsTotal = 4;
+            const levelColors = {1:'#e74c3c',2:'#f39c12',3:'#f1c40f',4:'#2ecc71'};
+            let dotsHtml = '<div class="d-flex align-items-center">';
+            for (let d = 1; d <= dotsTotal; d++) {
+                if (d <= filled) {
+                    const dotColor = levelColors[filled] || '#6c757d';
+                    dotsHtml += `<span class="level-dot filled" style="display:inline-block;width:12px;height:12px;margin-right:8px;background:${dotColor};border-radius:3px;"></span>`;
+                } else {
+                    dotsHtml += `<span class="level-dot empty" style="display:inline-block;width:12px;height:12px;margin-right:8px;background:#e9ecef;border-radius:3px;"></span>`;
+                }
+            }
+            dotsHtml += `<small class="text-muted ms-2">${filled}/${dotsTotal}</small></div>`;
+            document.getElementById('acModalLevelDots').innerHTML = dotsHtml;
+
+            // Resources
+            const resourceHtml = Array.isArray(item.resources) && item.resources.length
+                ? item.resources.map((resource, index) => {
+                    const label = resource && String(resource).trim() ? String(resource).trim() : `Ressource ${index + 1}`;
+                    const glossaryItem = resourceGlossary[label];
+                    const title = glossaryItem
+                        ? (typeof glossaryItem === 'object' ? (isFrench ? glossaryItem.fr : glossaryItem.en) : glossaryItem)
+                        : label;
+                    return `<span class="resource-badge border p-1 rounded px-2" style="font-size:0.85rem;" data-tooltip="${title}">${label}</span>`;
+                }).join('')
+                : `<span class="text-muted small">${isFrench ? 'Aucune ressource' : 'No resource'}</span>`;
+            document.getElementById('acModalResources').innerHTML = resourceHtml;
+
+            // Setup External Links
+            const proofLinkBtn = document.getElementById('acModalProofLink');
+            const analysisLinkBtn = document.getElementById('acModalAnalysisLink');
+            
+            if (item.proof) {
+                proofLinkBtn.href = item.proof;
+                proofLinkBtn.classList.remove('disabled');
+                proofLinkBtn.style.display = 'block';
+            } else {
+                proofLinkBtn.removeAttribute('href');
+                proofLinkBtn.classList.add('disabled');
+                proofLinkBtn.style.display = 'none';
+            }
+
+            if (item.analysis && String(item.analysis).startsWith('http')) {
+                analysisLinkBtn.href = item.analysis;
+                analysisLinkBtn.classList.remove('disabled');
+                analysisLinkBtn.style.display = 'block';
+            } else {
+                analysisLinkBtn.removeAttribute('href');
+                analysisLinkBtn.classList.add('disabled');
+                analysisLinkBtn.style.display = 'none';
+            }
+
+            // Set up Document Viewer (Iframe)
+            function getGoogleDriveId(url) {
+                if (!url) return null;
+                const matchD = url.match(/\/d\/([a-zA-Z0-9_-]{25,50})/);
+                if (matchD) return matchD[1];
+                const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]{25,50})/);
+                if (matchId) return matchId[1];
+                return null;
+            }
+
+            const proofId = getGoogleDriveId(item.proof);
+            const analysisId = getGoogleDriveId(item.analysis);
+
+            const proofTab = document.getElementById('acModalPreuveTab');
+            const analysisTab = document.getElementById('acModalAnalyseTab');
+            const iframe = document.getElementById('acModalIframe');
+            const spinner = document.getElementById('acModalSpinner');
+            const noDoc = document.getElementById('acModalNoDoc');
+
+            // Reset tab visibility and active state
+            proofTab.classList.remove('active', 'disabled');
+            analysisTab.classList.remove('active', 'disabled');
+            
+            if (!proofId) {
+                proofTab.classList.add('disabled');
+            }
+            if (!analysisId) {
+                analysisTab.classList.add('disabled');
+            }
+
+            // Function to load document into iframe
+            function loadDocument(docId) {
+                if (!docId) {
+                    iframe.style.display = 'none';
+                    spinner.style.display = 'none';
+                    noDoc.classList.remove('d-none');
+                    return;
+                }
+                
+                iframe.style.display = 'block';
+                spinner.style.display = 'block';
+                noDoc.classList.add('d-none');
+                
+                // Use preview URL to embed it cleanly
+                iframe.src = `https://docs.google.com/document/d/${docId}/preview`;
+            }
+
+            // Bind click events on viewer tabs
+            proofTab.onclick = () => {
+                if (proofTab.classList.contains('disabled')) return;
+                proofTab.classList.add('active');
+                analysisTab.classList.remove('active');
+                loadDocument(proofId);
+            };
+
+            analysisTab.onclick = () => {
+                if (analysisTab.classList.contains('disabled')) return;
+                analysisTab.classList.add('active');
+                proofTab.classList.remove('active');
+                loadDocument(analysisId);
+            };
+
+            // Initial load
+            if (proofId) {
+                proofTab.classList.add('active');
+                loadDocument(proofId);
+            } else if (analysisId) {
+                analysisTab.classList.add('active');
+                loadDocument(analysisId);
+            } else {
+                loadDocument(null);
+            }
+
+            // Show modal using Bootstrap modal API
+            const modalEl = document.getElementById('acModal');
+            const bsModal = new bootstrap.Modal(modalEl);
+            bsModal.show();
+            
+            // Clean iframe when modal is hidden to stop audio/video and free resources
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                iframe.src = 'about:blank';
+            }, { once: true });
+        };
 
         // initial render
         loadAcData();
