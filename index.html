@@ -2050,7 +2050,7 @@
             { code: 'AC24.05ROM', title: 'Automatiser la gestion des équipements réseaux', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [2], proof: 'https://docs.google.com/document/d/1eFJBwdeVPeLvIcQsWFgi54-ZUWQ2l88laG2R7cvvqiE/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1fmpZiDuEALdL8NQK9OQipYSm5wc5K6X8h_LS2PzBW7A/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.ROM.09'] },
             { code: 'AC25.01ROM', title: 'Choisir une architecture et déployer des services de ToIP', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [3], proof: 'https://docs.google.com/document/d/1-wipdSUBlwDiKNpHc0OYhX7GlbzQ0m8v5M5kTk7ZkXI/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1tdSGb8zPQU1oxy_P_aCgkJMZiWBGvZRVRZMA7FeLqUY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R3.ROM.16', 'SAÉ3.ROM.04'] },
             { code: 'AC25.02ROM', title: 'Administrer un service de téléphonie pour l’entreprise', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [4], proof: 'https://docs.google.com/document/d/1WJ4bE0uz3V16bokVxja316mmJAwDfhvcvlMxJq7f4Lg/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1JyTRBocNLenFCiTWnHmEdWyn7v5i0MvkXmpjuD2C4ig/edit?usp=drive_link', resources: ['SAÉ3.ROM.04'] },
-            { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['R19', 'SAÉ3.ROM.03'] }
+            { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['SAÉ3.ROM.03'] }
         ];
 
         const acFallbackItemsRT3 = [
@@ -2075,6 +2075,13 @@
         let acItemsRT3 = acFallbackItemsRT3.map(item => ({ ...item }));
         let strongAcCodesRT2 = new Set(fallbackStrongAcCodesRT2);
         let strongAcCodesRT3 = new Set(fallbackStrongAcCodesRT3);
+
+        let isSyncingRT2 = false;
+        let isSyncingRT3 = false;
+        let justSyncedRT2 = false;
+        let justSyncedRT3 = false;
+        let syncFailedRT2 = false;
+        let syncFailedRT3 = false;
 
         function getCompetenceFromCode(code) {
             if (!code || code.length < 4) return "RT1";
@@ -2856,11 +2863,11 @@
             // Render Search and Level filter below competence buttons
             const searchContainer = document.createElement('div');
             searchContainer.className = 'row g-2 justify-content-center align-items-center mt-3 mb-2';
-            searchContainer.style.maxWidth = '700px';
+            searchContainer.style.maxWidth = '850px';
             searchContainer.style.margin = '0 auto';
 
             const searchCol = document.createElement('div');
-            searchCol.className = 'col-12 col-md-7';
+            searchCol.className = 'col-12 col-md-5';
             
             const inputGroup = document.createElement('div');
             inputGroup.className = 'input-group shadow-sm';
@@ -2897,7 +2904,7 @@
             searchCol.appendChild(inputGroup);
 
             const levelCol = document.createElement('div');
-            levelCol.className = 'col-12 col-sm-6 col-md-5';
+            levelCol.className = 'col-12 col-sm-6 col-md-4';
             const levelSelect = document.createElement('select');
             levelSelect.className = 'form-select shadow-sm';
             levelSelect.style.borderRadius = '999px';
@@ -2929,8 +2936,91 @@
             };
             levelCol.appendChild(levelSelect);
 
+            // Synchronisation / Refresh button
+            const syncCol = document.createElement('div');
+            syncCol.className = 'col-12 col-sm-6 col-md-3';
+            
+            const isSyncing = year === 'rt2' ? isSyncingRT2 : isSyncingRT3;
+            const justSynced = year === 'rt2' ? justSyncedRT2 : justSyncedRT3;
+            const syncFailed = year === 'rt2' ? syncFailedRT2 : syncFailedRT3;
+
+            const syncBtn = document.createElement('button');
+            syncBtn.style.borderRadius = '999px';
+            syncBtn.style.padding = '0.45rem 1rem';
+            syncBtn.style.fontSize = '0.9rem';
+
+            const syncIcon = document.createElement('i');
+            const syncText = document.createElement('span');
+
+            if (isSyncing) {
+                syncBtn.className = 'btn btn-secondary w-100 shadow-sm d-flex align-items-center justify-content-center';
+                syncBtn.disabled = true;
+                syncIcon.className = 'fas fa-sync-alt me-2 fa-spin';
+                syncText.textContent = isFrench ? 'Synchro...' : 'Syncing...';
+            } else if (justSynced) {
+                syncBtn.className = 'btn btn-success w-100 shadow-sm d-flex align-items-center justify-content-center text-white';
+                syncBtn.disabled = true;
+                syncIcon.className = 'fas fa-check-circle me-2';
+                syncText.textContent = isFrench ? 'Synchronisé !' : 'Synchronized!';
+            } else if (syncFailed) {
+                syncBtn.className = 'btn btn-danger w-100 shadow-sm d-flex align-items-center justify-content-center text-white';
+                syncBtn.disabled = true;
+                syncIcon.className = 'fas fa-exclamation-circle me-2';
+                syncText.textContent = isFrench ? 'Échec' : 'Failed';
+            } else {
+                syncBtn.className = 'btn btn-primary w-100 shadow-sm d-flex align-items-center justify-content-center';
+                syncIcon.className = 'fas fa-sync-alt me-2';
+                syncText.textContent = isFrench ? 'Synchroniser' : 'Synchronize';
+                
+                syncBtn.onclick = async () => {
+                    if (isSyncingRT2 || isSyncingRT3) return;
+                    if (year === 'rt2') isSyncingRT2 = true;
+                    else isSyncingRT3 = true;
+                    renderAcSection(year);
+                    
+                    try {
+                        await loadAcData();
+                        if (year === 'rt2') {
+                            isSyncingRT2 = false;
+                            justSyncedRT2 = true;
+                        } else {
+                            isSyncingRT3 = false;
+                            justSyncedRT3 = true;
+                        }
+                        renderAcSection(year);
+                        
+                        setTimeout(() => {
+                            if (year === 'rt2') justSyncedRT2 = false;
+                            else justSyncedRT3 = false;
+                            renderAcSection(year);
+                        }, 2000);
+                    } catch (err) {
+                        console.error("Sync failed:", err);
+                        if (year === 'rt2') {
+                            isSyncingRT2 = false;
+                            syncFailedRT2 = true;
+                        } else {
+                            isSyncingRT3 = false;
+                            syncFailedRT3 = true;
+                        }
+                        renderAcSection(year);
+                        
+                        setTimeout(() => {
+                            if (year === 'rt2') syncFailedRT2 = false;
+                            else syncFailedRT3 = false;
+                            renderAcSection(year);
+                        }, 2000);
+                    }
+                };
+            }
+
+            syncBtn.appendChild(syncIcon);
+            syncBtn.appendChild(syncText);
+            syncCol.appendChild(syncBtn);
+
             searchContainer.appendChild(searchCol);
             searchContainer.appendChild(levelCol);
+            searchContainer.appendChild(syncCol);
             filtersEl.appendChild(searchContainer);
 
             // Render cards container
