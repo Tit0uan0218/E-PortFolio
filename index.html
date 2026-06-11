@@ -2243,17 +2243,19 @@
                             const r2 = parseRessourcesList(cells[acIndex + 2], strikethroughClasses);
                             const r3 = parseRessourcesList(cells[acIndex + 3], strikethroughClasses);
                             const r4 = parseRessourcesList(cells[acIndex + 4], strikethroughClasses);
-                            const resources = Array.from(new Set([...r2, ...r3, ...r4]));
+                            const resources = Array.from(new Set([...r1, ...r2, ...r3, ...r4]));
 
-                            const totalResources = r2.length + r3.length + r4.length;
+                            const totalResources = r1.length + r2.length + r3.length + r4.length;
                             let level = 1;
                             if (totalResources > 0) {
                                 const weightedSum = 
+                                    r1.reduce((sum, r) => sum + 1 * getResourceWeight(r), 0) +
                                     r2.reduce((sum, r) => sum + 2 * getResourceWeight(r), 0) +
                                     r3.reduce((sum, r) => sum + 3 * getResourceWeight(r), 0) +
                                     r4.reduce((sum, r) => sum + 4 * getResourceWeight(r), 0);
                                 
                                 const totalWeight = 
+                                    r1.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r2.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r3.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r4.reduce((sum, r) => sum + getResourceWeight(r), 0);
@@ -2370,17 +2372,19 @@
                         const r2 = parseResourcesGviz(cells[acIndex + 2]);
                         const r3 = parseResourcesGviz(cells[acIndex + 3]);
                         const r4 = parseResourcesGviz(cells[acIndex + 4]);
-                        const resources = Array.from(new Set([...r2, ...r3, ...r4]));
+                        const resources = Array.from(new Set([...r1, ...r2, ...r3, ...r4]));
 
-                        const totalResources = r2.length + r3.length + r4.length;
+                        const totalResources = r1.length + r2.length + r3.length + r4.length;
                         let level = 1;
                         if (totalResources > 0) {
                             const weightedSum = 
+                                r1.reduce((sum, r) => sum + 1 * getResourceWeight(r), 0) +
                                 r2.reduce((sum, r) => sum + 2 * getResourceWeight(r), 0) +
                                 r3.reduce((sum, r) => sum + 3 * getResourceWeight(r), 0) +
                                 r4.reduce((sum, r) => sum + 4 * getResourceWeight(r), 0);
                             
                             const totalWeight = 
+                                r1.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r2.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r3.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r4.reduce((sum, r) => sum + getResourceWeight(r), 0);
