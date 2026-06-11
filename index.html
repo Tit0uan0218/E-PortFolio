@@ -1047,6 +1047,18 @@
             color: #0f172a !important;
         }
 
+        body.dark-mode .input-group {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        body.dark-mode .input-group-text {
+            background-color: #1e293b !important;
+            color: #94a3b8 !important;
+        }
+        body.dark-mode .input-group .form-control {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+
         body.dark-mode .btn-outline-secondary {
             color: #cbd5e1;
             border-color: #cbd5e1;
@@ -1481,7 +1493,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p data-en="The submission of this form is under construction. 🚧">L'envoi de ce formulaire est en cours de construction. 🚧</p>
+                        <p><span data-en="The submission of this form is under construction.">L'envoi de ce formulaire est en cours de construction.</span> <i class="fas fa-tools text-warning ms-1"></i></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-en="Close">Fermer</button>
@@ -2462,7 +2474,7 @@
             let html = `
                 <div class="dashboard-card shadow-sm">
                     <h4 class="mb-4" style="font-weight:700; display:flex; align-items:center; gap:8px;">
-                        📊 ${isFrench ? 'Tableau de bord de progression' : 'Progression Dashboard'}
+                        <i class="fas fa-chart-bar text-primary"></i> ${isFrench ? 'Tableau de bord de progression' : 'Progression Dashboard'}
                     </h4>
                     <div class="row g-3 mb-4">
                         <!-- Stat 1 -->
@@ -2599,15 +2611,27 @@
 
             const searchCol = document.createElement('div');
             searchCol.className = 'col-12 col-md-7';
+            
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group shadow-sm';
+            inputGroup.style.borderRadius = '999px';
+            inputGroup.style.overflow = 'hidden';
+            inputGroup.style.border = '1px solid rgba(15, 23, 42, 0.15)';
+            
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'input-group-text bg-white border-0 pe-1';
+            iconSpan.style.color = '#64748b';
+            iconSpan.innerHTML = '<i class="fas fa-search"></i>';
+            
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
-            searchInput.className = 'form-control shadow-sm';
+            searchInput.className = 'form-control border-0 ps-1';
             searchInput.placeholder = isFrench 
-                ? '🔍 Rechercher (mot-clé, code, ressource)...' 
-                : '🔍 Search (keyword, code, resource)...';
+                ? 'Rechercher (mot-clé, code, ressource)...' 
+                : 'Search (keyword, code, resource)...';
             searchInput.value = year === 'rt2' ? searchTextRT2 : searchTextRT3;
-            searchInput.style.borderRadius = '999px';
-            searchInput.style.paddingLeft = '1.25rem';
+            searchInput.style.outline = 'none';
+            searchInput.style.boxShadow = 'none';
             
             searchInput.oninput = (e) => {
                 if (year === 'rt2') {
@@ -2617,7 +2641,10 @@
                 }
                 renderAcCardsOnly(year);
             };
-            searchCol.appendChild(searchInput);
+            
+            inputGroup.appendChild(iconSpan);
+            inputGroup.appendChild(searchInput);
+            searchCol.appendChild(inputGroup);
 
             const levelCol = document.createElement('div');
             levelCol.className = 'col-12 col-sm-6 col-md-5';
@@ -2627,11 +2654,11 @@
             levelSelect.style.paddingLeft = '1.25rem';
             
             const levelOptions = [
-                { value: 'ALL', fr: '🎯 Tous les niveaux', en: '🎯 All levels' },
-                { value: '1', fr: '⭐ Niveau 1 / 4', en: '⭐ Level 1 / 4' },
-                { value: '2', fr: '⭐⭐ Niveau 2 / 4', en: '⭐⭐ Level 2 / 4' },
-                { value: '3', fr: '⭐⭐⭐ Niveau 3 / 4', en: '⭐⭐⭐ Level 3 / 4' },
-                { value: '4', fr: '👑 Niveau 4 / 4', en: '👑 Level 4 / 4' }
+                { value: 'ALL', fr: 'Tous les niveaux', en: 'All levels' },
+                { value: '1', fr: 'Niveau 1 / 4', en: 'Level 1 / 4' },
+                { value: '2', fr: 'Niveau 2 / 4', en: 'Level 2 / 4' },
+                { value: '3', fr: 'Niveau 3 / 4', en: 'Level 3 / 4' },
+                { value: '4', fr: 'Niveau 4 / 4', en: 'Level 4 / 4' }
             ];
             
             levelOptions.forEach(opt => {
