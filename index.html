@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Description de votre site">
+    <meta name="author" content="Titouan FLOCH">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .nav-link,
+        #translateBtn,
+        .btn,
+        .card,
+        .list-group-item,
+        .accordion-button,
+        .page-section,
+        .intro-mini-card,
+        .intro-map-card,
+        #scrollToTopBtn {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%) !important;
+            box-shadow: 0 1px 8px rgba(15, 23, 42, 0.08);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #333333 !important;
+            letter-spacing: 0.2px;
+        }
+
+        .navbar .container {
+            max-width: 1380px;
+        }
+
+        .navbar-nav {
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .navbar .nav-link,
+        .navbar .dropdown-toggle {
+            border-radius: 999px;
+            padding: 0.45rem 0.8rem;
+            font-weight: 600;
+            color: #334155 !important;
+            font-size: 0.95rem;
+        }
+
+        .navbar .nav-link:hover,
+        .navbar .dropdown-toggle:hover {
+            background: rgba(17, 24, 39, 0.06);
+        }
+
+        .navbar .dropdown-menu {
+            border: 0;
+            border-radius: 16px;
+            padding: 0.5rem;
+            min-width: 260px;
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.14);
+        }
+
+        .navbar .dropdown-item {
+            border-radius: 12px;
+            padding: 0.7rem 0.95rem;
+            font-weight: 600;
+        }
+
+        .navbar .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            margin: 0 4px;
+            color: #555555 !important;
+            position: relative;
+        }
+
+        #translateBtn {
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.42rem 0.9rem;
+            color: #333333 !important;
+            border-color: #333333 !important;
+            font-size: 0.95rem;
+        }
+
+        #translateBtn:hover {
+            background-color: #333333 !important;
+            color: white !important;
+        }
+
+        /* Scroll to top button */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            display: none;
+            background: linear-gradient(135deg, #555555 0%, #333333 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        #scrollToTopBtn:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Typography */
+        h1 {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            color: #222222;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #555555 0%, #333333 100%);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #333333;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-weight: 700;
+            color: #444444;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: #555555;
+        }
+
+        p.lead {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Page sections */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        #home {
+            contain: content;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Index section */
+        #index {
+            background: linear-gradient(135deg, rgba(200, 200, 200, 0.1) 0%, rgba(100, 100, 100, 0.05) 100%);
+            padding: 4rem 0;
+        }
+
+        #indexPage {
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card,
+        .intro-mini-card,
+        .intro-map-card {
+            will-change: transform;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        /* List items */
+        .list-group-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            transition: all 0.3s ease;
+            color: #555555;
+        }
+
+        .list-group-item:hover {
+            background: #f8f8f8;
+            border-color: #333333;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-group-flush {
+            border-radius: 0;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #555555 0%, #333333 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #666666 0%, #444444 100%);
+        }
+
+        .btn-outline-primary {
+            color: #333333 !important;
+            border: 2px solid #333333 !important;
+            border-radius: 20px;
+        }
+
+        .btn-outline-primary:hover {
+            background: #333333 !important;
+            border-color: #333333 !important;
+            color: white !important;
+        }
+
+        /* Form elements */
+        .form-control, .form-select {
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            color: #333333;
+        }
+
+        .form-control:focus {
+            border-color: #333333;
+            box-shadow: 0 0 0 0.2rem rgba(51, 51, 51, 0.15);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444444;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal */
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #555555 0%, #333333 100%);
+            color: white;
+            border: none;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            border-top: 3px solid #555555;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: #b0b0b0 !important;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #ffffff !important;
+            text-decoration: underline;
+        }
+
+        footer p {
+            color: #999999;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Container sections */
+        .container {
+            max-width: 1000px;
+        }
+
+        section > .container {
+            background: transparent;
+            border-radius: 0;
+            padding: 2.5rem 1.25rem;
+            box-shadow: none;
+            margin: 0 auto;
+        }
+
+        #home > .container,
+        #cv > .container,
+        #portfolio > .container-fluid,
+        #loisirs > .container,
+        #mentions > .container {
+            max-width: 1380px;
+        }
+
+        /* Text center with spacing */
+        .text-center {
+            margin-bottom: 2rem;
+        }
+
+        /* Row spacing */
+        .row {
+            margin-bottom: 2rem;
+        }
+
+        /* Badge/tag style */
+        .badge {
+            background: linear-gradient(135deg, #555555 0%, #333333 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        /* Full-width portfolio layout */
+        #portfolio .portfolio-shell {
+            max-width: none !important;
+            width: 100% !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding: 0 1.25rem !important;
+            margin: 0 !important;
+        }
+
+        #portfolio .portfolio-shell > section {
+            background: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #portfolio .portfolio-shell {
+            background: transparent !important;
+        }
+
+        #portfolio .portfolio-panel {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #portfolio main,
+        #portfolio .container,
+        #portfolio .container-fluid {
+            background: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        #portfolio .tab-content,
+        #portfolio .tab-pane {
+            background: transparent !important;
+        }
+
+        #portfolio .portfolio-menu {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2rem;
+        }
+
+        #portfolio .portfolio-menu .dropdown-toggle {
+            min-width: 220px;
+            border-radius: 999px;
+            padding: 0.8rem 1.25rem;
+            font-weight: 700;
+            background: #222;
+            border-color: #222;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+        }
+
+        #portfolio .portfolio-menu .dropdown-menu {
+            border: 0;
+            border-radius: 16px;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        #portfolio .portfolio-menu .dropdown-item.active,
+        #portfolio .portfolio-menu .dropdown-item:active {
+            background: #222;
+            color: #fff;
+        }
+
+        #portfolio .portfolio-menu .dropdown-item {
+            padding: 0.8rem 1rem;
+            font-weight: 600;
+        }
+
+        /* Remove boxed backgrounds from the rest of the site */
+        #cv .bg-light,
+        #mentions .bg-light,
+        #home .intro-section,
+        #home .intro-mini-card,
+        #home .intro-map-card,
+        #home .cta-section {
+            background: transparent !important;
+            box-shadow: none !important;
+            border-color: rgba(148, 163, 184, 0.22) !important;
+        }
+
+        #cv .rounded-3,
+        #mentions .rounded-3,
+        #home .rounded-4,
+        #home .rounded-3 {
+            border-radius: 0 !important;
+        }
+
+        /* PDF preview styling: show a centered, classic preview without large grey borders */
+        #cv .pdf-preview {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(200,200,200,0.25);
+        }
+
+        #cv .pdf-preview object,
+        #cv .pdf-preview iframe,
+        #cv .pdf-preview embed {
+            width: 100%;
+            height: 1120px; /* large enough to display a single A4 page without inner scroll */
+            border: none;
+            display: block;
+            background: #ffffff;
+        }
+
+        /* on smaller screens, scale down the height so it fits better */
+        @media (max-width: 767.98px) {
+            #cv .pdf-preview object,
+            #cv .pdf-preview iframe,
+            #cv .pdf-preview embed {
+                height: 720px;
+            }
+        }
+
+        #portfolio .accordion,
+        #portfolio .accordion-item,
+        #portfolio .accordion-body,
+        #portfolio .rt2-subcategory-banner,
+        #portfolio .rt1-subcategory-banner,
+        #portfolio .rt3-subcategory-banner {
+            border-radius: 0.9rem;
+        }
+
+        /* Invalid feedback */
+        .invalid-feedback {
+            display: block;
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15) !important;
+        }
+
+        /* Background sections */
+        .bg-light {
+            background-color: #f5f5f5 !important;
+        }
+
+        /* Portfolio Navigation Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #d0d0d0;
+            gap: 0;
+        }
+
+        .nav-tabs .nav-link {
+            color: #555555;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #333333;
+            border-bottom-color: #888888;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #333333;
+            border-bottom-color: #333333;
+            background-color: transparent;
+        }
+
+        .tab-content {
+            margin-top: 2rem;
+        }
+
+        .tab-pane {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Hobbies Section Styling */
+        .hobbies-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #333333;
+            margin-bottom: 0.5rem;
+        }
+
+        .hobbies-section .card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            border-radius: 12px !important;
+        }
+
+        .hobbies-section .card:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2) !important;
+        }
+
+        .hobbies-section .card-body {
+            padding: 1.5rem;
+            background: #ffffff;
+        }
+
+        .hobbies-section .card-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #333333 !important;
+            margin-bottom: 1rem;
+        }
+
+        .hobbies-section .card-text {
+            color: #555555;
+            margin-bottom: 0;
+        }
+
+        /* Accordion Styling */
+        .accordion-rt1 {
+            border: 1px solid #d0d0d0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .accordion-item {
+            border: none;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-button {
+            background-color: #f8f8f8;
+            color: #333333;
+            font-weight: 600;
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-button:hover {
+            background-color: #f0f0f0;
+            color: #333333;
+        }
+
+        .accordion-button:focus {
+            background-color: #f0f0f0;
+            color: #333333;
+            box-shadow: none;
+            border: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            color: #333333;
+            box-shadow: none;
+        }
+
+        .accordion-button::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333333'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+
+        .accordion-body {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-top: none;
+        }
+
+        .accordion-body .list-group-item {
+            border-color: #d0d0d0;
+            margin-bottom: 0.5rem;
+        }
+
+        .accordion-body .list-group-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Intro section */
+        .intro-layout {
+            align-items: stretch;
+        }
+
+        .intro-mini-card {
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            height: 100%;
+        }
+
+        .intro-mini-card h3 {
+            margin-top: 0;
+            margin-bottom: 0.35rem;
+            font-size: 1rem;
+            color: #333333;
+        }
+
+        .intro-mini-card p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: #555555;
+        }
+
+        .intro-map-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f4f4f4 100%);
+            border: 1px solid #d9d9d9;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .intro-map-frame {
+            width: 100%;
+            min-height: 320px;
+            border: 0;
+            display: block;
+        }
+
+        .intro-map-links {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 991.98px) {
+            .intro-map-frame {
+                min-height: 260px;
+            }
+        }
+
+        /* Portfolio AC improvements */
+        #acFilters { margin-bottom: 1.5rem; }
+        #acFilters .btn { border-radius: 999px; padding: 0.45rem 0.9rem; font-weight:600; }
+        #acFilters .btn.active { background:#222; color:#fff; border-color:#222; }
+
+        .ac-badge { font-size:0.9rem; letter-spacing:0.4px; }
+
+        /* card tweaks for portfolio look */
+        .card.portfolio-card { border-radius:14px; transition: transform .25s ease, box-shadow .25s ease; }
+        .card.portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.08); }
+        .card .card-body { padding:1.1rem 1.2rem; }
+        .card .card-title { font-size:1.05rem; }
+
+        /* make the AC container use Bootstrap gutters only so 3 cards fit per row */
+        #acContainer { gap: 0; }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#index" data-nav-page="index">Titouan FLOCH</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home" data-nav-page="home" data-en="About Me">Présentation</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#portfolio" id="navPortfolio" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-en="E-Portfolio">E-Portfolio</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#portfolio" data-nav-page="portfolio" data-portfolio-target="rt1">BUT RT1</a></li>
+                            <li><a class="dropdown-item" href="#portfolio" data-nav-page="portfolio" data-portfolio-target="rt2">BUT RT2</a></li>
+                            <li><a class="dropdown-item" href="#portfolio" data-nav-page="portfolio" data-portfolio-target="rt3">BUT RT3</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#cv" data-nav-page="cv" data-en="Resume">CV</a></li>
+                </ul>
+                <button id="translateBtn" class="btn btn-outline-primary ms-2" type="button" data-en="Translate to French">Traduire en Anglais</button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section id="index" class="page-section active">
+        <div class="container mt-5" id="indexPage">
+            <h1 id="mainTitle" class="text-center" data-en="Welcome to my E-Portfolio">Bienvenue sur mon E-Portfolio</h1>
+            <p id="mainDescription" class="text-center mt-3" data-en="Explore my hobbies, my resume, and my projects. Click below to access the home page.">
+                Explorez mes loisirs, mon CV, et mes projets.
+            </p>
+            <div class="text-center mt-5">
+                <a href="#home" class="btn btn-primary btn-lg" id="homeButton" data-nav-page="home" data-en="Learn More About Me">En savoir plus sur moi</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="home" class="page-section">
+        <main class="container-fluid my-4 portfolio-shell">
+            <section>
+                <h1 class="text-center" data-en="About Me" data-fr="À propos de moi">À propos de moi</h1>
+                <div id="content">
+                    <div class="intro-section p-4 p-md-5 rounded-4 mb-5" style="background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%); border-left: 5px solid #333333;">
+                        <div class="row g-4 intro-layout align-items-stretch">
+                            <div class="col-lg-7 d-flex flex-column gap-3">
+                                <div>
+                                    <h2 class="mb-3" data-en="Welcome" data-fr="Bienvenue">Bienvenue</h2>
+                                    <p class="lead mb-0" style="font-size: 1.05rem; line-height: 1.7; color: #555555;" data-en="Passionate about the physical security of property and people, I am looking for work in this field to apply my skills and learn new technologies." data-fr="Passionné par la sécurité physique des biens et des personnes, je recherche un travail dans ce domaine pour mettre en pratique mes compétences et apprendre de nouvelles technologies.">
+                                        Passionné par la sécurité physique des biens et des personnes, je recherche un travail dans ce domaine pour mettre en pratique mes compétences et apprendre de nouvelles technologies.
+                                    </p>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <div class="intro-mini-card">
+                                            <h3 data-en="Titouan FLOCH" data-fr="Titouan FLOCH">Titouan FLOCH</h3>
+                                            <p data-en="Student passionate about networks, telecommunications and security." data-fr="Étudiant passionné par les réseaux, la télécommunication et la sécurité.">Étudiant passionné par les réseaux, la télécommunication et la sécurité.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="intro-mini-card">
+                                            <h3 data-en="BUT RT2 - Operator Networks and Multimedia" data-fr="BUT RT2 - Réseaux des Opérateurs et Multimédia">BUT RT2 - Réseaux des Opérateurs et Multimédia</h3>
+                                            <p data-en="Student in second year of BUT Networks and Telecommunications, Operator Networks and Multimedia pathway (BUT2 / BUT RT2 Group R2)." data-fr="Étudiant en deuxième année de BUT Réseaux et Télécommunications, parcours Réseaux des Opérateurs et Multimédia (BUT2 / BUT RT2 Groupe R2).">Étudiant en deuxième année de BUT Réseaux et Télécommunications, parcours Réseaux des Opérateurs et Multimédia (BUT2 / BUT RT2 Groupe R2).</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="intro-mini-card">
+                                            <h3 data-en="IUT of Roanne" data-fr="IUT de Roanne">IUT de Roanne</h3>
+                                            <p data-en="Institut Universitaire de Technologie of Roanne, a study environment focused on technical and digital professions." data-fr="Institut Universitaire de Technologie de Roanne, un cadre d'études orienté vers les métiers techniques et numériques.">Institut Universitaire de Technologie de Roanne, un cadre d'études orienté vers les métiers techniques et numériques.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5">
+                                <div class="intro-map-card h-100 d-flex flex-column">
+                                    <div class="p-3 p-md-4 border-bottom" style="background: rgba(255,255,255,0.65);">
+                                        <h3 class="mb-1" data-en="IUT of Roanne" data-fr="IUT de Roanne">IUT de Roanne</h3>
+                                        <p class="mb-1" style="color: #666666; font-size: 0.95rem;" data-en="20 avenue de Paris, Building G, 42300 Roanne" data-fr="20 avenue de Paris, Bâtiment G, 42300 Roanne">20 avenue de Paris, Bâtiment G, 42300 Roanne</p>
+                                        <p class="mb-0" style="color: #666666; font-size: 0.95rem;" data-en="Find the campus on the map and open it in navigation." data-fr="Localisez le campus sur la carte et ouvrez-le dans votre navigateur.">Localisez le campus sur la carte et ouvrez-le dans votre navigateur.</p>
+                                    </div>
+                                    <iframe
+                                        class="intro-map-frame flex-grow-1"
+                                        src="https://www.openstreetmap.org/export/embed.html?bbox=4.0717064%2C46.0428927%2C4.0736468%2C46.0455916&amp;layer=mapnik&amp;marker=46.0441726%2C4.0723792"
+                                        title="Carte interactive de l'IUT de Roanne"
+                                        loading="lazy"
+                                    ></iframe>
+                                    <div class="p-3 p-md-4 intro-map-links">
+                                        <a class="btn btn-primary w-100" href="https://www.openstreetmap.org/?mlat=46.0441726&amp;mlon=4.0723792#map=18/46.0441726/4.0723792" target="_blank" rel="noopener noreferrer" data-en="Open map">Ouvrir la carte</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-5" style="border-top: 2px solid #d0d0d0;">
+                    
+                    <!-- Hobbies Section -->
+                    <div class="hobbies-section mt-5 pt-5">
+                        <h2 class="text-center mb-2" id="loisirsTitle" data-en="My Hobbies and Passions" data-fr="Mes Loisirs et Passions">Mes Loisirs et Passions</h2>
+                        <p class="text-center mb-5" id="loisirsSubtitle" data-en="Discover what I am passionate about!" data-fr="Découvrez ce qui me passionne !" style="font-size: 1.1rem; color: #666666;">Découvrez ce qui me passionne !</p>
+                        <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
+                            <div class="col">
+                                <div class="card h-100" style="border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'; this.style.transform='translateY(0)';">
+                                    <img src="eportfolio_files/images/sécurité.jpg" class="card-img-top" alt="Sécurité" style="height: 200px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Security" data-fr="La sécurité">La sécurité</h5>
+                                        <p class="card-text flex-grow-1" data-en="Since I was a child, I have been passionate about the physical security of property and people. Alarm systems, safes, locksmithing, I am well-informed on these subjects." data-fr="Depuis tout petit, je suis passionné par la sécurité \"physique\" des biens et des personnes. Systèmes d'alarmes, coffres, serrurerie, je suis très renseigné sur ces sujets." style="font-size: 0.95rem; line-height: 1.6;">
+                                            Depuis tout petit, je suis passionné par la sécurité "physique" des biens et des personnes.
+                                            Systèmes d'alarmes, coffres, serrurerie, je suis très renseigné sur ces sujets.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100" style="border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'; this.style.transform='translateY(0)';">
+                                    <img src="eportfolio_files/images/escalade.jpg" class="card-img-top" alt="Escalade" style="height: 200px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Climbing" data-fr="L'escalade">L'escalade</h5>
+                                        <p class="card-text flex-grow-1" data-en="I have been climbing for 10 years. I have passed the white, yellow, and orange passports, as well as a training course for Managing Personal Protective Equipment (PPE)." style="font-size: 0.95rem; line-height: 1.6;">
+                                            Je pratique la grimpe depuis 10 ans. J'ai passé les passeports blanc, jaune et orange, ainsi
+                                            qu'une formation Gestionnaire d'Equipements de Protection Individuelle (EPI).
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100" style="border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease; overflow: hidden;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'; this.style.transform='translateY(0)';">
+                                    <img src="eportfolio_files/images/jeuxvidéo.jpg" class="card-img-top" alt="Jeux vidéo" style="height: 200px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Video Games" style="color: #333333; font-weight: 700;" data-fr="Les jeux-vidéos">Les jeux-vidéos</h5>
+                                        <p class="card-text flex-grow-1" data-en="One of my hobbies has always been playing video games. From military tactics to role-playing, the games I play are very varied." style="font-size: 0.95rem; line-height: 1.6; color: #555555;">
+                                            Un de mes loisirs depuis toujours est de jouer aux jeux vidéo. Du tactique militaire au roleplay,
+                                            les jeux auxquels je joue sont très variés.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <hr class="my-5" style="border-top: 2px solid #d0d0d0; margin-top: 4rem; margin-bottom: 4rem;">
+                    <div class="cta-section p-5 rounded-4 mt-5 text-center" style="background: linear-gradient(135deg, #f8f8f8 0%, #ececec 100%); border-right: 5px solid #333333; box-shadow: 0 6px 20px rgba(0,0,0,0.08);">
+                        <h3 class="mb-4" data-en="Explore My Portfolio" style="font-size: 2rem; font-weight: 800; color: #333333;">Explorez mon portfolio</h3>
+                        <p style="font-size: 1.1rem; color: #555555; margin-bottom: 2rem; font-weight: 500;" data-en="Discover my hobbies, passions and projects by exploring my site!">Découvrez mes loisirs, passions et projets en explorant mon site !</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="#portfolio" class="btn btn-lg" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); border: none; padding: 0.9rem 2.5rem; font-weight: 700; color: white; border-radius: 8px; transition: all 0.3s ease; text-decoration: none;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" data-nav-page="portfolio" data-en="View Portfolio">Voir mon portfolio</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </section>
+        </main>
+    </section>
+
+    <section id="loisirs" class="page-section">
+        <main class="container my-5">
+            <section>
+                <h1 class="text-center" id="loisirsTitle" data-en="My Hobbies and Passions">Mes Loisirs et Passions</h1>
+                <p class="text-center mb-5" id="loisirsSubtitle" data-en="Discover what I am passionate about!">Découvrez ce qui me passionne !</p>
+                    <div>
+                        <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="eportfolio_files/images/s%C3%A9curit%C3%A9.jpg" class="card-img-top" alt="Sécurité">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Security">La sécurité</h5>
+                                        <p class="card-text flex-grow-1" data-en="Since I was a child, I have been passionate about the physical security of property and people. Alarm systems, safes, locksmithing, I am well-informed on these subjects.">
+                                            Depuis tout petit, je suis passionné par la sécurité "physique" des biens et des personnes.
+                                            Systèmes d'alarmes, coffres, serrurerie, je suis très renseigné sur ces sujets.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="eportfolio_files/images/escalade.jpg" class="card-img-top" alt="Escalade">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Climbing">L'escalade</h5>
+                                        <p class="card-text flex-grow-1" data-en="I have been climbing for 10 years. I have passed the white, yellow, and orange passports, as well as a training course for Managing Personal Protective Equipment (PPE).">
+                                            Je pratique la grimpe depuis 10 ans. J'ai passé les passeports blanc, jaune et orange, ainsi
+                                            qu'une formation Gestionnaire d'Equipements de Protection Individuelle (EPI).
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="eportfolio_files/images/jeuxvid%C3%A9o.jpg" class="card-img-top" alt="Jeux vidéo">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title" data-en="Video Games">Les jeux-vidéos</h5>
+                                        <p class="card-text flex-grow-1" data-en="One of my hobbies has always been playing video games. From military tactics to role-playing, the games I play are very varied.">
+                                            Un de mes loisirs depuis toujours est de jouer aux jeux vidéo. Du tactique militaire au roleplay,
+                                            les jeux auxquels je joue sont très variés.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+        </main>
+    </section>
+
+    <section id="cv" class="page-section">
+        <div class="container my-5">
+            <h1 class="text-center" data-en="My Resume">Mon Curriculum Vitae</h1>
+
+            <div class="text-center mb-4">
+                <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" class="btn btn-brand" download>
+                    <i class="fas fa-download me-2"></i> <span data-en="Download PDF">Télécharger en PDF</span>
+                </a>
+            </div>
+
+            <div class="pdf-preview">
+                <object data="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf#page=1&view=FitH" type="application/pdf" aria-label="Aperçu du CV de Titouan FLOCH">
+                    <p style="padding:1rem; color:#444;">Votre navigateur ne peut pas afficher les PDF en ligne. Vous pouvez télécharger le CV <a href="eportfolio_files/download/CV%20Titouan%20FLOCH.pdf" download>ici</a>.</p>
+                </object>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="page-section">
+        <main class="container-fluid my-4 portfolio-shell">
+            <section class="portfolio-panel">
+                <h1 class="text-center" data-en="My E-Portfolio">Mon E-Portfolio</h1>
+                <p class="text-center mb-4" data-en="Discover my skills, projects and achievements">Découvrez mes compétences, mes projets et mes réalisations</p>
+
+                <div class="tab-content" id="portfolioContent">
+                    <!-- BUT RT1 Content -->
+                    <div class="tab-pane fade" id="content-rt1" role="tabpanel">
+                        
+                        <div class="accordion accordion-rt1" id="accordionRT1">
+                            <!-- Skills Accordion -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkills" aria-expanded="true" data-en="Skills">
+                                        Compétences
+                                    </button>
+                                </h2>
+                                <div id="collapseSkills" class="accordion-collapse collapse show" data-bs-parent="#accordionRT1">
+                                    <div class="accordion-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" data-en="Network Installation: Network administration under Linux and Windows, cabling and fiber optic welding. I also passed an MCQ certifying my level equivalent to an electrical authorization BE Manoeuvre.">
+                                                <strong>Installation Réseaux :</strong> Administration de réseaux sous Linux et Windows, câblage et soudure de fibre optique. J'ai également passé un QCM attestant mon niveau équivalent à une habiliation électrique BE Manoeuvre.
+                                            </li>
+                                            <li class="list-group-item" data-en="Web Development: Creation of dynamic websites with Symfony and Bootstrap. I also created an html/css/js site for a web development project.">
+                                                <strong>Développement Web :</strong> Création de sites dynamiques avec Symfony et Bootstrap. J'ai également créé un site html/css/js pour un projet de développement web.
+                                            </li>
+                                            <li class="list-group-item" data-en="Data Analysis: Use of tools such as Python to process and analyze data. I carried out an event frame analysis project (internet traffic).">
+                                                <strong>Analyse de données :</strong> Utilisation d'outils comme Python pour traiter et analyser des données. J'ai réalisé un projet d'analyse de trames d'événements (traffic internet).
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Projects Accordion -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProjects" data-en="Completed Projects">
+                                        Projets Réalisés
+                                    </button>
+                                </h2>
+                                <div id="collapseProjects" class="accordion-collapse collapse" data-bs-parent="#accordionRT1">
+                                    <div class="accordion-body">
+                                        <div class="row g-4">
+                                            <div class="col-md-4">
+                                                <div class="card h-100">
+                                                    <img src="eportfolio_files/images/BUT RT1/CaptureTP2R105.png" class="card-img-top" alt="Projet 1">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" data-en="Network infrastructure installation">Installation des infrastructures réseau</h5>
+                                                        <p class="card-text" data-en="Wiring of an Ethernet LAN network and fiber optic welding.">Câblage d'un réseau LAN Ethernet et soudure de fibre optique.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card h-100">
+                                                    <img src="eportfolio_files/images/BUT RT1/CaptureSAE104.png" class="card-img-top" alt="Projet 2">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" data-en="Website Project">Projet de Site Web</h5>
+                                                        <p class="card-text" data-en="Development of a library management website with Symfony.">Développement d'un site de gestion de bibliothèque avec Symfony.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card h-100">
+                                                    <img src="eportfolio_files/images/BUT RT1/CaptureSAE105.png" class="card-img-top" alt="Projet 3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" data-en="Frame analysis">Analyse de trames</h5>
+                                                        <p class="card-text" data-en="Automation of event frame analysis with Python and report creation.">Automatisation de l'analyse de trames d'événements avec Python et création de rapports.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Reflective Analyses Accordion -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyses" data-en="Reflective Analyses">
+                                        Analyses Réflexives
+                                    </button>
+                                </h2>
+                                <div id="collapseAnalyses" class="accordion-collapse collapse" data-bs-parent="#accordionRT1">
+                                    <div class="accordion-body">
+                                        <div class="p-4">
+                                            <p data-en="Throughout my training, I analyzed my projects and evaluated my progress. Here are some key points:">Tout au long de ma formation, j'ai analysé mes projets et évalué mes progrès. Voici quelques points clés :</p>
+                                            <ul class="list-unstyled mt-3">
+                                                <li class="mb-2">✓ <span data-en="Improvement of my skills in network installation.">Amélioration de mes compétences en installation de réseaux.</span></li>
+                                                <li class="mb-2">✓ <span data-en="Learning new languages and frameworks like Symfony and Bootstrap.">Apprentissage de nouveaux langages et frameworks comme Symfony et Bootstrap.</span></li>
+                                                <li class="mb-2">✓ <span data-en="Improvement of my project management and team collaboration skills.">Amélioration de mes compétences en gestion de projet et en collaboration d'équipe.</span></li>
+                                                <li>✓ <span data-en="Development of an ability to solve complex technical problems.">Développement d'une capacité à résoudre des problèmes techniques complexes.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-category banner for BUT RT1 (bottom of RT1 tab) -->
+                        <div class="rt1-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
+                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT1 Groupe A2 - année scolaire 2024-2025</p>
+                        </div>
+
+                    </div>
+
+                    <!-- BUT RT2 Content -->
+                    <div class="tab-pane fade show active" id="content-rt2" role="tabpanel">
+                        <div class="p-3">
+                            <div id="acFilters" class="text-center mb-4"></div>
+                            <div id="acContainer" class="row g-4" style="width:100%; margin:0; --gap:1.5rem;"></div>
+                        </div>
+
+                        <!-- Sub-category banner for BUT RT2 (bottom of RT2 tab) -->
+                        <div class="rt2-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
+                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT2 Groupe R2 - année scolaire 2025-2026</p>
+                        </div>
+                    </div>
+
+                    <!-- BUT RT3 Content -->
+                    <div class="tab-pane fade" id="content-rt3" role="tabpanel">
+                        <div class="accordion accordion-rt3" id="accordionRT3">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSkills3" aria-expanded="true" data-en="Skills">
+                                        Compétences
+                                    </button>
+                                </h2>
+                                <div id="collapseSkills3" class="accordion-collapse collapse show" data-bs-parent="#accordionRT3">
+                                    <div class="accordion-body">
+                                        <p class="text-muted">Contenu à ajouter.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProjects3" data-en="Completed Projects">
+                                        Projets Réalisés
+                                    </button>
+                                </h2>
+                                <div id="collapseProjects3" class="accordion-collapse collapse" data-bs-parent="#accordionRT3">
+                                    <div class="accordion-body">
+                                        <p class="text-muted">Contenu à ajouter.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyses3" data-en="Reflective Analyses">
+                                        Analyses Réflexives
+                                    </button>
+                                </h2>
+                                <div id="collapseAnalyses3" class="accordion-collapse collapse" data-bs-parent="#accordionRT3">
+                                    <div class="accordion-body">
+                                        <p class="text-muted">Contenu à ajouter.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-category banner for BUT RT3 (bottom of RT3 tab) -->
+                        <div class="rt3-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
+                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT3 Groupe xx - année scolaire 2026-2027</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </section>
+
+    <section id="contact" class="page-section">
+        <main class="container my-5">
+            <section>
+                <h1 class="text-center" data-en="Contact me">Contactez-moi</h1>
+                <p class="text-center mb-4" data-en="Do you have a question or want to know more? Feel free to contact me by filling out the form below.">
+                    Vous avez une question ou souhaitez en savoir plus ? N'hésitez pas à me contacter en remplissant le formulaire ci-dessous.
+                </p>
+
+                <div id="contact-form" class="mt-5">
+                    <form id="contactForm" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="name" class="form-label" data-en="Last Name">Nom</label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Votre nom" data-placeholder-fr="Votre nom" data-placeholder-en="Your name" required>
+                            <div class="invalid-feedback" data-en="Please enter your name.">
+                                Veuillez entrer votre nom.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contactEmail" class="form-label" data-en="Email">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="contactEmail" name="email" placeholder="Votre email" data-placeholder-fr="Votre email" data-placeholder-en="Your email" required>
+                            <div class="invalid-feedback" data-en="Please enter a valid email address.">
+                                Veuillez entrer une adresse email valide.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="subject" class="form-label" data-en="Subject">Sujet</label>
+                            <input type="text" class="form-control form-control-lg" id="subject" name="subject" placeholder="Sujet de votre message" data-placeholder-fr="Sujet de votre message" data-placeholder-en="Subject of your message" required>
+                            <div class="invalid-feedback" data-en="Please enter a subject.">
+                                Veuillez entrer un sujet.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="form-label" data-en="Message">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="6" placeholder="Votre message" data-placeholder-fr="Votre message" data-placeholder-en="Your message" required></textarea>
+                            <div class="invalid-feedback" data-en="Please enter your message.">
+                                Veuillez entrer votre message.
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" data-en="Send">Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <div class="modal fade" id="constructionModal" tabindex="-1" aria-labelledby="constructionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="constructionModalLabel" data-en="Information">Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p data-en="The submission of this form is under construction. 🚧">L'envoi de ce formulaire est en cours de construction. 🚧</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-en="Close">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mentions" class="page-section">
+        <main class="container my-5">
+            <section>
+                <h1 class="text-center" data-en="Legal Mentions">Mentions Légales</h1>
+                <p class="text-center mb-5" data-en="In accordance with legal requirements, here is the information relating to this site.">
+                    Conformément aux exigences légales, voici les informations relatives à ce site.
+                </p>
+
+                <div class="mt-5 pt-4">
+                    <h2 data-en="Legal information">Informations légales</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong data-en="Website owner:">Propriétaire du site :</strong> Titouan FLOCH</li>
+                        <li class="list-group-item"><strong data-en="Professional email:">Email pro :</strong> titouan.floch@etu.univ-st-etienne.fr</li>
+                        <li class="list-group-item"><strong data-en="Personal email:">Email personnel :</strong> titouan.flch@gmail.com</li>
+                        <li class="list-group-item"><strong data-en="Phone number:">Numéro de téléphone :</strong> +33 6 49 92 50 47</li>
+                    </ul>
+                </div>
+
+                <div class="mt-5 pt-4">
+                    <h2 data-en="Hosting">Hébergement</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong data-en="Host:">Hébergeur :</strong> GitHub</li>
+                    </ul>
+                </div>
+
+                <div class="mt-5 pt-4 p-4">
+                    <h2 data-en="Intellectual property">Propriété intellectuelle</h2>
+                    <p data-en="The content on this site, including texts, images, logos, videos, and other elements are the property of Titouan Floch or its partners. Any unauthorized reproduction, distribution, or use is prohibited.">
+                        Les contenus présents sur ce site, y compris les textes, images, logos, vidéos, et autres éléments sont la propriété de Titouan Floch. Toute reproduction, distribution, ou utilisation non autorisée est interdite.
+                    </p>
+                </div>
+
+                <div class="mt-5 pt-4 p-4">
+                    <h2 data-en="Liability">Responsabilité</h2>
+                    <p data-en="This site contains links to external sites. We have no control over the content of these sites and cannot be held responsible for their content or any damage resulting from their use.">
+                        Ce site contient des liens vers des sites externes. Nous n'avons aucun contrôle sur le contenu de ces sites et ne saurions être tenus responsables de leur contenu ou de tout dommage résultant de leur utilisation.
+                    </p>
+                </div>
+
+                <div class="mt-5 pt-4 p-4">
+                    <h2 data-en="Personal data protection">Protection des données personnelles</h2>
+                    <p data-en="Personal data collected via this site is processed in accordance with this site's privacy policy. You can consult this policy to learn more about the collection, use, and protection of your data.">
+                        Les données personnelles collectées via ce site sont traitées conformément à la politique de confidentialité de ce dernier. Vous pouvez consulter cette politique pour en savoir plus sur la collecte, l'utilisation, et la protection de vos données.
+                    </p>
+                </div>
+
+                <div class="mt-5 pt-4 p-4 bg-light rounded-3">
+                    <h2 data-en="Cookies">Cookies</h2>
+                    <p data-en="This site uses cookies to improve user experience. By continuing to browse, you accept the use of cookies in accordance with our cookie policy.">
+                        Ce site utilise des cookies pour améliorer l'expérience utilisateur. En poursuivant votre navigation, vous acceptez l'utilisation de cookies conformément à notre politique de cookies.
+                    </p>
+                </div>
+            </section>
+        </main>
+    </section>
+
+    <button id="scrollToTopBtn" type="button" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
+</main>
+
+<!-- Banner moved into the BUT RT1 tab as a sub-category (bottom of the tab content) -->
+
+<footer class="bg-dark text-light py-4">
+    <div class="container text-center">
+        <p id="footerText" data-en="© 2026 Titouan FLOCH. All rights reserved.">&copy; 2026 Titouan FLOCH. Tous droits réservés.</p>
+        <p>
+            <a href="#mentions" class="text-light" id="legalMentions" data-nav-page="mentions" data-en="Legal Mentions">Mentions légales</a>
+            |
+            <a href="#contact" class="text-light" data-nav-page="contact" id="footerContact" data-en="Contact">Contact</a>
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function() {
+        // Error overlay: show uncaught errors/rejections in a visible banner
+        function showJsError(msg) {
+            console.error(msg);
+            let el = document.getElementById('jsErrorOverlay');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'jsErrorOverlay';
+                el.style.position = 'fixed';
+                el.style.bottom = '0';
+                el.style.left = '0';
+                el.style.right = '0';
+                el.style.background = 'rgba(200,30,30,0.95)';
+                el.style.color = '#fff';
+                el.style.padding = '0.5rem 1rem';
+                el.style.zIndex = 99999;
+                el.style.fontFamily = 'monospace';
+                el.style.maxHeight = '40vh';
+                el.style.overflow = 'auto';
+                document.body.appendChild(el);
+            }
+            el.textContent = msg;
+        }
+        window.addEventListener('error', function(e) { showJsError(e.message + ' at ' + (e.filename || '') + ':' + (e.lineno || '')); });
+        window.addEventListener('unhandledrejection', function(e) { showJsError('UnhandledRejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))); });
+        // light style for AC resource badges (override dark badge styles)
+        const _acResourceStyle = `
+            .resource-badge{display:inline-block;background:#f8fafc;color:#1f2d3d;border:1px solid rgba(15,23,42,0.06);padding:0.35rem 0.6rem;border-radius:999px;font-weight:600;box-shadow:none}
+        `;
+        document.head.insertAdjacentHTML('beforeend', `<style>${_acResourceStyle}</style>`);
+        const pageIds = ["index", "home", "loisirs", "cv", "portfolio", "contact", "mentions"];
+        const sections = pageIds.map((id) => document.getElementById(id));
+        const scrollBtn = document.getElementById("scrollToTopBtn");
+        const translateBtn = document.getElementById("translateBtn");
+        let isFrench = true;
+
+        function showPage(pageId) {
+            const validPageId = pageIds.includes(pageId) ? pageId : "index";
+            sections.forEach((section) => {
+                if (!section) {
+                    return;
+                }
+                section.classList.toggle("active", section.id === validPageId);
+            });
+            if (validPageId === 'portfolio') {
+                showPortfolioTab(portfolioView);
+            }
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function pageFromHash() {
+            const hash = window.location.hash.replace("#", "");
+            return hash || "index";
+        }
+
+        function goToPage(pageId) {
+            const target = pageIds.includes(pageId) ? pageId : "index";
+            if (window.location.hash !== "#" + target) {
+                window.location.hash = target;
+            } else {
+                showPage(target);
+            }
+        }
+
+        let portfolioView = 'rt2';
+
+        function showPortfolioTab(tabKey) {
+            const tabs = ['rt1', 'rt2', 'rt3'];
+            portfolioView = tabs.includes(tabKey) ? tabKey : 'rt1';
+            tabs.forEach((key) => {
+                const pane = document.getElementById(`content-${key}`);
+                if (pane) {
+                    pane.classList.toggle('show', key === portfolioView);
+                    pane.classList.toggle('active', key === portfolioView);
+                }
+            });
+
+            const rootTitle = document.querySelector('#portfolio h1');
+            if (rootTitle) {
+                rootTitle.textContent = 'Mon E-Portfolio';
+            }
+        }
+
+        window.showPortfolioTab = showPortfolioTab;
+
+        document.querySelectorAll("[data-nav-page]").forEach((link) => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                const target = this.getAttribute("data-nav-page");
+                goToPage(target);
+            });
+        });
+
+        document.querySelectorAll("[data-portfolio-target]").forEach((item) => {
+            item.addEventListener("click", function(event) {
+                event.preventDefault();
+                const target = this.getAttribute("data-portfolio-target");
+                showPortfolioTab(target);
+            });
+        });
+
+        window.addEventListener("hashchange", () => {
+            showPage(pageFromHash());
+        });
+
+        window.addEventListener("scroll", () => {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollBtn.style.display = "block";
+            } else {
+                scrollBtn.style.display = "none";
+            }
+        });
+
+        scrollBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Store original French text for all elements with data-en
+        document.querySelectorAll("[data-en]").forEach((element, index) => {
+            // Store the original French text in a data attribute
+            if (!element.hasAttribute("data-fr")) {
+                element.setAttribute("data-fr", element.textContent.trim());
+            }
+        });
+
+        function updateLanguageUI() {
+            document.querySelectorAll("[data-en]").forEach((element) => {
+                if (element === translateBtn) {
+                    return;
+                }
+
+                const enText = element.getAttribute("data-en");
+                const frText = element.getAttribute("data-fr");
+
+                if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+                    if (element.hasAttribute("data-placeholder-fr") && element.hasAttribute("data-placeholder-en")) {
+                        element.placeholder = isFrench ? element.getAttribute("data-placeholder-fr") : element.getAttribute("data-placeholder-en");
+                    }
+                } else {
+                    element.textContent = isFrench ? frText : enText;
+                }
+            });
+
+            translateBtn.textContent = isFrench ? "Traduire en Anglais" : "Translate to French";
+        }
+
+        translateBtn.addEventListener("click", () => {
+            isFrench = !isFrench;
+            updateLanguageUI();
+        });
+
+        updateLanguageUI();
+
+        const downloadForm = document.getElementById("downloadForm");
+        if (downloadForm) {
+            downloadForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const nomEl = document.getElementById("cvNom");
+                const prenomEl = document.getElementById("cvPrenom");
+                const emailEl = document.getElementById("cvEmail");
+                const nom = nomEl ? nomEl.value.trim() : '';
+                const prenom = prenomEl ? prenomEl.value.trim() : '';
+                const email = emailEl ? emailEl.value.trim() : '';
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!nom || !prenom || !email) {
+                    const message = isFrench 
+                        ? "Veuillez remplir tous les champs obligatoires" 
+                        : "Please fill in all required fields";
+                    alert(message);
+                    return;
+                }
+
+                if (!emailPattern.test(email)) {
+                    const message = isFrench 
+                        ? "Veuillez entrer une adresse email valide" 
+                        : "Please enter a valid email address";
+                    alert(message);
+                    return;
+                }
+
+                const formatPDFEl = document.getElementById("formatPDF");
+                const formatDOCXEl = document.getElementById("formatDOCX");
+                const isPDF = formatPDFEl ? formatPDFEl.checked : false;
+                const isDOCX = formatDOCXEl ? formatDOCXEl.checked : false;
+
+                if (!isPDF && !isDOCX) {
+                    const message = isFrench 
+                        ? "Veuillez sélectionner au moins un format de téléchargement" 
+                        : "Please select at least one download format";
+                    alert(message);
+                    return;
+                }
+
+                const modalElement = document.getElementById("inscriptionModal");
+                const modalInstance = modalElement ? bootstrap.Modal.getInstance(modalElement) : null;
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+
+                if (isPDF) {
+                    downloadFile("eportfolio_files/download/CV%20Titouan%20FLOCH.pdf");
+                }
+            });
+        }
+
+        function downloadFile(url) {
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        const contactForm = document.getElementById("contactForm");
+        contactForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Validate all required fields
+            const nameInput = document.getElementById("name");
+            const emailInput = document.getElementById("contactEmail");
+            const subjectInput = document.getElementById("subject");
+            const messageInput = document.getElementById("message");
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let isValid = true;
+
+            // Check name
+            if (!nameInput.value.trim()) {
+                nameInput.classList.add("is-invalid");
+                isValid = false;
+            } else {
+                nameInput.classList.remove("is-invalid");
+            }
+
+            // Check email
+            if (!emailPattern.test(emailInput.value)) {
+                emailInput.classList.add("is-invalid");
+                isValid = false;
+            } else {
+                emailInput.classList.remove("is-invalid");
+            }
+
+            // Check subject
+            if (!subjectInput.value.trim()) {
+                subjectInput.classList.add("is-invalid");
+                isValid = false;
+            } else {
+                subjectInput.classList.remove("is-invalid");
+            }
+
+            // Check message
+            if (!messageInput.value.trim()) {
+                messageInput.classList.add("is-invalid");
+                isValid = false;
+            } else {
+                messageInput.classList.remove("is-invalid");
+            }
+
+            if (isValid) {
+                const infoModal = new bootstrap.Modal(document.getElementById("constructionModal"));
+                infoModal.show();
+                contactForm.reset();
+            }
+        });
+
+        // --- Apprentissages Critiques (AC) data and rendering (RT2-focused) ---
+
+        const competenceMeta = {
+            RT1: {
+                title: 'Administrer les réseaux et l’Internet',
+                level: 2,
+                description: 'Administrer un réseau'
+            },
+            RT2: {
+                title: 'Connecter les entreprises et les usagers',
+                level: 2,
+                description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers'
+            },
+            RT3: {
+                title: 'Créer des outils et des applications informatiques pour les R&T',
+                level: 2,
+                description: 'Développer une application R&T'
+            },
+            ROM1: {
+                title: 'Gérer les infrastructures et les services des réseaux opérateurs',
+                level: 1,
+                description: 'Gérer les infrastructures des réseaux opérateurs'
+            },
+            ROM2: {
+                title: 'Gérer les communications unifiées et la vidéo sur Internet',
+                level: 1,
+                description: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
+            }
+        };
+
+        const acFallbackItems = [
+            { code: 'AC21.01', title: 'Configurer et dépanner le routage dynamique dans un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1LtMtop2W2EklInWxzN0TeYDGMzwuVi0AJ5U3qqBSO0Q/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1l2lD9cuz9cbmnmlYxbzf9jO94lYx9J5bJ5tkKZOtU5A/edit?usp=drive_link', resources: ['R3.02', 'R3.01', 'SAÉ3.02', 'SAÉ3.ROM.03'] },
+            { code: 'AC21.02', title: 'Configurer et expliquer une politique simple de QoS et les fonctions de base de la sécurité d’un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [3], proof: 'https://docs.google.com/document/d/183LTrX8ExmySEsoPgN5srQvuaduiJaaAhgCdCImNL6I/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1T9RWx9axYizGA61nhUj-16hh463p7SplqHaZMoiv9YY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.01'] },
+            { code: 'AC21.03', title: 'Déployer des postes clients et des solutions virtualisées adaptées à une situation donnée', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1Y4Wz22WMQXalfabetyKyV69Cz-SyWR2-rwOaPDBqleo/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/17yuK4IuvZCYmDJ3XpPWwdvfzHqbhiigEZd25QYDh5Ts/edit?usp=drive_link', resources: ['R3.03', 'R3.04', 'SAÉ3.ROM.03'] },
+            { code: 'AC21.04', title: 'Déployer des services réseaux avancés', competence: 'RT1', description: 'Administrer un réseau', levels: [3], proof: 'https://docs.google.com/document/d/19VzlndGzMYMeJmgkBigjTh_cF_d4Xxw54mF6xhTRzrQ/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1rj8LWPoxrycrtpnqrRkj9NSSgYNMYoHRe8YOFMXhQ_A/edit?usp=drive_link', resources: ['R3.03', 'SAÉ3.ROM.03'] },
+            { code: 'AC21.05', title: 'Identifier les réseaux opérateurs et l’architecture d’Internet', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1kEb2JBd-HM8AzBKOas8--yHMjqlq3owtUKbViq8Lhfc/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1yyV5rcuFOWMXbU9hoWvHYfejvNWmDWXb7frFZYQhzFM/edit?usp=drive_link', resources: ['R3.01', 'R3.02', 'SAÉ4.STAGE', 'SAÉ3.ROM.03', 'R4.01'] },
+            { code: 'AC21.06', title: 'Travailler en équipe pour développer ses compétences professionnelles', competence: 'RT1', description: 'Administrer un réseau', levels: [4], proof: 'https://docs.google.com/document/d/1zemOYe4mMmDkRf-8xeisC_XThi5cKUKwuRKPvleki2A/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1O03b-N5cpdIB4w8QyWpY-pU33mnxcgYrska6hyHI4Xs/edit?usp=drive_link', resources: ['R3.11', 'R3.12', 'R3.13', 'R3.15', 'R4.06', 'R4.07', 'SAÉ3.ROM.03', 'SAÉ4.STAGE'] },
+            { code: 'AC22.01', title: 'Déployer et caractériser des systèmes de transmissions complexes', competence: 'RT2', description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers', levels: [4], proof: 'https://docs.google.com/document/d/1w9shSNFIUtE4J7PX-lGL5-S6IAFH-efQ8JIs6tgHMzc/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/14ffgxK4TBKOkTCoTqb_JLZXU-NlS-_eJb6rNUUcEirQ/edit?usp=drive_link', resources: ['R3.05', 'R4.02', 'R4.03', 'R3.06', 'SAÉ3.01'] },
+            { code: 'AC22.02', title: 'Mettre en place un accès distant sécurisé', competence: 'RT2', description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers', levels: [4], proof: 'https://docs.google.com/document/d/1sfzsN6jHs_wZDFvKDRXbV155nOeMLnnX-jgVmN2ZMYw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1R6MY300tpQURtSHZ3DD3IK35TV5mXhvzuHfajuOMpv4/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.01', 'R3.01'] },
+            { code: 'AC22.03', title: 'Mettre en place une connexion multi-site via un réseau opérateur', competence: 'RT2', description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers', levels: [4], proof: 'https://docs.google.com/document/d/1jXHExsvHiB6v9zOBvLMOMV_-TZb4_TF47Qyv32PYe3E/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/13HM8gm66sFKSZJtQxQc5Ws78mg-BpTaxGNeE1deMYKQ/edit?usp=drive_link', resources: ['R4.04', 'SAÉ3.02', 'R4.01', 'R3.07', 'SAÉ3.ROM.03'] },
+            { code: 'AC22.04', title: 'Administrer les réseaux d’accès des opérateurs', competence: 'RT2', description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers', levels: [4], proof: 'https://docs.google.com/document/d/16a0FLNYgVFjfrpBfOoKoVzALxF4TSXc1C0FuWrK6m48/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/11yRTTwZ-2aRd13EfqGJzsAB-KE8umc5iQ-NxllrkQlk/edit?usp=drive_link', resources: ['R3.02', 'R4.01', 'R4.04', 'R3.07'] },
+            { code: 'AC22.05', title: 'Capacité à questionner un cahier des charges R&T', competence: 'RT2', description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers', levels: [4], proof: 'https://docs.google.com/document/d/1PQHJhgCgqIFelh_aN-LvjBMSdEoTDaF5gaWGjYV0Who/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1oj8uKyr23CHM1xD3hf1bSmDI4yNOOZGXTeI8BxckMck/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R3.07', 'SAÉ3.01', 'SAÉ3.02', 'SAÉ4.STAGE'] },
+            { code: 'AC23.01', title: 'Automatiser l’administration système avec des scripts', competence: 'RT3', description: 'Développer une application R&T', levels: [3], proof: 'https://docs.google.com/document/d/1c9vG4b_1T48TR62TkWr-k-8S2wCZBtVqEany3QYprqw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/19i4lBqzKTav-uEm-GsIjNyKTvPE8HOmOCrZDpA3h0wg/edit?usp=drive_link', resources: ['R3.08', 'R4.05'] },
+            { code: 'AC23.02', title: 'Développer une application à partir d’un cahier des charges donné, pour le Web ou les périphériques mobiles', competence: 'RT3', description: 'Développer une application R&T', levels: [4], proof: 'https://docs.google.com/document/d/1GIX-mdISzGZt8PFBLAV3zxYYRwikVy1g-iWSzjHTDuI/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1rB5XQOZ9TLhuZOShXGGHErFJjnGYNMxEuFWvePlfdpY/edit?usp=drive_link', resources: ['SAÉ3.02'] },
+            { code: 'AC23.03', title: 'Utiliser un protocole réseau pour programmer une application client/serveur', competence: 'RT3', description: 'Développer une application R&T', levels: [3], proof: 'https://docs.google.com/document/d/1GxgBICjIU3s6Mv4VZsjKMPK_6Yrg1nr4CEla6YEf-Qg/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1IY0Vz8iO903lgfl3o_tbcnqSr7qpPbVOab3sv6eNEyE/edit?usp=drive_link', resources: ['SAÉ3.02'] },
+            { code: 'AC23.04', title: 'Installer, administrer un système de gestion de données', competence: 'RT3', description: 'Développer une application R&T', levels: [3], proof: 'https://docs.google.com/document/d/13tTQ5xSIRzAEwCC9xXvl4P8beW5yjslnUxizA7j1vnU/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1Rk6ztaWaRmXXmnUYEVVqDREbkVyxXtocyKEhuZ2U3Hk/edit?usp=drive_link', resources: ['R3.10'] },
+            { code: 'AC23.05', title: 'Accéder à un ensemble de données depuis une application et/ou un site web', competence: 'RT3', description: 'Développer une application R&T', levels: [3], proof: 'https://docs.google.com/document/d/1RSi4jZoW0Pr_oI6erEeHPR5rriNSU9FrfaQCIfl7mVk/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1Oz471uwiaG2GGHmX2b7x05M4mtpRQsPnY0kaMG6R7hk/edit?usp=drive_link', resources: ['R3.09', 'SAÉ4.STAGE'] },
+            { code: 'AC24.01ROM', title: 'Administrer les réseaux d’accès fixes et mobiles', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [4], proof: 'https://docs.google.com/document/d/1U27ZdRjvyI9AT5j4womykpWfYuWQ_C1mjwbpMV4LRP8/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1k-1ftmSkZm5Jifu2nvLNuYBPJpydXNtVE4SpKwo92_0/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.ROM.09'] },
+            { code: 'AC24.02ROM', title: 'Virtualiser des services réseaux', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [2], proof: 'https://docs.google.com/document/d/1yeahTKbox31J2-IocrlaX-z7NTVzXrCzcTsBDbgl96c/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1FpngPdES6ytdGhfbePw-mMsA-y4mzP_NxwNEy23MgSE/edit?usp=drive_link', resources: ['SAÉ3.ROM.03'] },
+            { code: 'AC24.03ROM', title: 'Décrire/comprendre l’architecture et les offres des opérateurs', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [4], proof: 'https://docs.google.com/document/d/1VtuDWuagDaP78SnByXYiSXfLvTc3XKux3CkGxWcvqNc/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1UWv5F67kTVlBeYvtrB24GwH8B400uvfol3BwCVwTRE0/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.ROM.10', 'SAÉ3.ROM.04', 'SAÉ4.STAGE'] },
+            { code: 'AC24.04ROM', title: 'Gérer le routage/commutation et les interconnexions', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [4], proof: 'https://docs.google.com/document/d/1IcSaNv__aYXkUjdafVPLJDKByD_NfR4BEweblvFeZxc/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1YAYxhiede1pI9SsI_KekxxaTQnRCfbOKXlI9TOSWKsM/edit?usp=drive_link', resources: ['SAÉ4.ROM.01', 'SAÉ3.ROM.03', 'R3.ROM.16', 'SAÉ3.ROM.04', 'SAÉ4.STAGE'] },
+            { code: 'AC24.05ROM', title: 'Automatiser la gestion des équipements réseaux', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [3], proof: 'https://docs.google.com/document/d/1eFJBwdeVPeLvIcQsWFgi54-ZUWQ2l88laG2R7cvvqiE/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1fmpZiDuEALdL8NQK9OQipYSm5wc5K6X8h_LS2PzBW7A/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.ROM.09'] },
+            { code: 'AC25.01ROM', title: 'Choisir une architecture et déployer des services de ToIP', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [4], proof: 'https://docs.google.com/document/d/1-wipdSUBlwDiKNpHc0OYhX7GlbzQ0m8v5M5kTk7ZkXI/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1tdSGb8zPQU1oxy_P_aCgkJMZiWBGvZRVRZMA7FeLqUY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R3.ROM.16', 'SAÉ3.ROM.04'] },
+            { code: 'AC25.02ROM', title: 'Administrer un service de téléphonie pour l’entreprise', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [4], proof: 'https://docs.google.com/document/d/1WJ4bE0uz3V16bokVxja316mmJAwDfhvcvlMxJq7f4Lg/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1JyTRBocNLenFCiTWnHmEdWyn7v5i0MvkXmpjuD2C4ig/edit?usp=drive_link', resources: ['SAÉ3.ROM.04'] },
+            { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['SAÉ3.ROM.03'] }
+        ];
+
+        let acItems = acFallbackItems.map(item => ({ ...item }));
+
+        const fallbackStrongAcCodes = new Set([
+            'AC21.03',
+            'AC21.05',
+            'AC21.06',
+            'AC22.01',
+            'AC22.05',
+            'AC23.02',
+            'AC24.03ROM',
+            'AC25.01ROM',
+            'AC25.02ROM'
+        ]);
+        let strongAcCodes = new Set(fallbackStrongAcCodes);
+
+        function parseCsvLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result.map(val => {
+                if (val.startsWith('"') && val.endsWith('"')) {
+                    return val.substring(1, val.length - 1).trim();
+                }
+                return val;
+            });
+        }
+
+        async function loadAcData() {
+            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pubhtml/sheet?headers=false&gid=808860009";
+            
+            // --- TIER 1: Sync via HTML CORS Proxy (Updates both text AND hyperlinks) ---
+            const proxies = [
+                "https://corsproxy.io/?" + encodeURIComponent(sheetUrl),
+                "https://api.allorigins.win/raw?url=" + encodeURIComponent(sheetUrl)
+            ];
+
+            let htmlText = null;
+            let fetchSuccess = false;
+
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    const response = await fetch(proxies[i]);
+                    if (response.ok) {
+                        htmlText = await response.text();
+                        fetchSuccess = true;
+                        break;
+                    }
+                } catch (err) {
+                    console.warn(`Échec de récupération via le proxy HTML ${i + 1}`);
+                }
+            }
+
+            if (fetchSuccess && htmlText) {
+                try {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, "text/html");
+                    const rows = Array.from(doc.querySelectorAll("table.ritz tr, table.waffle tr"));
+
+                    const newAcItems = [];
+                    const parsedStrongCodes = new Set();
+
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll("td");
+                        let acIndex = -1;
+                        let acText = "";
+                        for (let i = 0; i < cells.length; i++) {
+                            const txt = cells[i].textContent.trim();
+                            if (/^AC\d+/i.test(txt)) {
+                                acIndex = i;
+                                acText = txt;
+                                break;
+                            }
+                        }
+
+                        if (acIndex !== -1) {
+                            const firstSpace = acText.indexOf(" ");
+                            const code = firstSpace !== -1 ? acText.substring(0, firstSpace) : acText;
+                            const title = firstSpace !== -1 ? acText.substring(firstSpace + 1) : "";
+
+                            const r1 = parseRessourcesList(cells[acIndex + 1]);
+                            const r2 = parseRessourcesList(cells[acIndex + 2]);
+                            const r3 = parseRessourcesList(cells[acIndex + 3]);
+                            const r4 = parseRessourcesList(cells[acIndex + 4]);
+                            const resources = Array.from(new Set([...r2, ...r3, ...r4]));
+
+                            let level = 1;
+                            if (r4.length > 0) level = 4;
+                            else if (r3.length > 0) level = 3;
+                            else if (r2.length > 0) level = 2;
+                            else if (r1.length > 0) level = 1;
+
+                            const getLink = (cell) => {
+                                if (!cell) return "";
+                                const a = cell.querySelector("a");
+                                if (!a) return "";
+                                const href = a.getAttribute("href");
+                                if (!href) return "";
+                                try {
+                                    const urlObj = new URL(href);
+                                    return urlObj.searchParams.get("q") || href;
+                                } catch (e) {
+                                    const match = href.match(/q=([^&]+)/);
+                                    return match ? decodeURIComponent(match[1]) : href;
+                                }
+                            };
+
+                            const proof = getLink(cells[acIndex + 5]);
+                            const analysis = getLink(cells[acIndex + 6]);
+
+                            const strongCell = cells[acIndex + 7];
+                            const isStrong = strongCell && strongCell.textContent.trim().toLowerCase() === "oui";
+                            if (isStrong) {
+                                parsedStrongCodes.add(code);
+                            }
+
+                            let competence = "RT1";
+                            if (code.startsWith("AC24")) competence = "ROM1";
+                            else if (code.startsWith("AC25")) competence = "ROM2";
+                            else {
+                                const numStr = code.substring(2, 4);
+                                if (numStr === "21") competence = "RT1";
+                                else if (numStr === "22") competence = "RT2";
+                                else if (numStr === "23") competence = "RT3";
+                            }
+
+                            const competenceMetaDesc = {
+                                RT1: 'Administrer un réseau',
+                                RT2: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers',
+                                RT3: 'Développer une application R&T',
+                                ROM1: 'Gérer les infrastructures des réseaux opérateurs',
+                                ROM2: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
+                            };
+
+                            newAcItems.push({
+                                code,
+                                title,
+                                competence,
+                                description: competenceMetaDesc[competence] || "",
+                                levels: [level],
+                                proof,
+                                analysis,
+                                resources
+                            });
+                        }
+                    });
+
+                    if (newAcItems.length > 0) {
+                        acItems = newAcItems;
+                        strongAcCodes.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodes.add(code));
+                        console.log("Synchronisation Google Sheets réussie en temps réel (via HTML) !");
+                        renderAcSection();
+                        return;
+                    }
+                } catch (error) {
+                    console.warn("Erreur lors du parsing HTML, bascule sur la méthode CSV...", error);
+                }
+            }
+
+            // --- TIER 2: Sync via CORS-free CSV direct fetch (100% reliable for text, resources, levels, strong status) ---
+            try {
+                console.log("Tentative de synchronisation via CSV direct (sans proxy)...");
+                const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pub?gid=808860009&single=true&output=csv";
+                const response = await fetch(csvUrl);
+                if (response.ok) {
+                    const csvText = await response.text();
+                    const lines = csvText.split(/\r?\n/);
+                    const newAcItems = [];
+                    const parsedStrongCodes = new Set();
+
+                    lines.forEach(line => {
+                        if (!line.trim()) return;
+                        const cells = parseCsvLine(line);
+                        
+                        let acIndex = -1;
+                        let acText = "";
+                        for (let i = 0; i < cells.length; i++) {
+                            const txt = cells[i];
+                            if (/^AC\d+/i.test(txt)) {
+                                acIndex = i;
+                                acText = txt;
+                                break;
+                            }
+                        }
+
+                        if (acIndex !== -1) {
+                            const firstSpace = acText.indexOf(" ");
+                            const code = firstSpace !== -1 ? acText.substring(0, firstSpace) : acText;
+                            const title = firstSpace !== -1 ? acText.substring(firstSpace + 1) : "";
+
+                            const r1 = parseRessourcesList({ textContent: cells[acIndex + 1] || "" });
+                            const r2 = parseRessourcesList({ textContent: cells[acIndex + 2] || "" });
+                            const r3 = parseRessourcesList({ textContent: cells[acIndex + 3] || "" });
+                            const r4 = parseRessourcesList({ textContent: cells[acIndex + 4] || "" });
+                            const resources = Array.from(new Set([...r2, ...r3, ...r4]));
+
+                            let level = 1;
+                            if (r4.length > 0) level = 4;
+                            else if (r3.length > 0) level = 3;
+                            else if (r2.length > 0) level = 2;
+                            else if (r1.length > 0) level = 1;
+
+                            // Maps link URLs from local fallback data
+                            const fallbackItem = acFallbackItems.find(item => item.code === code);
+                            const proof = fallbackItem ? fallbackItem.proof : "";
+                            const analysis = fallbackItem ? fallbackItem.analysis : "";
+
+                            const isStrong = cells[acIndex + 7] && cells[acIndex + 7].trim().toLowerCase() === "oui";
+                            if (isStrong) {
+                                parsedStrongCodes.add(code);
+                            }
+
+                            let competence = "RT1";
+                            if (code.startsWith("AC24")) competence = "ROM1";
+                            else if (code.startsWith("AC25")) competence = "ROM2";
+                            else {
+                                const numStr = code.substring(2, 4);
+                                if (numStr === "21") competence = "RT1";
+                                else if (numStr === "22") competence = "RT2";
+                                else if (numStr === "23") competence = "RT3";
+                            }
+
+                            const competenceMetaDesc = {
+                                RT1: 'Administrer un réseau',
+                                RT2: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers',
+                                RT3: 'Développer une application R&T',
+                                ROM1: 'Gérer les infrastructures des réseaux opérateurs',
+                                ROM2: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
+                            };
+
+                            newAcItems.push({
+                                code,
+                                title,
+                                competence,
+                                description: competenceMetaDesc[competence] || "",
+                                levels: [level],
+                                proof,
+                                analysis,
+                                resources
+                            });
+                        }
+                    });
+
+                    if (newAcItems.length > 0) {
+                        acItems = newAcItems;
+                        strongAcCodes.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodes.add(code));
+                        console.log("Synchronisation Google Sheets réussie via CSV en direct !");
+                        renderAcSection();
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.warn("Échec de synchronisation via CSV direct :", error);
+            }
+
+            // --- TIER 3: Local Fallback (Loads offline data) ---
+            console.warn("Utilisation des données locales de secours.");
+            acItems = acFallbackItems.map(item => ({ ...item }));
+            strongAcCodes = new Set(fallbackStrongAcCodes);
+            renderAcSection();
+        }
+
+        function parseRessourcesList(cell) {
+            if (!cell || !cell.textContent) return [];
+            return cell.textContent.split(",")
+                                   .map(r => r.trim())
+                                   .filter(r => r.length > 0);
+        }
+
+        function avg(arr) {
+            if (!arr || arr.length === 0) return 0;
+            return arr.reduce((s, v) => s + v, 0) / arr.length;
+        }
+
+        // show ALL by default
+        let currentFilter = 'ALL';
+
+        function setFilter(comp) {
+            currentFilter = comp;
+            renderAcSection();
+        }
+
+        function renderAcSection() {
+            const container = document.getElementById('acContainer');
+            const filtersEl = document.getElementById('acFilters');
+            if (!container || !filtersEl) return;
+
+            // color map per competence (visible-light / custom rainbow: rose -> violet -> bleu -> vert -> jaune)
+            const colorMap = {
+                'RT1': '#FF2D95',  // rose
+                'RT2': '#8E44AD',  // violet
+                'RT3': '#007AFF',  // bleu
+                'ROM1': '#5AC8FA',  // bleu clair
+                'ROM2': '#34C759',  // vert
+                'DEFAULT': '#6c757d'
+            };
+
+            // Group by competence
+            const groups = acItems.reduce((acc, item) => {
+                if (!acc[item.competence]) acc[item.competence] = [];
+                acc[item.competence].push(item);
+                return acc;
+            }, {});
+
+            // preferred order: RT1, RT2, RT3, ROM1, ROM2, then others alphabetically
+            const preferred = ['RT1','RT2','RT3','ROM1','ROM2'];
+            const competenceKeys = Object.keys(groups).sort((a,b) => {
+                const ia = preferred.indexOf(a) >= 0 ? preferred.indexOf(a) : preferred.length + a.localeCompare(b);
+                const ib = preferred.indexOf(b) >= 0 ? preferred.indexOf(b) : preferred.length + b.localeCompare(a);
+                return ia - ib;
+            });
+
+            // Render filters: Tout montrer + Sélection de mes compétences fortes + competences
+            filtersEl.innerHTML = '';
+            const allBtn = document.createElement('button');
+            allBtn.className = `btn btn-sm btn-outline-dark me-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
+            allBtn.textContent = 'Tout montrer';
+            allBtn.onclick = () => setFilter('ALL');
+            filtersEl.appendChild(allBtn);
+
+            const strongBtn = document.createElement('button');
+            strongBtn.className = `btn btn-sm btn-outline-success me-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
+            strongBtn.textContent = 'Compétences fortes';
+            strongBtn.onclick = () => setFilter('STRONG');
+            filtersEl.appendChild(strongBtn);
+
+            competenceKeys.forEach(k => {
+                const b = document.createElement('button');
+                b.className = `btn btn-sm btn-outline-secondary me-2 ${currentFilter === k ? 'active' : ''}`;
+                b.textContent = k;
+                b.onclick = () => setFilter(k);
+                filtersEl.appendChild(b);
+            });
+
+            if (currentFilter === 'STRONG') {
+                const strongNote = document.createElement('div');
+                strongNote.className = 'mt-3 text-center text-muted small';
+                strongNote.textContent = 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.';
+                filtersEl.appendChild(strongNote);
+            }
+
+            // Render cards
+            container.innerHTML = '';
+
+            // helper to decide if an item belongs to the strict strong selection
+            function isStrong(item) {
+                return !!item && strongAcCodes.has(item.code);
+            }
+
+            competenceKeys.forEach(comp => {
+                // collect items for this competence
+                let items = groups[comp].slice().sort((a, b) => a.code.localeCompare(b.code));
+                // filter by global filter
+                if (currentFilter === 'STRONG') {
+                    items = items.filter(isStrong);
+                } else if (currentFilter !== 'ALL' && currentFilter !== comp) {
+                    return; // skip this competence section
+                }
+
+                // if no items after filtering, skip
+                if (!items.length) return;
+
+                // section header
+                const headerRow = document.createElement('div');
+                headerRow.className = 'col-12';
+                const meta = competenceMeta[comp] || { title: comp, level: '', description: items[0] && items[0].description ? items[0].description : '' };
+                headerRow.innerHTML = `
+                    <div style="border-left:4px solid ${colorMap[comp] || colorMap.DEFAULT}; padding-left:12px; margin-bottom:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+                        <div style="min-width:0; flex:1 1 auto;">
+                            <h3 style="margin:0 0 0.25rem 0; font-weight:700;">${comp} - ${meta.title}</h3>
+                            <p class="text-muted" style="margin:0;">Niveau ${meta.level} - ${meta.description}</p>
+                        </div>
+                        <div style="flex:0 0 auto; margin-top:0.2rem;">
+                            <span class="badge" style="background:${colorMap[comp] || colorMap.DEFAULT}; color:#fff; font-size:0.95rem; padding:0.6rem 0.9rem; border-radius:999px;">${items.length} AC</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(headerRow);
+
+                items.forEach(i => {
+                    const col = document.createElement('div');
+                    col.className = 'col-12 col-sm-6 col-md-4';
+                    const avgLevel = avg(i.levels);
+                    const progressPct = Math.round((avgLevel / 4) * 100);
+                    const compColor = colorMap[i.competence] || colorMap.DEFAULT;
+
+                    // visual dots for levels
+                    const dotsTotal = 4;
+                    const filled = Math.round(avgLevel);
+                    const levelColors = {1:'#e74c3c',2:'#f39c12',3:'#f1c40f',4:'#2ecc71'};
+                    let dotsHtml = '<div style="margin-bottom:6px; display:flex; align-items:center;">';
+                    for (let d = 1; d <= dotsTotal; d++) {
+                        if (d <= filled) {
+                            // use the color of the filled level so all filled squares match
+                            const dotColor = levelColors[filled] || '#6c757d';
+                            dotsHtml += `<span style="display:inline-block;width:12px;height:12px;margin-right:8px;background:${dotColor};border-radius:3px;"></span>`;
+                        } else {
+                            dotsHtml += `<span style="display:inline-block;width:12px;height:12px;margin-right:8px;background:#e9ecef;border-radius:3px;"></span>`;
+                        }
+                    }
+                    dotsHtml += ` <small class="text-muted" style="margin-left:6px;">${filled}/${dotsTotal}</small></div>`;
+
+                    const resourceHtml = Array.isArray(i.resources) && i.resources.length
+                        ? i.resources.map((resource, index) => {
+                            const label = resource && String(resource).trim() ? String(resource).trim() : `Ressource ${index + 1} à compléter dans le code`;
+                            return `<span class="resource-badge me-2 mb-2">${label}</span>`;
+                        }).join('')
+                        : '<span class="text-muted">Ressources associées à compléter dans le code</span>';
+
+                    col.innerHTML = `
+                        <div class="card h-100 shadow-sm" style="border-radius:16px; border-top:6px solid ${compColor}; display:flex; flex-direction:column; justify-content:space-between; min-height:240px;">
+                            <div class="card-body d-flex flex-column" style="padding:1rem 1.25rem;">
+                                <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <span class="ac-badge" style="background:${compColor}; color:#fff; padding:6px 10px; border-radius:20px; font-weight:700;">${i.code}</span>
+                                    <small class="text-muted text-end">Niveau ${filled}/4</small>
+                                </div>
+                                <h5 class="card-title mt-3 mb-2" style="font-weight:700; line-height:1.25;">${i.title}</h5>
+                                <p class="card-text text-muted mb-3" style="font-size:0.95rem;">${i.description || ''}</p>
+                                <div class="mb-3 p-2 rounded-3" style="background: rgba(15, 23, 42, 0.02); border: 1px solid rgba(15, 23, 42, 0.08);">
+                                    <div class="small text-muted mb-2">Ressources associées</div>
+                                    <div style="font-size:0.9rem; line-height:1.6;">${resourceHtml}</div>
+                                </div>
+                                <div class="mb-2" style="height:8px; background:#eee; border-radius:6px; overflow:hidden;">
+                                    <div style="width:${progressPct}%; height:100%; background:${compColor};"></div>
+                                </div>
+                                ${dotsHtml}
+                                <div class="mb-3">
+                                    <small class="text-muted">Compétence: ${i.competence}</small>
+                                </div>
+                                <div class="mt-auto d-flex gap-2 flex-wrap">
+                                    ${i.proof ? `<a href="${i.proof}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">↗ Preuve</a>` : `<button type="button" class="btn btn-sm btn-outline-primary" disabled>↗ Preuve</button>`}
+                                    ${i.analysis && String(i.analysis).startsWith('http') ? `<a href="${i.analysis}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">↗ Analyse</a>` : `<button type="button" class="btn btn-sm btn-outline-success" disabled>↗ Analyse</button>`}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    container.appendChild(col);
+                });
+            });
+        }
+
+        // initial render
+        loadAcData();
+        showPortfolioTab(portfolioView);
+
+        showPage(pageFromHash());
+    })();
+</script>
+</body>
+</html>
+
+
+

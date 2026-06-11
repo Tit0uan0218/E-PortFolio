@@ -1,0 +1,10 @@
+# Backup and sync files
+index.html.bak
+index.html.sync
+A faire.txt
+
+# Temp and caches
+.DS_Store
+Thumbs.db
+.gemini/
+scratch/
