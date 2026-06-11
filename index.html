@@ -2720,6 +2720,12 @@
                 sumLevels += avg(item.levels);
             });
             const avgLevel = totalAc > 0 ? (sumLevels / totalAc).toFixed(1) : '0.0';
+            
+            // Map average level to acquisition level colors
+            const avgLevelNum = parseFloat(avgLevel);
+            const roundedAvg = Math.round(avgLevelNum);
+            const levelColors = {1:'#e74c3c', 2:'#f39c12', 3:'#f1c40f', 4:'#2ecc71'};
+            const avgLevelColor = levelColors[roundedAvg] || '#6c757d';
 
             // Group by competence to calculate competence-specific progress
             const comps = {};
@@ -2760,14 +2766,14 @@
                             <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
                                 ${isFrench ? 'Niveau Moyen' : 'Average Level'}
                             </div>
-                            <div style="font-size:1.8rem; font-weight:800; color:#34C759;">${avgLevel} <span class="text-muted" style="font-size:1rem; font-weight:500;">/ 4</span></div>
+                            <div style="font-size:1.8rem; font-weight:800; color:${avgLevelColor};">${avgLevel} <span class="text-muted" style="font-size:1rem; font-weight:500;">/ 4</span></div>
                         </div>
                         <!-- Stat 3 -->
                         <div class="col-12 col-sm-4 text-center">
                             <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
                                 ${isFrench ? 'Compétences Fortes' : 'Strong Competencies'}
                             </div>
-                            <div style="font-size:1.8rem; font-weight:800; color:#FF9500;">${strongCount}</div>
+                            <div style="font-size:1.8rem; font-weight:800; color:#dc3545;">${strongCount}</div>
                         </div>
                     </div>
 
@@ -2849,7 +2855,7 @@
             buttonsContainer.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
-            strongBtn.className = `btn btn-sm btn-outline-success me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
+            strongBtn.className = `btn btn-sm btn-outline-danger me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
             strongBtn.textContent = isFrench ? 'Compétences fortes' : 'Strong Skills';
             strongBtn.onclick = () => setFilter('STRONG', year);
             buttonsContainer.appendChild(strongBtn);
