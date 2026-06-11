@@ -2982,6 +2982,9 @@
                     else isSyncingRT3 = true;
                     renderAcSection(year);
                     
+                    const feedbackEl = document.getElementById(`syncFeedback-${year}`);
+                    if (feedbackEl) feedbackEl.classList.add('d-none');
+                    
                     try {
                         const results = await loadAcData();
                         const isSuccess = year === 'rt2' ? results.rt2 : results.rt3;
@@ -3010,6 +3013,13 @@
                             }
                             renderAcSection(year);
                             
+                            if (feedbackEl) {
+                                feedbackEl.innerHTML = isFrench 
+                                    ? `<strong>La synchronisation en temps réel a échoué.</strong><br>Pour activer la synchronisation instantanée, veuillez ouvrir votre Google Sheet, cliquer sur <strong>Partager</strong> en haut à droite, et sous <strong>Accès général</strong>, modifier "Limité" en <strong>"Tous les utilisateurs disposant du lien"</strong> (en rôle <strong>Lecteur</strong>). Sinon, les données se mettront à jour automatiquement via GitHub toutes les 6 heures.`
+                                    : `<strong>Real-time synchronization failed.</strong><br>To enable instant synchronization, please open your Google Sheet, click <strong>Share</strong> in the top-right, and under <strong>General Access</strong> change "Restricted" to <strong>"Anyone with the link"</strong> (with the <strong>Viewer/Reader</strong> role). Otherwise, data will sync automatically via GitHub every 6 hours.`;
+                                feedbackEl.classList.remove('d-none');
+                            }
+                            
                             setTimeout(() => {
                                 if (year === 'rt2') syncFailedRT2 = false;
                                 else syncFailedRT3 = false;
@@ -3026,6 +3036,13 @@
                             syncFailedRT3 = true;
                         }
                         renderAcSection(year);
+                        
+                        if (feedbackEl) {
+                            feedbackEl.innerHTML = isFrench 
+                                ? `<strong>La synchronisation en temps réel a échoué.</strong><br>Pour activer la synchronisation instantanée, veuillez ouvrir votre Google Sheet, cliquer sur <strong>Partager</strong> en haut à droite, et sous <strong>Accès général</strong>, modifier "Limité" en <strong>"Tous les utilisateurs disposant du lien"</strong> (en rôle <strong>Lecteur</strong>). Sinon, les données se mettront à jour automatiquement via GitHub toutes les 6 heures.`
+                                : `<strong>Real-time synchronization failed.</strong><br>To enable instant synchronization, please open your Google Sheet, click <strong>Share</strong> in the top-right, and under <strong>General Access</strong> change "Restricted" to <strong>"Anyone with the link"</strong> (with the <strong>Viewer/Reader</strong> role). Otherwise, data will sync automatically via GitHub every 6 hours.`;
+                            feedbackEl.classList.remove('d-none');
+                        }
                         
                         setTimeout(() => {
                             if (year === 'rt2') syncFailedRT2 = false;
@@ -3044,6 +3061,15 @@
             searchContainer.appendChild(levelCol);
             searchContainer.appendChild(syncCol);
             filtersEl.appendChild(searchContainer);
+
+            // Alert div for feedback
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.id = `syncFeedback-${year}`;
+            feedbackDiv.className = 'alert alert-warning mt-3 d-none shadow-sm';
+            feedbackDiv.style.borderRadius = '12px';
+            feedbackDiv.style.fontSize = '0.85rem';
+            feedbackDiv.style.borderLeft = '4px solid #f39c12';
+            filtersEl.appendChild(feedbackDiv);
 
             // Render cards container
             renderAcCardsOnly(year);
