@@ -1553,108 +1553,6 @@
                 </div>
             </section>
         </main>
-
-        <div class="modal fade" id="constructionModal" tabindex="-1" aria-labelledby="constructionModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="constructionModalLabel" data-en="Information">Information</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><span data-en="The submission of this form is under construction.">L'envoi de ce formulaire est en cours de construction.</span> <i class="fas fa-tools text-warning ms-1"></i></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-en="Close">Fermer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AC Detail Modal -->
-        <div class="modal fade" id="acModal" tabindex="-1" aria-labelledby="acModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content shadow-lg" style="border-radius: 16px; overflow: hidden; border: none;">
-                    <div class="modal-header text-white" id="acModalHeader" style="border: none; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
-                        <h5 class="modal-title" id="acModalLabel" style="font-weight: 700;">
-                            <span id="acModalCode" class="badge me-2" style="font-size: 0.95rem; padding: 6px 12px; border-radius: 20px;">ACXX.XX</span>
-                            <span id="acModalTitle">Titre de l'AC</span>
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-0" style="background-color: #f8fafc;">
-                        <div class="container-fluid p-0">
-                            <div class="row g-0">
-                                <!-- Left side: Details & Description -->
-                                <div class="col-12 col-lg-4 p-4 border-end" style="background-color: #ffffff;">
-                                    <div class="mb-4">
-                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Competence">Compétence</h6>
-                                        <div class="d-flex align-items-center gap-2 mt-2">
-                                            <span id="acModalCompBadge" class="badge" style="font-size: 0.85rem; padding: 5px 10px; border-radius: 10px;">RT1</span>
-                                            <span id="acModalCompTitle" class="fw-bold text-dark" style="font-size: 0.95rem;">Administrer un réseau</span>
-                                        </div>
-                                        <p id="acModalCompDesc" class="text-muted small mt-2 mb-0">Description de la compétence.</p>
-                                    </div>
-                                    
-                                    <div class="mb-4">
-                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Description / Criteria">Description de l'AC</h6>
-                                        <p id="acModalAcDesc" class="text-dark mt-2 mb-0" style="font-size: 0.95rem; line-height: 1.6;"></p>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Acquisition Level">Niveau d'acquisition</h6>
-                                        <div id="acModalLevelDots" class="mt-2"></div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Associated Resources">Ressources associées</h6>
-                                        <div id="acModalResources" class="mt-2 d-flex flex-wrap gap-2"></div>
-                                    </div>
-                                    
-                                    <div class="d-grid gap-2 mt-4 pt-3 border-top">
-                                        <a id="acModalProofLink" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-sm shadow-sm" style="border-radius: 8px;">
-                                            <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Proof in New Tab">Ouvrir la preuve dans Drive</span>
-                                        </a>
-                                        <a id="acModalAnalysisLink" href="#" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm" style="border-radius: 8px;">
-                                            <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Analysis in New Tab">Ouvrir l'analyse dans Drive</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                
-                                <!-- Right side: Document / Images Viewer -->
-                                <div class="col-12 col-lg-8 d-flex flex-column" style="min-height: 500px; max-height: 80vh;">
-                                    <div class="bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
-                                        <!-- Document Switch Tabs (Preuve vs Analyse) -->
-                                        <ul class="nav nav-pills card-header-pills" id="acModalViewerTabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active btn-sm" id="acModalPreuveTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Document Proof">Preuve</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link btn-sm ms-2" id="acModalAnalyseTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Reflexive Analysis">Analyse</button>
-                                            </li>
-                                        </ul>
-                                        <span class="text-muted small" data-en="Preview Document"><i class="fas fa-eye me-1"></i> Aperçu du document</span>
-                                    </div>
-                                    <div class="flex-grow-1 p-3 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
-                                        <!-- Spinner -->
-                                        <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1;">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                        <!-- Iframe Viewer -->
-                                        <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: block;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
-                                        <!-- No Document Fallback -->
-                                        <div id="acModalNoDoc" class="text-center p-5 d-none" style="z-index: 2;">
-                                            <i class="fas fa-file-excel text-muted fa-3x mb-3"></i>
-                                            <p class="text-muted" data-en="No document available for preview.">Aucun document disponible pour l'aperçu.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <section id="mentions" class="page-section">
@@ -1728,6 +1626,108 @@
         </p>
     </div>
 </footer>
+
+<!-- Modals (placed at top-level to prevent parent display:none issues) -->
+<div class="modal fade" id="constructionModal" tabindex="-1" aria-labelledby="constructionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="constructionModalLabel" data-en="Information">Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><span data-en="The submission of this form is under construction.">L'envoi de ce formulaire est en cours de construction.</span> <i class="fas fa-tools text-warning ms-1"></i></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-en="Close">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AC Detail Modal -->
+<div class="modal fade" id="acModal" tabindex="-1" aria-labelledby="acModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content shadow-lg" style="border-radius: 16px; overflow: hidden; border: none;">
+            <div class="modal-header text-white" id="acModalHeader" style="border: none; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                <h5 class="modal-title" id="acModalLabel" style="font-weight: 700;">
+                    <span id="acModalCode" class="badge me-2" style="font-size: 0.95rem; padding: 6px 12px; border-radius: 20px;">ACXX.XX</span>
+                    <span id="acModalTitle">Titre de l'AC</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0" style="background-color: #f8fafc;">
+                <div class="container-fluid p-0">
+                    <div class="row g-0">
+                        <!-- Left side: Details & Description -->
+                        <div class="col-12 col-lg-4 p-4 border-end" style="background-color: #ffffff;">
+                            <div class="mb-4">
+                                <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Competence">Compétence</h6>
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <span id="acModalCompBadge" class="badge" style="font-size: 0.85rem; padding: 5px 10px; border-radius: 10px;">RT1</span>
+                                    <span id="acModalCompTitle" class="fw-bold text-dark" style="font-size: 0.95rem;">Administrer un réseau</span>
+                                </div>
+                                <p id="acModalCompDesc" class="text-muted small mt-2 mb-0">Description de la compétence.</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Description / Criteria">Description de l'AC</h6>
+                                <p id="acModalAcDesc" class="text-dark mt-2 mb-0" style="font-size: 0.95rem; line-height: 1.6;"></p>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Acquisition Level">Niveau d'acquisition</h6>
+                                <div id="acModalLevelDots" class="mt-2"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Associated Resources">Ressources associées</h6>
+                                <div id="acModalResources" class="mt-2 d-flex flex-wrap gap-2"></div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4 pt-3 border-top">
+                                <a id="acModalProofLink" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-sm shadow-sm" style="border-radius: 8px;">
+                                    <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Proof in New Tab">Ouvrir la preuve dans Drive</span>
+                                </a>
+                                <a id="acModalAnalysisLink" href="#" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm" style="border-radius: 8px;">
+                                    <i class="fas fa-external-link-alt me-1"></i> <span data-en="Open Analysis in New Tab">Ouvrir l'analyse dans Drive</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Right side: Document / Images Viewer -->
+                        <div class="col-12 col-lg-8 d-flex flex-column" style="min-height: 500px; max-height: 80vh;">
+                            <div class="bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+                                <!-- Document Switch Tabs (Preuve vs Analyse) -->
+                                <ul class="nav nav-pills card-header-pills" id="acModalViewerTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active btn-sm" id="acModalPreuveTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Document Proof">Preuve</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link btn-sm ms-2" id="acModalAnalyseTab" data-bs-toggle="pill" type="button" role="tab" style="border-radius: 20px; font-weight: 600;" data-en="Reflexive Analysis">Analyse</button>
+                                    </li>
+                                </ul>
+                                <span class="text-muted small" data-en="Preview Document"><i class="fas fa-eye me-1"></i> Aperçu du document</span>
+                            </div>
+                            <div class="flex-grow-1 p-3 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
+                                <!-- Spinner -->
+                                <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <!-- Iframe Viewer -->
+                                <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: block;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
+                                <!-- No Document Fallback -->
+                                <div id="acModalNoDoc" class="text-center p-5 d-none" style="z-index: 2;">
+                                    <i class="fas fa-file-excel text-muted fa-3x mb-3"></i>
+                                    <p class="text-muted" data-en="No document available for preview.">Aucun document disponible pour l'aperçu.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -2901,7 +2901,7 @@
                             <div class="text-muted small" style="text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">
                                 ${isFrench ? 'Compétences Fortes' : 'Strong Competencies'}
                             </div>
-                            <div style="font-size:1.8rem; font-weight:800; color:#dc3545;">${strongCount}</div>
+                            <div style="font-size:1.8rem; font-weight:800; color:#34C759;">${strongCount}</div>
                         </div>
                     </div>
 
@@ -2983,7 +2983,7 @@
             buttonsContainer.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
-            strongBtn.className = `btn btn-sm btn-outline-danger me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
+            strongBtn.className = `btn btn-sm btn-outline-success me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
             strongBtn.textContent = isFrench ? 'Compétences fortes' : 'Strong Skills';
             strongBtn.onclick = () => setFilter('STRONG', year);
             buttonsContainer.appendChild(strongBtn);
