@@ -2050,7 +2050,7 @@
             { code: 'AC24.05ROM', title: 'Automatiser la gestion des équipements réseaux', competence: 'ROM1', description: 'Gérer les infrastructures des réseaux opérateurs', levels: [2], proof: 'https://docs.google.com/document/d/1eFJBwdeVPeLvIcQsWFgi54-ZUWQ2l88laG2R7cvvqiE/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1fmpZiDuEALdL8NQK9OQipYSm5wc5K6X8h_LS2PzBW7A/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.ROM.09'] },
             { code: 'AC25.01ROM', title: 'Choisir une architecture et déployer des services de ToIP', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [3], proof: 'https://docs.google.com/document/d/1-wipdSUBlwDiKNpHc0OYhX7GlbzQ0m8v5M5kTk7ZkXI/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1tdSGb8zPQU1oxy_P_aCgkJMZiWBGvZRVRZMA7FeLqUY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R3.ROM.16', 'SAÉ3.ROM.04'] },
             { code: 'AC25.02ROM', title: 'Administrer un service de téléphonie pour l’entreprise', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [4], proof: 'https://docs.google.com/document/d/1WJ4bE0uz3V16bokVxja316mmJAwDfhvcvlMxJq7f4Lg/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1JyTRBocNLenFCiTWnHmEdWyn7v5i0MvkXmpjuD2C4ig/edit?usp=drive_link', resources: ['SAÉ3.ROM.04'] },
-            { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['SAÉ3.ROM.03'] }
+            { code: 'AC25.03ROM', title: 'Mettre en place une politique de QoS pour les applications', competence: 'ROM2', description: 'Mettre en oeuvre le système de téléphonie de l’entreprise', levels: [2], proof: 'https://docs.google.com/document/d/1VyevUXSOetVoO1fU2Qkmp1O9wlm6sTr5n8f4hTgABxw/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1P8jBoMqrNSvWwSwKXIvZQQGOAPN0Sghud-nys4O8KTw/edit?usp=drive_link', resources: ['R19', 'SAÉ3.ROM.03'] }
         ];
 
         const acFallbackItemsRT3 = [
@@ -2097,78 +2097,225 @@
         }
 
         async function loadAcData() {
+            window.csvSyncSuccessRT2 = false;
+            window.csvSyncSuccessRT3 = false;
             window.htmlSyncSuccessRT2 = false;
             window.htmlSyncSuccessRT3 = false;
             window.gvizSyncSuccessRT2 = false;
             window.gvizSyncSuccessRT3 = false;
 
-            // --- TIER 1: Sync via CORS-free JSONP (Completely real-time, no delay) ---
-            console.log("Attempting synchronization via real-time GViz JSONP...");
-            const scriptRT2 = document.createElement("script");
-            scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
-            scriptRT2.onload = () => {
-                try { document.body.removeChild(scriptRT2); } catch (e) {}
-            };
-            scriptRT2.onerror = () => {
-                try { document.body.removeChild(scriptRT2); } catch (e) {}
-            };
-            document.body.appendChild(scriptRT2);
+            // --- TIER 1: Sync via Direct CSV (CORS-free, Public, Real-time) ---
+            console.log("Attempting synchronization via Direct CORS-free CSV...");
+            const csvSuccessRT2 = await fetchCsvData('808860009', 'rt2');
+            if (csvSuccessRT2) {
+                window.csvSyncSuccessRT2 = true;
+            }
+            const csvSuccessRT3 = await fetchCsvData('1897392063', 'rt3');
+            if (csvSuccessRT3) {
+                window.csvSyncSuccessRT3 = true;
+            }
 
-            const scriptRT3 = document.createElement("script");
-            scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
-            scriptRT3.onload = () => {
-                try { document.body.removeChild(scriptRT3); } catch (e) {}
-            };
-            scriptRT3.onerror = () => {
-                try { document.body.removeChild(scriptRT3); } catch (e) {}
-            };
-            document.body.appendChild(scriptRT3);
+            // --- TIER 2: Sync via CORS-free JSONP (GViz) ---
+            const needsGvizRT2 = !window.csvSyncSuccessRT2;
+            const needsGvizRT3 = !window.csvSyncSuccessRT3;
 
-            // Wait up to 1.5 seconds for JSONP scripts to load, or resolve immediately if both succeed early
-            await new Promise((resolve) => {
-                const startTime = Date.now();
-                const checkInterval = setInterval(() => {
-                    const rt2Finished = window.gvizSyncSuccessRT2 || !document.body.contains(scriptRT2);
-                    const rt3Finished = window.gvizSyncSuccessRT3 || !document.body.contains(scriptRT3);
-                    if ((rt2Finished && rt3Finished) || (Date.now() - startTime >= 1500)) {
-                        clearInterval(checkInterval);
-                        resolve();
-                    }
-                }, 50);
-            });
+            if (needsGvizRT2 || needsGvizRT3) {
+                console.log("CSV Direct failed or was incomplete. Attempting real-time GViz JSONP...");
+                let scriptRT2, scriptRT3;
+                if (needsGvizRT2) {
+                    scriptRT2 = document.createElement("script");
+                    scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
+                    scriptRT2.onload = () => {
+                        try { document.body.removeChild(scriptRT2); } catch (e) {}
+                    };
+                    scriptRT2.onerror = () => {
+                        try { document.body.removeChild(scriptRT2); } catch (e) {}
+                    };
+                    document.body.appendChild(scriptRT2);
+                }
 
-            // --- TIER 2: Sync via HTML CORS Proxy (Fallback if GViz failed, e.g. network issues) ---
-            const needsHtmlRT2 = !window.gvizSyncSuccessRT2;
-            const needsHtmlRT3 = !window.gvizSyncSuccessRT3;
+                if (needsGvizRT3) {
+                    scriptRT3 = document.createElement("script");
+                    scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
+                    scriptRT3.onload = () => {
+                        try { document.body.removeChild(scriptRT3); } catch (e) {}
+                    };
+                    scriptRT3.onerror = () => {
+                        try { document.body.removeChild(scriptRT3); } catch (e) {}
+                    };
+                    document.body.appendChild(scriptRT3);
+                }
+
+                // Wait up to 1.5 seconds for JSONP scripts to load, or resolve immediately if both succeed early
+                await new Promise((resolve) => {
+                    const startTime = Date.now();
+                    const checkInterval = setInterval(() => {
+                        const rt2Finished = window.gvizSyncSuccessRT2 || !scriptRT2 || !document.body.contains(scriptRT2);
+                        const rt3Finished = window.gvizSyncSuccessRT3 || !scriptRT3 || !document.body.contains(scriptRT3);
+                        if ((rt2Finished && rt3Finished) || (Date.now() - startTime >= 1500)) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 50);
+                });
+            }
+
+            // --- TIER 3: Sync via HTML CORS Proxy (Fallback if GViz and CSV failed) ---
+            const needsHtmlRT2 = !window.csvSyncSuccessRT2 && !window.gvizSyncSuccessRT2;
+            const needsHtmlRT3 = !window.csvSyncSuccessRT3 && !window.gvizSyncSuccessRT3;
 
             if (needsHtmlRT2) {
-                console.log("GViz JSONP failed or timed out for RT2. Falling back to HTML CORS Proxy...");
+                console.log("GViz and CSV failed or timed out for RT2. Falling back to HTML CORS Proxy...");
                 const rt2HtmlSuccess = await fetchHtmlProxy('808860009', 'rt2');
                 if (rt2HtmlSuccess) {
                     window.htmlSyncSuccessRT2 = true;
                 }
             }
             if (needsHtmlRT3) {
-                console.log("GViz JSONP failed or timed out for RT3. Falling back to HTML CORS Proxy...");
+                console.log("GViz and CSV failed or timed out for RT3. Falling back to HTML CORS Proxy...");
                 const rt3HtmlSuccess = await fetchHtmlProxy('1897392063', 'rt3');
                 if (rt3HtmlSuccess) {
                     window.htmlSyncSuccessRT3 = true;
                 }
             }
 
-            // --- TIER 3: Local Fallback Data (If both GViz and HTML Proxy failed) ---
-            if (!window.gvizSyncSuccessRT2 && !window.htmlSyncSuccessRT2) {
+            // --- TIER 4: Local Fallback Data (If all else failed) ---
+            if (!window.csvSyncSuccessRT2 && !window.gvizSyncSuccessRT2 && !window.htmlSyncSuccessRT2) {
                 console.warn("Utilisation des données locales de secours pour RT2.");
                 acItemsRT2 = acFallbackItemsRT2.map(item => ({ ...item }));
                 strongAcCodesRT2 = new Set(fallbackStrongAcCodesRT2);
                 renderAcSection('rt2');
             }
-            if (!window.gvizSyncSuccessRT3 && !window.htmlSyncSuccessRT3) {
+            if (!window.csvSyncSuccessRT3 && !window.gvizSyncSuccessRT3 && !window.htmlSyncSuccessRT3) {
                 console.warn("Utilisation des données locales de secours pour RT3.");
                 acItemsRT3 = acFallbackItemsRT3.map(item => ({ ...item }));
                 strongAcCodesRT3 = new Set(fallbackStrongAcCodesRT3);
                 renderAcSection('rt3');
             }
+        }
+
+        async function fetchCsvData(gid, year) {
+            console.log(`Tentative de synchronisation en cours via CSV Direct pour ${year.toUpperCase()}...`);
+            const csvUrl = `https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pub?output=csv&gid=${gid}&t=${Date.now()}`;
+            try {
+                const response = await fetch(csvUrl);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                const csvText = await response.text();
+                
+                if (typeof XLSX === "undefined") {
+                    throw new Error("SheetJS XLSX library is not loaded");
+                }
+                const workbook = XLSX.read(csvText, { type: 'string' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                
+                const newAcItems = [];
+                const parsedStrongCodes = new Set();
+
+                const parseResourcesCSV = (val) => {
+                    if (!val) return [];
+                    return String(val).split(",")
+                                      .map(r => r.trim())
+                                      .filter(r => r.length > 0);
+                };
+
+                rows.forEach(row => {
+                    let acIndex = -1;
+                    let acText = "";
+                    for (let i = 0; i < row.length; i++) {
+                        const txt = row[i] ? String(row[i]).trim() : "";
+                        if (/^AC\d+/i.test(txt)) {
+                            acIndex = i;
+                            acText = txt;
+                            break;
+                        }
+                    }
+
+                    if (acIndex !== -1) {
+                        const firstSpace = acText.indexOf(" ");
+                        const code = firstSpace !== -1 ? acText.substring(0, firstSpace) : acText;
+                        const title = firstSpace !== -1 ? acText.substring(firstSpace + 1) : "";
+
+                        const r1 = parseResourcesCSV(row[acIndex + 1]);
+                        const r2 = parseResourcesCSV(row[acIndex + 2]);
+                        const r3 = parseResourcesCSV(row[acIndex + 3]);
+                        const r4 = parseResourcesCSV(row[acIndex + 4]);
+                        const resources = Array.from(new Set([...r1, ...r2, ...r3, ...r4]));
+
+                        const totalResources = r1.length + r2.length + r3.length + r4.length;
+                        let level = 1;
+                        if (totalResources > 0) {
+                            const weightedSum = 
+                                r1.reduce((sum, r) => sum + 1 * getResourceWeight(r), 0) +
+                                r2.reduce((sum, r) => sum + 2 * getResourceWeight(r), 0) +
+                                r3.reduce((sum, r) => sum + 3 * getResourceWeight(r), 0) +
+                                r4.reduce((sum, r) => sum + 4 * getResourceWeight(r), 0);
+                            
+                            const totalWeight = 
+                                r1.reduce((sum, r) => sum + getResourceWeight(r), 0) +
+                                r2.reduce((sum, r) => sum + getResourceWeight(r), 0) +
+                                r3.reduce((sum, r) => sum + getResourceWeight(r), 0) +
+                                r4.reduce((sum, r) => sum + getResourceWeight(r), 0);
+
+                            level = Math.round(weightedSum / totalWeight);
+                            level = Math.max(1, Math.min(4, level));
+                        }
+
+                        const fallbackList = year === 'rt2' ? acFallbackItemsRT2 : acFallbackItemsRT3;
+                        const fallbackItem = fallbackList.find(item => item.code === code);
+                        const proof = fallbackItem ? fallbackItem.proof : "";
+                        const analysis = fallbackItem ? fallbackItem.analysis : "";
+
+                        const strongVal = row[acIndex + 7] ? String(row[acIndex + 7]).trim().toLowerCase() : "";
+                        const isStrong = strongVal === "oui";
+                        if (isStrong) {
+                            parsedStrongCodes.add(code);
+                        }
+
+                        const competence = getCompetenceFromCode(code);
+
+                        const competenceMetaDesc = {
+                            RT1: 'Administrer un réseau',
+                            RT2: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers',
+                            RT3: 'Développer une application R&T',
+                            ROM1: 'Gérer les infrastructures des réseaux opérateurs',
+                            ROM2: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
+                        };
+
+                        newAcItems.push({
+                            code,
+                            title,
+                            competence,
+                            description: competenceMetaDesc[competence] || "",
+                            levels: [level],
+                            proof,
+                            analysis,
+                            resources
+                        });
+                    }
+                });
+
+                if (rows.length > 0) {
+                    if (year === 'rt2') {
+                        acItemsRT2 = newAcItems;
+                        strongAcCodesRT2.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodesRT2.add(code));
+                        console.log("Synchronisation Google Sheets réussie en temps réel pour RT2 (via CSV Direct) !");
+                        renderAcSection('rt2');
+                    } else {
+                        acItemsRT3 = newAcItems;
+                        strongAcCodesRT3.clear();
+                        parsedStrongCodes.forEach(code => strongAcCodesRT3.add(code));
+                        console.log("Synchronisation Google Sheets réussie en temps réel pour RT3 (via CSV Direct) !");
+                        renderAcSection('rt3');
+                    }
+                    return true;
+                }
+            } catch (error) {
+                console.warn(`Erreur lors de la synchronisation CSV pour ${year.toUpperCase()}:`, error);
+            }
+            return false;
         }
 
         async function fetchHtmlProxy(gid, year) {
