@@ -136,26 +136,25 @@ def fetch_and_parse_sheet(gid):
             r3 = parse_resources(row[ac_idx + 3]["text"]) if ac_idx + 3 < len(row) else []
             r4 = parse_resources(row[ac_idx + 4]["text"]) if ac_idx + 4 < len(row) else []
             
-            # Keep resources from all levels (1/4 to 4/4)
-            resources = list(dict.fromkeys(r1 + r2 + r3 + r4))
+            # Keep resources from validated levels (2/4 to 4/4) as per the portfolio's logic
+            resources = list(dict.fromkeys(r2 + r3 + r4))
             
             # Calculate level based on weighted average of resources (SAÉ has weight 1.5, regular resources have weight 1.0)
+            # Level 1/4 (r1) is excluded from the average calculation as it is just for sensitization
             def get_resource_weight(r_name):
                 r_name_upper = r_name.strip().upper()
                 if r_name_upper.startswith("SAÉ") or r_name_upper.startswith("SAE"):
                     return 1.5
                 return 1.0
 
-            total_resources = len(r1) + len(r2) + len(r3) + len(r4)
+            total_resources = len(r2) + len(r3) + len(r4)
             if total_resources > 0:
                 weighted_sum = (
-                    sum(1 * get_resource_weight(r) for r in r1) +
                     sum(2 * get_resource_weight(r) for r in r2) +
                     sum(3 * get_resource_weight(r) for r in r3) +
                     sum(4 * get_resource_weight(r) for r in r4)
                 )
                 total_weight = (
-                    sum(get_resource_weight(r) for r in r1) +
                     sum(get_resource_weight(r) for r in r2) +
                     sum(get_resource_weight(r) for r in r3) +
                     sum(get_resource_weight(r) for r in r4)

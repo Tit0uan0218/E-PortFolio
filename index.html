@@ -2093,54 +2093,54 @@
             window.gvizSyncSuccessRT2 = false;
             window.gvizSyncSuccessRT3 = false;
 
-            // --- TIER 1: Sync via HTML CORS Proxy (Most accurate for styles/strikethroughs) ---
-            const rt2HtmlSuccess = await fetchHtmlProxy('808860009', 'rt2');
-            if (rt2HtmlSuccess) {
-                window.htmlSyncSuccessRT2 = true;
-            }
-            const rt3HtmlSuccess = await fetchHtmlProxy('1897392063', 'rt3');
-            if (rt3HtmlSuccess) {
-                window.htmlSyncSuccessRT3 = true;
-            }
+            // --- TIER 1: Sync via CORS-free JSONP (Completely real-time, no delay) ---
+            console.log("Attempting synchronization via real-time GViz JSONP...");
+            const scriptRT2 = document.createElement("script");
+            scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
+            document.body.appendChild(scriptRT2);
 
-            // --- TIER 2: Sync via CORS-free JSONP (Fallback if HTML Proxy failed) ---
-            const needsGvizRT2 = !window.htmlSyncSuccessRT2;
-            const needsGvizRT3 = !window.htmlSyncSuccessRT3;
+            const scriptRT3 = document.createElement("script");
+            scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
+            document.body.appendChild(scriptRT3);
 
-            if (needsGvizRT2 || needsGvizRT3) {
-                console.log("HTML Proxy failed or timed out. Falling back to GViz JSONP...");
-                let scriptRT2, scriptRT3;
-                if (needsGvizRT2) {
-                    scriptRT2 = document.createElement("script");
-                    scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
-                    document.body.appendChild(scriptRT2);
+            // Wait up to 1.5 seconds for JSONP scripts to load
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 1500);
+            });
+
+            // Clean up scripts
+            try { document.body.removeChild(scriptRT2); } catch (e) {}
+            try { document.body.removeChild(scriptRT3); } catch (e) {}
+
+            // --- TIER 2: Sync via HTML CORS Proxy (Fallback if GViz failed, e.g. network issues) ---
+            const needsHtmlRT2 = !window.gvizSyncSuccessRT2;
+            const needsHtmlRT3 = !window.gvizSyncSuccessRT3;
+
+            if (needsHtmlRT2) {
+                console.log("GViz JSONP failed or timed out for RT2. Falling back to HTML CORS Proxy...");
+                const rt2HtmlSuccess = await fetchHtmlProxy('808860009', 'rt2');
+                if (rt2HtmlSuccess) {
+                    window.htmlSyncSuccessRT2 = true;
                 }
-                if (needsGvizRT3) {
-                    scriptRT3 = document.createElement("script");
-                    scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
-                    document.body.appendChild(scriptRT3);
+            }
+            if (needsHtmlRT3) {
+                console.log("GViz JSONP failed or timed out for RT3. Falling back to HTML CORS Proxy...");
+                const rt3HtmlSuccess = await fetchHtmlProxy('1897392063', 'rt3');
+                if (rt3HtmlSuccess) {
+                    window.htmlSyncSuccessRT3 = true;
                 }
-
-                // Wait up to 1.5 seconds for JSONP scripts to load
-                await new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 1500);
-                });
-
-                // Clean up scripts
-                if (scriptRT2) { try { document.body.removeChild(scriptRT2); } catch (e) {} }
-                if (scriptRT3) { try { document.body.removeChild(scriptRT3); } catch (e) {} }
             }
 
-            // --- TIER 3: Local Fallback Data (If both HTML Proxy and GViz failed) ---
-            if (!window.htmlSyncSuccessRT2 && !window.gvizSyncSuccessRT2) {
+            // --- TIER 3: Local Fallback Data (If both GViz and HTML Proxy failed) ---
+            if (!window.gvizSyncSuccessRT2 && !window.htmlSyncSuccessRT2) {
                 console.warn("Utilisation des données locales de secours pour RT2.");
                 acItemsRT2 = acFallbackItemsRT2.map(item => ({ ...item }));
                 strongAcCodesRT2 = new Set(fallbackStrongAcCodesRT2);
                 renderAcSection('rt2');
             }
-            if (!window.htmlSyncSuccessRT3 && !window.gvizSyncSuccessRT3) {
+            if (!window.gvizSyncSuccessRT3 && !window.htmlSyncSuccessRT3) {
                 console.warn("Utilisation des données locales de secours pour RT3.");
                 acItemsRT3 = acFallbackItemsRT3.map(item => ({ ...item }));
                 strongAcCodesRT3 = new Set(fallbackStrongAcCodesRT3);
@@ -2220,7 +2220,7 @@
                             const r2 = parseRessourcesList(cells[acIndex + 2], strikethroughClasses);
                             const r3 = parseRessourcesList(cells[acIndex + 3], strikethroughClasses);
                             const r4 = parseRessourcesList(cells[acIndex + 4], strikethroughClasses);
-                            const resources = Array.from(new Set([...r1, ...r2, ...r3, ...r4]));
+                            const resources = Array.from(new Set([...r2, ...r3, ...r4]));
 
                             function getResourceWeight(rName) {
                                 const nameUpper = rName.trim().toUpperCase();
@@ -2230,17 +2230,15 @@
                                 return 1.0;
                             }
 
-                            const totalResources = r1.length + r2.length + r3.length + r4.length;
+                            const totalResources = r2.length + r3.length + r4.length;
                             let level = 1;
                             if (totalResources > 0) {
                                 const weightedSum = 
-                                    r1.reduce((sum, r) => sum + 1 * getResourceWeight(r), 0) +
                                     r2.reduce((sum, r) => sum + 2 * getResourceWeight(r), 0) +
                                     r3.reduce((sum, r) => sum + 3 * getResourceWeight(r), 0) +
                                     r4.reduce((sum, r) => sum + 4 * getResourceWeight(r), 0);
                                 
                                 const totalWeight = 
-                                    r1.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r2.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r3.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                     r4.reduce((sum, r) => sum + getResourceWeight(r), 0);
@@ -2357,7 +2355,7 @@
                         const r2 = parseResourcesGviz(cells[acIndex + 2]);
                         const r3 = parseResourcesGviz(cells[acIndex + 3]);
                         const r4 = parseResourcesGviz(cells[acIndex + 4]);
-                        const resources = Array.from(new Set([...r1, ...r2, ...r3, ...r4]));
+                        const resources = Array.from(new Set([...r2, ...r3, ...r4]));
 
                         function getResourceWeight(rName) {
                             const nameUpper = rName.trim().toUpperCase();
@@ -2367,17 +2365,15 @@
                             return 1.0;
                         }
 
-                        const totalResources = r1.length + r2.length + r3.length + r4.length;
+                        const totalResources = r2.length + r3.length + r4.length;
                         let level = 1;
                         if (totalResources > 0) {
                             const weightedSum = 
-                                r1.reduce((sum, r) => sum + 1 * getResourceWeight(r), 0) +
                                 r2.reduce((sum, r) => sum + 2 * getResourceWeight(r), 0) +
                                 r3.reduce((sum, r) => sum + 3 * getResourceWeight(r), 0) +
                                 r4.reduce((sum, r) => sum + 4 * getResourceWeight(r), 0);
                             
                             const totalWeight = 
-                                r1.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r2.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r3.reduce((sum, r) => sum + getResourceWeight(r), 0) +
                                 r4.reduce((sum, r) => sum + getResourceWeight(r), 0);
