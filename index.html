@@ -1121,7 +1121,7 @@
 
                         <!-- Sub-category banner for BUT RT1 (bottom of RT1 tab) -->
                         <div class="rt1-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
-                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT1 Groupe A2 - année scolaire 2024-2025</p>
+                            <p style="color: #fff; margin:0; font-weight:700;" data-en="BUT RT1 Group A2 - school year 2024-2025">BUT RT1 Groupe A2 - année scolaire 2024-2025</p>
                         </div>
 
                     </div>
@@ -1135,7 +1135,7 @@
 
                         <!-- Sub-category banner for BUT RT2 (bottom of RT2 tab) -->
                         <div class="rt2-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
-                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT2 Groupe R2 - année scolaire 2025-2026</p>
+                            <p style="color: #fff; margin:0; font-weight:700;" data-en="BUT RT2 Group R2 - school year 2025-2026">BUT RT2 Groupe R2 - année scolaire 2025-2026</p>
                         </div>
                     </div>
 
@@ -1148,7 +1148,7 @@
 
                         <!-- Sub-category banner for BUT RT3 (bottom of RT3 tab) -->
                         <div class="rt3-subcategory-banner" style="background: linear-gradient(135deg, #555555 0%, #333333 100%); padding: 0.75rem; border-radius: 8px; margin-top: 1.5rem; text-align: center;">
-                            <p style="color: #fff; margin:0; font-weight:700;">BUT RT3 Groupe xx - année scolaire 2026-2027</p>
+                            <p style="color: #fff; margin:0; font-weight:700;" data-en="BUT RT3 Group xx - school year 2026-2027">BUT RT3 Groupe xx - année scolaire 2026-2027</p>
                         </div>
                     </div>
                 </div>
@@ -1422,7 +1422,7 @@
 
             const rootTitle = document.querySelector('#portfolio h1');
             if (rootTitle) {
-                rootTitle.textContent = 'Mon E-Portfolio';
+                rootTitle.textContent = isFrench ? 'Mon E-Portfolio' : 'My E-Portfolio';
             }
         }
 
@@ -1487,6 +1487,14 @@
             });
 
             translateBtn.textContent = isFrench ? "Traduire en Anglais" : "Translate to French";
+
+            // Translate dynamic portfolio title and sections
+            const rootTitle = document.querySelector('#portfolio h1');
+            if (rootTitle) {
+                rootTitle.textContent = isFrench ? 'Mon E-Portfolio' : 'My E-Portfolio';
+            }
+            renderAcSection('rt2');
+            renderAcSection('rt3');
         }
 
         translateBtn.addEventListener("click", () => {
@@ -1615,67 +1623,77 @@
 
         const resourceGlossary = {
             // Semestre 3
-            'R3.01': 'Réseaux campus',
-            'R3.02': 'Réseaux opérateurs',
-            'R3.03': 'Services réseaux avancés',
-            'R3.04': 'Services d\'annuaires',
-            'R3.05': 'Transmissions numériques',
-            'R3.06': 'Fibres optiques',
-            'R3.07': 'Réseaux d\'accès',
-            'R3.08': 'Consolidation de la programmation',
-            'R3.09': 'Programmation événementielle',
-            'R3.10': 'Bases de données',
-            'R3.11': 'Anglais professionnel',
-            'R3.12': 'Expression-Communication',
-            'R3.13': 'Projet Personnel et Professionnel (PPP)',
-            'R3.14': 'Analyse de Fourier',
-            'R3.15': 'Gestion de projet',
-            'R3.ROM.16': 'Téléphonie sur IP (ToIP)',
-            'SAÉ3.01': 'Systèmes de transmission',
-            'SAÉ3.02': 'Développement d\'applications de communication',
-            'SAÉ3.ROM.03': 'Projet Réseau Opérateur/Téléphonie',
-            'SAÉ3.ROM.04': 'Déploiement de Téléphonie d\'entreprise',
+            'R3.01': { fr: 'Réseaux campus', en: 'Campus Networks' },
+            'R3.02': { fr: 'Réseaux opérateurs', en: 'Operator Networks' },
+            'R3.03': { fr: 'Services réseaux avancés', en: 'Advanced Network Services' },
+            'R3.04': { fr: 'Services d\'annuaires', en: 'Directory Services' },
+            'R3.05': { fr: 'Transmissions numériques', en: 'Digital Transmissions' },
+            'R3.06': { fr: 'Fibres optiques', en: 'Optical Fibers' },
+            'R3.07': { fr: 'Réseaux d\'accès', en: 'Access Networks' },
+            'R3.08': { fr: 'Consolidation de la programmation', en: 'Consolidation of Programming' },
+            'R3.09': { fr: 'Programmation événementielle', en: 'Event-Driven Programming' },
+            'R3.10': { fr: 'Bases de données', en: 'Databases' },
+            'R3.11': { fr: 'Anglais professionnel', en: 'Professional English' },
+            'R3.12': { fr: 'Expression-Communication', en: 'Expression-Communication' },
+            'R3.13': { fr: 'Projet Personnel et Professionnel (PPP)', en: 'Personal and Professional Project (PPP)' },
+            'R3.14': { fr: 'Analyse de Fourier', en: 'Fourier Analysis' },
+            'R3.15': { fr: 'Gestion de projet', en: 'Project Management' },
+            'R3.ROM.16': { fr: 'Téléphonie sur IP (ToIP)', en: 'IP Telephony (VoIP)' },
+            'SAÉ3.01': { fr: 'Systèmes de transmission', en: 'Transmission Systems' },
+            'SAÉ3.02': { fr: 'Développement d\'applications de communication', en: 'Development of Communication Applications' },
+            'SAÉ3.ROM.03': { fr: 'Projet Réseau Opérateur/Téléphonie', en: 'Operator Network/Telephony Project' },
+            'SAÉ3.ROM.04': { fr: 'Déploiement de Téléphonie d\'entreprise', en: 'Enterprise Telephony Deployment' },
 
             // Semestre 4
-            'R4.01': 'Infrastructures de sécurité',
-            'R4.02': 'Transmissions avancées',
-            'R4.03': 'Physique des télécommunications',
-            'R4.04': 'Réseaux cellulaires',
-            'R4.05': 'Automatisation des tâches d\'administration (DevOps)',
-            'R4.06': 'Anglais professionnel',
-            'R4.07': 'Expression-Communication',
-            'R4.ROM.09': 'DevOps pour les réseaux opérateurs',
-            'R4.ROM.10': 'Opérateurs de téléphonie',
-            'SAÉ4.PORTFOLIO': 'Création du Portfolio et auto-évaluation',
-            'SAÉ4.STAGE': 'Stage professionnel en entreprise',
-            'SAÉ4.ROM.01': 'Opérations réseaux opérateurs'
+            'R4.01': { fr: 'Infrastructures de sécurité', en: 'Security Infrastructures' },
+            'R4.02': { fr: 'Transmissions avancées', en: 'Advanced Transmissions' },
+            'R4.03': { fr: 'Physique des télécommunications', en: 'Physics of Telecommunications' },
+            'R4.04': { fr: 'Réseaux cellulaires', en: 'Cellular Networks' },
+            'R4.05': { fr: 'Automatisation des tâches d\'administration (DevOps)', en: 'Automation of Administration Tasks (DevOps)' },
+            'R4.06': { fr: 'Anglais professionnel', en: 'Professional English' },
+            'R4.07': { fr: 'Expression-Communication', en: 'Expression-Communication' },
+            'R4.ROM.09': { fr: 'DevOps pour les réseaux opérateurs', en: 'DevOps for Operator Networks' },
+            'R4.ROM.10': { fr: 'Opérateurs de téléphonie', en: 'Telephony Operators' },
+            'SAÉ4.PORTFOLIO': { fr: 'Création du Portfolio et auto-évaluation', en: 'Portfolio Creation and Self-Assessment' },
+            'SAÉ4.STAGE': { fr: 'Stage professionnel en entreprise', en: 'Professional Internship in a Company' },
+            'SAÉ4.ROM.01': { fr: 'Opérations réseaux opérateurs', en: 'Operator Network Operations' }
         };
 
         const competenceMeta = {
             RT1: {
                 title: 'Administrer les réseaux et l’Internet',
+                title_en: 'Administer Networks and the Internet',
                 level: 2,
-                description: 'Administrer un réseau'
+                description: 'Administrer un réseau',
+                description_en: 'Administer a network'
             },
             RT2: {
                 title: 'Connecter les entreprises et les usagers',
+                title_en: 'Connect Businesses and Users',
                 level: 2,
-                description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers'
+                description: 'Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers',
+                description_en: 'Master the components of connection solutions for businesses and users'
             },
             RT3: {
                 title: 'Créer des outils et des applications informatiques pour les R&T',
+                title_en: 'Create IT Tools and Applications for R&T',
                 level: 2,
-                description: 'Développer une application R&T'
+                description: 'Développer une application R&T',
+                description_en: 'Develop an R&T application'
             },
             ROM1: {
                 title: 'Gérer les infrastructures et les services des réseaux opérateurs',
+                title_en: 'Manage Operator Network Infrastructures and Services',
                 level: 1,
-                description: 'Gérer les infrastructures des réseaux opérateurs'
+                description: 'Gérer les infrastructures des réseaux opérateurs',
+                description_en: 'Manage operator network infrastructures'
             },
             ROM2: {
                 title: 'Gérer les communications unifiées et la vidéo sur Internet',
+                title_en: 'Manage Unified Communications and Video over Internet',
                 level: 1,
-                description: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
+                description: 'Mettre en oeuvre le système de téléphonie de l’entreprise',
+                description_en: 'Implement enterprise telephony systems'
             }
         };
 
@@ -2095,13 +2113,13 @@
             filtersEl.innerHTML = '';
             const allBtn = document.createElement('button');
             allBtn.className = `btn btn-sm btn-outline-dark me-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
-            allBtn.textContent = 'Tout montrer';
+            allBtn.textContent = isFrench ? 'Tout montrer' : 'Show All';
             allBtn.onclick = () => setFilter('ALL', year);
             filtersEl.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
             strongBtn.className = `btn btn-sm btn-outline-success me-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
-            strongBtn.textContent = 'Compétences fortes';
+            strongBtn.textContent = isFrench ? 'Compétences fortes' : 'Strong Skills';
             strongBtn.onclick = () => setFilter('STRONG', year);
             filtersEl.appendChild(strongBtn);
 
@@ -2116,9 +2134,15 @@
             if (currentFilter === 'STRONG') {
                 const strongNote = document.createElement('div');
                 strongNote.className = 'mt-3 text-center text-muted small';
-                strongNote.textContent = year === 'rt2' 
-                    ? 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.'
-                    : 'Voici une sélection personnelle de mes compétences fortes en 3ème année de R&T.';
+                if (isFrench) {
+                    strongNote.textContent = year === 'rt2' 
+                        ? 'Voici une sélection personnelle de mes compétences fortes en 2ème année de R&T.'
+                        : 'Voici une sélection personnelle de mes compétences fortes en 3ème année de R&T.';
+                } else {
+                    strongNote.textContent = year === 'rt2'
+                        ? 'Here is a personal selection of my strong skills in the 2nd year of R&T.'
+                        : 'Here is a personal selection of my strong skills in the 3rd year of R&T.';
+                }
                 filtersEl.appendChild(strongNote);
             }
 
@@ -2141,15 +2165,24 @@
 
                 const headerRow = document.createElement('div');
                 headerRow.className = 'col-12';
-                const meta = competenceMeta[comp] || { title: comp, level: '', description: items[0] && items[0].description ? items[0].description : '' };
+                const meta = competenceMeta[comp] || { 
+                    title: comp, 
+                    title_en: comp,
+                    level: '', 
+                    description: items[0] && items[0].description ? items[0].description : '',
+                    description_en: items[0] && items[0].description ? items[0].description : ''
+                };
                 
                 const levelDisplay = year === 'rt3' ? (comp.startsWith('ROM') ? '2' : '3') : meta.level;
+                const displayTitle = isFrench ? meta.title : (meta.title_en || meta.title);
+                const displayDesc = isFrench ? meta.description : (meta.description_en || meta.description);
+                const displayLevelPrefix = isFrench ? 'Niveau' : 'Level';
 
                 headerRow.innerHTML = `
                     <div style="border-left:4px solid ${colorMap[comp] || colorMap.DEFAULT}; padding-left:12px; margin-bottom:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
                         <div style="min-width:0; flex:1 1 auto;">
-                            <h3 style="margin:0 0 0.25rem 0; font-weight:700;">${comp} - ${meta.title}</h3>
-                            <p class="text-muted" style="margin:0;">Niveau ${levelDisplay} - ${meta.description}</p>
+                            <h3 style="margin:0 0 0.25rem 0; font-weight:700;">${comp} - ${displayTitle}</h3>
+                            <p class="text-muted" style="margin:0;">${displayLevelPrefix} ${levelDisplay} - ${displayDesc}</p>
                         </div>
                         <div style="flex:0 0 auto; margin-top:0.2rem;">
                             <span class="badge" style="background:${colorMap[comp] || colorMap.DEFAULT}; color:#fff; font-size:0.95rem; padding:0.6rem 0.9rem; border-radius:999px;">${items.length} AC</span>
@@ -2182,22 +2215,31 @@
                     const resourceHtml = Array.isArray(i.resources) && i.resources.length
                         ? i.resources.map((resource, index) => {
                             const label = resource && String(resource).trim() ? String(resource).trim() : `Ressource ${index + 1}`;
-                            const title = resourceGlossary[label] || label;
+                            const glossaryItem = resourceGlossary[label];
+                            const title = glossaryItem
+                                ? (typeof glossaryItem === 'object' ? (isFrench ? glossaryItem.fr : glossaryItem.en) : glossaryItem)
+                                : label;
                             return `<span class="resource-badge me-2 mb-2" data-tooltip="${title}">${label}</span>`;
                         }).join('')
-                        : '<span class="text-muted">Ressources associées</span>';
+                        : `<span class="text-muted">${isFrench ? 'Ressources associées' : 'Associated Resources'}</span>`;
+
+                    const cardLevelText = isFrench ? 'Niveau' : 'Level';
+                    const cardResourcesTitle = isFrench ? 'Ressources associées' : 'Associated Resources';
+                    const cardCompLabel = isFrench ? 'Compétence' : 'Competence';
+                    const cardProofLabel = isFrench ? 'Preuve' : 'Proof';
+                    const cardAnalysisLabel = isFrench ? 'Analyse' : 'Analysis';
 
                     col.innerHTML = `
                         <div class="card h-100 shadow-sm" style="border-radius:16px; border-top:6px solid ${compColor}; display:flex; flex-direction:column; justify-content:space-between; min-height:240px;">
                             <div class="card-body d-flex flex-column" style="padding:1rem 1.25rem;">
                                 <div class="d-flex justify-content-between align-items-start gap-3">
                                     <span class="ac-badge" style="background:${compColor}; color:#fff; padding:6px 10px; border-radius:20px; font-weight:700;">${i.code}</span>
-                                    <small class="text-muted text-end">Niveau ${filled}/4</small>
+                                    <small class="text-muted text-end">${cardLevelText} ${filled}/4</small>
                                 </div>
                                 <h5 class="card-title mt-3 mb-2" style="font-weight:700; line-height:1.25;">${i.title}</h5>
                                 <p class="card-text text-muted mb-3" style="font-size:0.95rem;">${i.description || ''}</p>
                                 <div class="mb-3 p-2 rounded-3" style="background: rgba(15, 23, 42, 0.02); border: 1px solid rgba(15, 23, 42, 0.08);">
-                                    <div class="small text-muted mb-2">Ressources associées</div>
+                                    <div class="small text-muted mb-2">${cardResourcesTitle}</div>
                                     <div style="font-size:0.9rem; line-height:1.6;">${resourceHtml}</div>
                                 </div>
                                 <div class="mb-2" style="height:8px; background:#eee; border-radius:6px; overflow:hidden;">
@@ -2205,11 +2247,11 @@
                                 </div>
                                 ${dotsHtml}
                                 <div class="mb-3">
-                                    <small class="text-muted">Compétence: ${i.competence}</small>
+                                    <small class="text-muted">${cardCompLabel}: ${i.competence}</small>
                                 </div>
                                 <div class="mt-auto d-flex gap-2 flex-wrap">
-                                    ${i.proof ? `<a href="${i.proof}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">↗ Preuve</a>` : `<button type="button" class="btn btn-sm btn-outline-primary" disabled>↗ Preuve</button>`}
-                                    ${i.analysis && String(i.analysis).startsWith('http') ? `<a href="${i.analysis}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">↗ Analyse</a>` : `<button type="button" class="btn btn-sm btn-outline-success" disabled>↗ Analyse</button>`}
+                                    ${i.proof ? `<a href="${i.proof}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">↗ ${cardProofLabel}</a>` : `<button type="button" class="btn btn-sm btn-outline-primary" disabled>↗ ${cardProofLabel}</button>`}
+                                    ${i.analysis && String(i.analysis).startsWith('http') ? `<a href="${i.analysis}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">↗ ${cardAnalysisLabel}</a>` : `<button type="button" class="btn btn-sm btn-outline-success" disabled>↗ ${cardAnalysisLabel}</button>`}
                                 </div>
                             </div>
                         </div>
@@ -2224,7 +2266,7 @@
                 const emptyMsg = document.createElement('div');
                 emptyMsg.className = 'col-12 text-center py-5';
                 emptyMsg.innerHTML = `
-                    <p class="text-muted mb-0">Aucun apprentissage critique (AC) trouvé pour cette sélection.</p>
+                    <p class="text-muted mb-0">${isFrench ? 'Aucun apprentissage critique (AC) trouvé pour cette sélection.' : 'No critical learning outcomes (AC) found for this selection.'}</p>
                 `;
                 container.appendChild(emptyMsg);
             }
