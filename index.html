@@ -1712,20 +1712,25 @@
                                 </ul>
                                 <span class="text-muted small" data-en="Preview Document"><i class="fas fa-eye me-1"></i> Aperçu du document</span>
                             </div>
-                            <div class="flex-grow-1 p-3 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
-                                <!-- Spinner -->
-                                <div id="acModalSpinner" class="spinner-border text-primary" role="status" style="position: absolute; z-index: 1; display: none;">
-                                    <span class="visually-hidden">Loading...</span>
+                            <div class="flex-grow-1 p-3 d-flex flex-row gap-3 align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
+                                <!-- Resume Pane -->
+                                <div id="acModalResumePane" class="bg-white p-4 shadow-sm flex-fill" style="display: block; width: 100%; height: 100%; overflow-y: auto; border-radius: 8px; z-index: 3;">
                                 </div>
-                                <!-- Resume Container -->
-                                <div id="acModalResumeContainer" class="bg-white p-4 shadow-sm" style="display: block; width: 100%; height: 100%; overflow-y: auto; border-radius: 8px; z-index: 3;">
+                                <!-- Preuve Pane -->
+                                <div id="acModalPreuvePane" class="flex-fill position-relative shadow-sm" style="display: none; width: 100%; height: 100%; border-radius: 8px;">
+                                    <div id="acModalPreuveSpinner" class="spinner-border text-primary position-absolute top-50 start-50 translate-middle" role="status" style="z-index: 1;"><span class="visually-hidden">Loading...</span></div>
+                                    <iframe id="acModalPreuveIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px;" onload="document.getElementById('acModalPreuveSpinner').style.display='none';"></iframe>
+                                    <div id="acModalPreuveNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3;">
+                                        <i class="fas fa-file-excel text-muted fa-3x mb-3"></i><p class="text-muted">Aucun document preuve disponible.</p>
+                                    </div>
                                 </div>
-                                <!-- Iframe Viewer -->
-                                <iframe id="acModalIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px; display: none;" onload="document.getElementById('acModalSpinner').style.display='none';"></iframe>
-                                <!-- No Document Fallback -->
-                                <div id="acModalNoDoc" class="text-center p-5 d-none" style="z-index: 2;">
-                                    <i class="fas fa-file-excel text-muted fa-3x mb-3"></i>
-                                    <p class="text-muted" data-en="No document available for preview.">Aucun document disponible pour l'aperçu.</p>
+                                <!-- Analyse Pane -->
+                                <div id="acModalAnalysePane" class="flex-fill position-relative shadow-sm" style="display: none; width: 100%; height: 100%; border-radius: 8px;">
+                                    <div id="acModalAnalyseSpinner" class="spinner-border text-primary position-absolute top-50 start-50 translate-middle" role="status" style="z-index: 1;"><span class="visually-hidden">Loading...</span></div>
+                                    <iframe id="acModalAnalyseIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px;" onload="document.getElementById('acModalAnalyseSpinner').style.display='none';"></iframe>
+                                    <div id="acModalAnalyseNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3;">
+                                        <i class="fas fa-file-excel text-muted fa-3x mb-3"></i><p class="text-muted">Aucune analyse disponible.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3538,122 +3543,119 @@
                 analysisLinkBtn.removeAttribute('href');
                 analysisLinkBtn.classList.add('disabled');
                 analysisLinkBtn.style.display = 'none';
-            }
-
-            // Set up Document Viewer (Iframe)
-            function getGoogleDriveId(url) {
-                if (!url) return null;
-                const matchD = url.match(/\/d\/([a-zA-Z0-9_-]{25,50})/);
-                if (matchD) return matchD[1];
-                const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]{25,50})/);
-                if (matchId) return matchId[1];
-                return null;
-            }
-
-            const proofId = getGoogleDriveId(item.proof);
-            const analysisId = getGoogleDriveId(item.analysis);
-
+                
             const resumeTab = document.getElementById('acModalResumeTab');
             const proofTab = document.getElementById('acModalPreuveTab');
             const analysisTab = document.getElementById('acModalAnalyseTab');
-            const iframe = document.getElementById('acModalIframe');
-            const spinner = document.getElementById('acModalSpinner');
-            const noDoc = document.getElementById('acModalNoDoc');
-            const resumeContainer = document.getElementById('acModalResumeContainer');
+            
+            const resumePane = document.getElementById('acModalResumePane');
+            const preuvePane = document.getElementById('acModalPreuvePane');
+            const analysePane = document.getElementById('acModalAnalysePane');
+
+            const preuveIframe = document.getElementById('acModalPreuveIframe');
+            const preuveSpinner = document.getElementById('acModalPreuveSpinner');
+            const preuveNoDoc = document.getElementById('acModalPreuveNoDoc');
+
+            const analyseIframe = document.getElementById('acModalAnalyseIframe');
+            const analyseSpinner = document.getElementById('acModalAnalyseSpinner');
+            const analyseNoDoc = document.getElementById('acModalAnalyseNoDoc');
 
             // Reset tab visibility and active state
             resumeTab.classList.remove('active', 'disabled');
             proofTab.classList.remove('active', 'disabled');
             analysisTab.classList.remove('active', 'disabled');
-            
-            // Set Resume as active by default
-            resumeTab.classList.add('active');
-            
+
+            if (!proofId) proofTab.classList.add('disabled');
+            if (!analysisId) analysisTab.classList.add('disabled');
+
             // Load Resume Content
-            const summaryHtml = window.acSummariesContent && window.acSummariesContent[item.code] 
-                                ? window.acSummariesContent[item.code] 
+            const summaryHtml = window.acSummariesContent && window.acSummariesContent[item.code]
+                                ? window.acSummariesContent[item.code]
                                 : '<div class="alert alert-secondary">Aucun résumé détaillé n\'a pu être généré pour cet AC.</div>';
-            resumeContainer.innerHTML = summaryHtml;
-            resumeContainer.style.display = 'block';
-            iframe.style.display = 'none';
-            spinner.style.display = 'none';
-            noDoc.classList.add('d-none');
+            resumePane.innerHTML = summaryHtml;
 
-            if (!proofId) {
-                proofTab.classList.add('disabled');
-            }
-            if (!analysisId) {
-                analysisTab.classList.add('disabled');
-            }
+            // Manage active panes (Split Screen up to 2)
+            let activePanes = ['resume']; // Default to Resume only
 
-            // Function to load document into iframe
-            function loadDocument(docId) {
-                if (!docId) {
-                    iframe.style.display = 'none';
-                    spinner.style.display = 'none';
-                    noDoc.classList.remove('d-none');
-                    return;
+            function updatePanesUI() {
+                // Update Tab Buttons
+                resumeTab.classList.toggle('active', activePanes.includes('resume'));
+                proofTab.classList.toggle('active', activePanes.includes('preuve'));
+                analysisTab.classList.toggle('active', activePanes.includes('analyse'));
+
+                // Update Panes Visibility
+                resumePane.style.display = activePanes.includes('resume') ? 'block' : 'none';
+                preuvePane.style.display = activePanes.includes('preuve') ? 'block' : 'none';
+                analysePane.style.display = activePanes.includes('analyse') ? 'block' : 'none';
+
+                // Load iframe if visible and not loaded
+                if (activePanes.includes('preuve')) {
+                    if (!preuveIframe.src || preuveIframe.src === 'about:blank' || !preuveIframe.src.includes(proofId)) {
+                        preuveIframe.style.display = 'none';
+                        if (proofId) {
+                            preuveSpinner.style.display = 'block';
+                            preuveNoDoc.classList.add('d-none');
+                            preuveIframe.style.display = 'block';
+                            preuveIframe.src = `https://docs.google.com/document/d/${proofId}/preview`;
+                        } else {
+                            preuveSpinner.style.display = 'none';
+                            preuveNoDoc.classList.remove('d-none');
+                        }
+                    }
                 }
-                
-                iframe.style.display = 'block';
-                spinner.style.display = 'block';
-                noDoc.classList.add('d-none');
-                
-                // Use preview URL to embed it cleanly
-                iframe.src = `https://docs.google.com/document/d/${docId}/preview`;
+
+                if (activePanes.includes('analyse')) {
+                    if (!analyseIframe.src || analyseIframe.src === 'about:blank' || !analyseIframe.src.includes(analysisId)) {
+                        analyseIframe.style.display = 'none';
+                        if (analysisId) {
+                            analyseSpinner.style.display = 'block';
+                            analyseNoDoc.classList.add('d-none');
+                            analyseIframe.style.display = 'block';
+                            analyseIframe.src = `https://docs.google.com/document/d/${analysisId}/preview`;
+                        } else {
+                            analyseSpinner.style.display = 'none';
+                            analyseNoDoc.classList.remove('d-none');
+                        }
+                    }
+                }
+            }
+
+            function togglePane(paneId) {
+                if (activePanes.includes(paneId)) {
+                    // Prevent hiding the last pane
+                    if (activePanes.length > 1) {
+                        activePanes = activePanes.filter(p => p !== paneId);
+                    }
+                } else {
+                    if (activePanes.length >= 2) {
+                        activePanes.shift(); // Remove the oldest pane
+                    }
+                    activePanes.push(paneId);
+                }
+                updatePanesUI();
             }
 
             // Event Listeners for Tabs
-            // (Old click events removed since they are now handled above)
-
-            // Bind click events on viewer tabs
+            resumeTab.onclick = () => togglePane('resume');
             proofTab.onclick = () => {
-                if (proofTab.classList.contains('disabled')) return;
-                proofTab.classList.add('active');
-                analysisTab.classList.remove('active');
-                resumeTab.classList.remove('active');
-                resumeContainer.style.display = 'none';
-                loadDocument(proofId);
+                if (!proofTab.classList.contains('disabled')) togglePane('preuve');
             };
-
             analysisTab.onclick = () => {
-                if (analysisTab.classList.contains('disabled')) return;
-                analysisTab.classList.add('active');
-                proofTab.classList.remove('active');
-                resumeTab.classList.remove('active');
-                resumeContainer.style.display = 'none';
-                loadDocument(analysisId);
+                if (!analysisTab.classList.contains('disabled')) togglePane('analyse');
             };
 
-            resumeTab.onclick = () => {
-                resumeTab.classList.add('active');
-                proofTab.classList.remove('active');
-                analysisTab.classList.remove('active');
-                resumeContainer.style.display = 'block';
-                iframe.style.display = 'none';
-                spinner.style.display = 'none';
-                noDoc.classList.add('d-none');
-            };
-
-            // Initial load
-            if (proofId) {
-                proofTab.classList.add('active');
-                loadDocument(proofId);
-            } else if (analysisId) {
-                analysisTab.classList.add('active');
-                loadDocument(analysisId);
-            } else {
-                loadDocument(null);
-            }
+            // Initial load handled by force initial state
+            updatePanesUI();
 
             // Show modal using Bootstrap modal API
             const modalEl = document.getElementById('acModal');
             const bsModal = new bootstrap.Modal(modalEl);
             bsModal.show();
             
-            // Clean iframe when modal is hidden to stop audio/video and free resources
+            // Clean iframes when modal is hidden to free resources
             modalEl.addEventListener('hidden.bs.modal', function () {
-                iframe.src = 'about:blank';
+                preuveIframe.src = 'about:blank';
+                analyseIframe.src = 'about:blank';
             }, { once: true });
         };
 
