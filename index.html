@@ -2165,6 +2165,33 @@
             }
         };
 
+        const acTranslations = {
+            'AC21.01': 'Configure and troubleshoot dynamic routing in a network',
+            'AC21.02': 'Configure and explain a simple QoS policy and basic network security functions',
+            'AC21.03': 'Deploy client workstations and virtualized solutions adapted to a given situation',
+            'AC21.04': 'Deploy advanced network services',
+            'AC21.05': 'Identify operator networks and Internet architecture',
+            'AC21.06': 'Work in a team to develop professional skills',
+            'AC22.01': 'Deploy and characterize complex transmission systems',
+            'AC22.02': 'Set up secure remote access',
+            'AC22.03': 'Set up a multi-site connection via an operator network',
+            'AC22.04': 'Administer operator access networks',
+            'AC22.05': 'Ability to analyze and challenge an R&T specification',
+            'AC23.01': 'Automate system administration with scripts',
+            'AC23.02': 'Develop an application from a given specification, for the Web or mobile devices',
+            'AC23.03': 'Use a network protocol to program a client/server application',
+            'AC23.04': 'Install and administer a data management system',
+            'AC23.05': 'Access a dataset from an application and/or a website',
+            'AC24.01ROM': 'Administer fixed and mobile access networks',
+            'AC24.02ROM': 'Virtualize network services',
+            'AC24.03ROM': 'Describe/understand operator architecture and offers',
+            'AC24.04ROM': 'Manage routing/switching and interconnections',
+            'AC24.05ROM': 'Automate the management of network equipment',
+            'AC25.01ROM': 'Choose an architecture and deploy ToIP services',
+            'AC25.02ROM': 'Administer a telephony service for the enterprise',
+            'AC25.03ROM': 'Set up a QoS policy for applications'
+        };
+
         const acFallbackItemsRT2 = [
             { code: 'AC21.01', title: 'Configurer et dépanner le routage dynamique dans un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [3], proof: 'https://docs.google.com/document/d/1LtMtop2W2EklInWxzN0TeYDGMzwuVi0AJ5U3qqBSO0Q/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1l2lD9cuz9cbmnmlYxbzf9jO94lYx9J5bJ5tkKZOtU5A/edit?usp=drive_link', resources: ['R3.02', 'R3.01', 'SAÉ3.02', 'SAÉ3.ROM.03'] },
             { code: 'AC21.02', title: 'Configurer et expliquer une politique simple de QoS et les fonctions de base de la sécurité d’un réseau', competence: 'RT1', description: 'Administrer un réseau', levels: [3], proof: 'https://docs.google.com/document/d/183LTrX8ExmySEsoPgN5srQvuaduiJaaAhgCdCImNL6I/edit?usp=drive_link', analysis: 'https://docs.google.com/document/d/1T9RWx9axYizGA61nhUj-16hh463p7SplqHaZMoiv9YY/edit?usp=drive_link', resources: ['SAÉ3.ROM.03', 'R4.01'] },
@@ -3271,7 +3298,8 @@
             if (searchStr) {
                 filteredItems = filteredItems.filter(item => {
                     const inCode = item.code.toLowerCase().includes(searchStr);
-                    const inTitle = item.title.toLowerCase().includes(searchStr);
+                    const translation = acTranslations[item.code];
+                    const inTitle = item.title.toLowerCase().includes(searchStr) || (translation && translation.toLowerCase().includes(searchStr));
                     const inDesc = item.description ? item.description.toLowerCase().includes(searchStr) : false;
                     const inResources = item.resources ? item.resources.some(r => {
                         const rLabel = String(r).toLowerCase();
@@ -3384,8 +3412,8 @@
                                     <span class="ac-badge" style="background:${compColor}; color:#fff; padding:6px 10px; border-radius:20px; font-weight:700;">${i.code}</span>
                                     <small class="text-muted text-end">${cardLevelText} ${filled}/4</small>
                                 </div>
-                                <h5 class="card-title mt-3 mb-2" style="font-weight:700; line-height:1.25;">${i.title}</h5>
-                                <p class="card-text text-muted mb-3" style="font-size:0.95rem;">${i.description || ''}</p>
+                                <h5 class="card-title mt-3 mb-2" style="font-weight:700; line-height:1.25;">${isFrench ? i.title : (acTranslations[i.code] || i.title)}</h5>
+                                <p class="card-text text-muted mb-3" style="font-size:0.95rem;">${isFrench ? (i.description || '') : ((competenceMeta[i.competence] && competenceMeta[i.competence].description_en) || i.description || '')}</p>
                                 <div class="resources-container mb-3 p-2 rounded-3">
                                     <div class="small text-muted mb-2">${cardResourcesTitle}</div>
                                     <div style="font-size:0.9rem; line-height:1.6;">${resourceHtml}</div>
@@ -3438,7 +3466,7 @@
             // Set code, title, header colors
             document.getElementById('acModalCode').textContent = item.code;
             document.getElementById('acModalCode').style.backgroundColor = compColor;
-            document.getElementById('acModalTitle').textContent = item.title;
+            document.getElementById('acModalTitle').textContent = isFrench ? item.title : (acTranslations[item.code] || item.title);
             document.getElementById('acModalHeader').style.background = `linear-gradient(135deg, ${compColor} 0%, #0f172a 100%)`;
 
             // Competence details
@@ -3449,7 +3477,7 @@
             document.getElementById('acModalCompDesc').textContent = isFrench ? meta.description : (meta.description_en || meta.description);
 
             // AC Description
-            document.getElementById('acModalAcDesc').textContent = item.description || '';
+            document.getElementById('acModalAcDesc').textContent = isFrench ? (item.description || '') : ((competenceMeta[item.competence] && competenceMeta[item.competence].description_en) || item.description || '');
 
             // Level Dots
             const avgLevel = avg(item.levels);
