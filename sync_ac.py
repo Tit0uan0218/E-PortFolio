@@ -1,11 +1,12 @@
 import urllib.request
 import re
+import time
 from html.parser import HTMLParser
 from urllib.parse import urlparse, parse_qs
 
 # Fetch spreadsheet HTML function
 def fetch_and_parse_sheet(gid):
-    url = f"https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pubhtml/sheet?headers=false&gid={gid}"
+    url = f"https://docs.google.com/spreadsheets/d/e/2PACX-1vT1qQLyw9iZeU_fEaTO1s6_1mJ_vJhzr3po4ezae3q7Hz88ZNdmQqNSIkRAhB9Nx5HbuZJ0rirK-P2c/pubhtml/sheet?headers=false&gid={gid}&t={int(time.time())}"
     print(f"Fetching Google Sheet GID {gid} from: {url}")
     req = urllib.request.Request(url, headers={'User-Agent': 'AntigravitySync/1.0'})
     try:
@@ -138,11 +139,28 @@ def fetch_and_parse_sheet(gid):
             # Keep resources from all levels (1/4 to 4/4)
             resources = list(dict.fromkeys(r1 + r2 + r3 + r4))
             
-            # Calculate level based on weighted average of resources
+            # Calculate level based on weighted average of resources (SAÉ has weight 1.5, regular resources have weight 1.0)
+            def get_resource_weight(r_name):
+                r_name_upper = r_name.strip().upper()
+                if r_name_upper.startswith("SAÉ") or r_name_upper.startswith("SAE"):
+                    return 1.5
+                return 1.0
+
             total_resources = len(r1) + len(r2) + len(r3) + len(r4)
             if total_resources > 0:
-                weighted_sum = (1 * len(r1)) + (2 * len(r2)) + (3 * len(r3)) + (4 * len(r4))
-                level = int((weighted_sum / total_resources) + 0.5)
+                weighted_sum = (
+                    sum(1 * get_resource_weight(r) for r in r1) +
+                    sum(2 * get_resource_weight(r) for r in r2) +
+                    sum(3 * get_resource_weight(r) for r in r3) +
+                    sum(4 * get_resource_weight(r) for r in r4)
+                )
+                total_weight = (
+                    sum(get_resource_weight(r) for r in r1) +
+                    sum(get_resource_weight(r) for r in r2) +
+                    sum(get_resource_weight(r) for r in r3) +
+                    sum(get_resource_weight(r) for r in r4)
+                )
+                level = int((weighted_sum / total_weight) + 0.5)
                 level = max(1, min(4, level))
             else:
                 level = 1
