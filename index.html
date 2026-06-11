@@ -2087,6 +2087,15 @@
             return "RT1";
         }
 
+        function getResourceWeight(rName) {
+            if (!rName) return 1.0;
+            const nameUpper = rName.trim().toUpperCase();
+            if (nameUpper.startsWith("SAÉ") || nameUpper.startsWith("SAE")) {
+                return 1.5;
+            }
+            return 1.0;
+        }
+
         async function loadAcData() {
             window.htmlSyncSuccessRT2 = false;
             window.htmlSyncSuccessRT3 = false;
@@ -2097,22 +2106,36 @@
             console.log("Attempting synchronization via real-time GViz JSONP...");
             const scriptRT2 = document.createElement("script");
             scriptRT2.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT2&gid=808860009&t=${Date.now()}`;
+            scriptRT2.onload = () => {
+                try { document.body.removeChild(scriptRT2); } catch (e) {}
+            };
+            scriptRT2.onerror = () => {
+                try { document.body.removeChild(scriptRT2); } catch (e) {}
+            };
             document.body.appendChild(scriptRT2);
 
             const scriptRT3 = document.createElement("script");
             scriptRT3.src = `https://docs.google.com/spreadsheets/d/1LNOzHPJ3C2Z6uqie3zGZg1njAdrairqRsPHxfVX8Kp0/gviz/tq?tqx=responseHandler:myCallbackRT3&gid=1897392063&t=${Date.now()}`;
+            scriptRT3.onload = () => {
+                try { document.body.removeChild(scriptRT3); } catch (e) {}
+            };
+            scriptRT3.onerror = () => {
+                try { document.body.removeChild(scriptRT3); } catch (e) {}
+            };
             document.body.appendChild(scriptRT3);
 
-            // Wait up to 1.5 seconds for JSONP scripts to load
+            // Wait up to 1.5 seconds for JSONP scripts to load, or resolve immediately if both succeed early
             await new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve();
-                }, 1500);
+                const startTime = Date.now();
+                const checkInterval = setInterval(() => {
+                    const rt2Finished = window.gvizSyncSuccessRT2 || !document.body.contains(scriptRT2);
+                    const rt3Finished = window.gvizSyncSuccessRT3 || !document.body.contains(scriptRT3);
+                    if ((rt2Finished && rt3Finished) || (Date.now() - startTime >= 1500)) {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }
+                }, 50);
             });
-
-            // Clean up scripts
-            try { document.body.removeChild(scriptRT2); } catch (e) {}
-            try { document.body.removeChild(scriptRT3); } catch (e) {}
 
             // --- TIER 2: Sync via HTML CORS Proxy (Fallback if GViz failed, e.g. network issues) ---
             const needsHtmlRT2 = !window.gvizSyncSuccessRT2;
@@ -2180,7 +2203,7 @@
                     // Detect strikethrough classes from HTML stylesheets
                     const strikethroughClasses = new Set();
                     const styleTags = doc.querySelectorAll("style");
-                    styleTags.forEach(styleTag => {
+                    Array.from(styleTags).forEach(styleTag => {
                         const cssText = styleTag.textContent;
                         const regex = /\.([a-zA-Z0-9_-]+)\s*\{([^}]+)\}/g;
                         let match;
@@ -2221,14 +2244,6 @@
                             const r3 = parseRessourcesList(cells[acIndex + 3], strikethroughClasses);
                             const r4 = parseRessourcesList(cells[acIndex + 4], strikethroughClasses);
                             const resources = Array.from(new Set([...r2, ...r3, ...r4]));
-
-                            function getResourceWeight(rName) {
-                                const nameUpper = rName.trim().toUpperCase();
-                                if (nameUpper.startsWith("SAÉ") || nameUpper.startsWith("SAE")) {
-                                    return 1.5;
-                                }
-                                return 1.0;
-                            }
 
                             const totalResources = r2.length + r3.length + r4.length;
                             let level = 1;
@@ -2357,14 +2372,6 @@
                         const r4 = parseResourcesGviz(cells[acIndex + 4]);
                         const resources = Array.from(new Set([...r2, ...r3, ...r4]));
 
-                        function getResourceWeight(rName) {
-                            const nameUpper = rName.trim().toUpperCase();
-                            if (nameUpper.startsWith("SAÉ") || nameUpper.startsWith("SAE")) {
-                                return 1.5;
-                            }
-                            return 1.0;
-                        }
-
                         const totalResources = r2.length + r3.length + r4.length;
                         let level = 1;
                         if (totalResources > 0) {
@@ -2469,7 +2476,7 @@
 
             // Traverse child nodes to filter out strikethrough elements/tags
             let textParts = [];
-            cell.childNodes.forEach(node => {
+            Array.from(cell.childNodes).forEach(node => {
                 if (node.nodeType === 3) { // Node.TEXT_NODE
                     textParts.push(node.textContent);
                 } else if (node.nodeType === 1) { // Node.ELEMENT_NODE
