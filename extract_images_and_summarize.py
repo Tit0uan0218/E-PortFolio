@@ -155,7 +155,13 @@ for ac_code, data in summaries_data.items():
     # If there's an analyse block, append it inside the ac-resume-content div if it exists
     if data['analyse']:
         if combined:
-            combined = combined.replace('</div>\n                    ', data['analyse'] + '</div>\n                    ')
+            # Find the last </div> before the banner and insert the analyse block before it
+            suffix = '</div>\n                    '
+            if suffix in combined:
+                parts = combined.rsplit(suffix, 1)
+                combined = parts[0] + data['analyse'] + suffix
+            else:
+                combined += f'<div class="ac-resume-content" style="padding: 1rem;">{data["analyse"]}</div>'
         else:
             combined = f'<div class="ac-resume-content" style="padding: 1rem;">{data["analyse"]}</div>'
             

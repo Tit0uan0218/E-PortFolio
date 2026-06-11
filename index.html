@@ -2988,7 +2988,7 @@
 
                 html += `
                     <div class="col-6 col-md-4 col-lg-2-4 text-center">
-                        <div class="dashboard-stat-card shadow-sm" style="cursor: pointer; transition: transform 0.2s;" onclick="setFilter('${comp}', '${year}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div class="dashboard-stat-card shadow-sm" style="cursor: pointer; transition: transform 0.2s;" onclick="window.setFilter('${comp}', '${year}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                             <span class="badge" style="background:${compColor}; color:#fff; font-weight:700; font-size:0.85rem; padding:4px 8px; border-radius:10px;">${comp}</span>
                             
                             <svg width="60" height="60" viewBox="0 0 36 36" class="circular-chart mt-2 mb-2">
@@ -3045,20 +3045,20 @@
             const allBtn = document.createElement('button');
             allBtn.className = `btn btn-sm btn-outline-dark me-2 mb-2 ${currentFilter === 'ALL' ? 'active' : ''}`;
             allBtn.textContent = isFrench ? 'Tout montrer' : 'Show All';
-            allBtn.onclick = () => setFilter('ALL', year);
+            allBtn.onclick = () => window.setFilter('ALL', year);
             buttonsContainer.appendChild(allBtn);
 
             const strongBtn = document.createElement('button');
             strongBtn.className = `btn btn-sm btn-outline-success me-2 mb-2 ${currentFilter === 'STRONG' ? 'active' : ''}`;
             strongBtn.textContent = isFrench ? 'Compétences fortes' : 'Strong Skills';
-            strongBtn.onclick = () => setFilter('STRONG', year);
+            strongBtn.onclick = () => window.setFilter('STRONG', year);
             buttonsContainer.appendChild(strongBtn);
 
             competenceKeys.forEach(k => {
                 const b = document.createElement('button');
                 b.className = `btn btn-sm btn-outline-secondary me-2 mb-2 ${currentFilter === k ? 'active' : ''}`;
                 b.textContent = k;
-                b.onclick = () => setFilter(k, year);
+                b.onclick = () => window.setFilter(k, year);
                 buttonsContainer.appendChild(b);
             });
             
@@ -3620,14 +3620,22 @@
 
             function updatePanesUI() {
                 // Update Tab Buttons
-                resumeTab.classList.toggle('active', activePanes.includes('resume'));
-                proofTab.classList.toggle('active', activePanes.includes('preuve'));
-                analysisTab.classList.toggle('active', activePanes.includes('analyse'));
+                const isResumeActive = activePanes.includes('resume');
+                const isPreuveActive = activePanes.includes('preuve');
+                const isAnalyseActive = activePanes.includes('analyse');
+                
+                resumeTab.classList.toggle('active', isResumeActive);
+                proofTab.classList.toggle('active', isPreuveActive);
+                analysisTab.classList.toggle('active', isAnalyseActive);
+                
+                resumeTab.style.setProperty('color', isResumeActive ? '#ffffff' : '', 'important');
+                proofTab.style.setProperty('color', isPreuveActive ? '#ffffff' : '', 'important');
+                analysisTab.style.setProperty('color', isAnalyseActive ? '#ffffff' : '', 'important');
 
                 // Update Panes Visibility
-                resumePane.style.display = activePanes.includes('resume') ? 'block' : 'none';
-                preuvePane.style.display = activePanes.includes('preuve') ? 'block' : 'none';
-                analysePane.style.display = activePanes.includes('analyse') ? 'block' : 'none';
+                resumePane.style.display = isResumeActive ? 'block' : 'none';
+                preuvePane.style.display = isPreuveActive ? 'block' : 'none';
+                analysePane.style.display = isAnalyseActive ? 'block' : 'none';
 
                 // Load iframe if visible and not loaded
                 if (activePanes.includes('preuve')) {
