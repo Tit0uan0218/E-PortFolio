@@ -81,7 +81,9 @@ for filepath in files:
                 capture_analyse = False
                 for el in elements:
                     if el['type'] == 'text':
+                        import re
                         line_clean = el['val']
+                        line_clean = re.sub(r'\[.*?\]', '', line_clean).strip()
                         # Trigger on "Analyse R..." or "Auto-évaluation..."
                         lc = line_clean.lower()
                         is_trigger = 'analyse r' in lc or 'auto-évaluation' in lc or 'auto évaluation' in lc
@@ -104,7 +106,12 @@ for filepath in files:
                 
                 for el in elements:
                     if el['type'] == 'text':
+                        import re
                         line_clean = el['val']
+                        line_clean = re.sub(r'\[.*?\]', '', line_clean).strip()
+                        if not line_clean:
+                            continue
+                        
                         if 'Contexte' in line_clean and len(line_clean) < 30:
                             current_section = 'contexte'
                         elif 'Savoir-faire' in line_clean and len(line_clean) < 40:
