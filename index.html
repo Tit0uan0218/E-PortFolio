@@ -2775,7 +2775,12 @@
             `;
 
             // Competence stats cards
-            const sortedComps = Object.keys(comps).sort();
+            const preferred = ['RT1', 'RT2', 'RT3', 'ROM1', 'ROM2'];
+            const sortedComps = Object.keys(comps).sort((a, b) => {
+                const ia = preferred.indexOf(a) >= 0 ? preferred.indexOf(a) : preferred.length + a.localeCompare(b);
+                const ib = preferred.indexOf(b) >= 0 ? preferred.indexOf(b) : preferred.length + b.localeCompare(a);
+                return ia - ib;
+            });
             sortedComps.forEach(comp => {
                 const compColor = colorMap[comp] || colorMap.DEFAULT;
                 const compData = comps[comp];
