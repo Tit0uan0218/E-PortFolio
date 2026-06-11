@@ -3543,7 +3543,21 @@
                 analysisLinkBtn.removeAttribute('href');
                 analysisLinkBtn.classList.add('disabled');
                 analysisLinkBtn.style.display = 'none';
-                
+            }
+
+            // Set up Document Viewer (Iframe)
+            function getGoogleDriveId(url) {
+                if (!url) return null;
+                const matchD = url.match(/\/d\/([a-zA-Z0-9_-]{25,50})/);
+                if (matchD) return matchD[1];
+                const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]{25,50})/);
+                if (matchId) return matchId[1];
+                return null;
+            }
+
+            const proofId = getGoogleDriveId(item.proof);
+            const analysisId = getGoogleDriveId(item.analysis);
+
             const resumeTab = document.getElementById('acModalResumeTab');
             const proofTab = document.getElementById('acModalPreuveTab');
             const analysisTab = document.getElementById('acModalAnalyseTab');
