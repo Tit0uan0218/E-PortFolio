@@ -1652,7 +1652,7 @@
 <!-- AC Detail Modal -->
 <div class="modal fade" id="acModal" tabindex="-1" aria-labelledby="acModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content shadow-lg" style="border-radius: 16px; overflow: hidden; border: none; min-height: 75vh;">
+        <div class="modal-content shadow-lg" style="border-radius: 16px; overflow: hidden; border: none;">
             <div class="modal-header text-white" id="acModalHeader" style="border: none; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
                 <h5 class="modal-title" id="acModalLabel" style="font-weight: 700;">
                     <span id="acModalCode" class="badge me-2" style="font-size: 0.95rem; padding: 6px 12px; border-radius: 20px;">ACXX.XX</span>
@@ -1660,11 +1660,11 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-0 d-flex flex-column flex-grow-1" style="background-color: #f8fafc; overflow: hidden;">
-                <div class="container-fluid p-0 d-flex flex-column flex-grow-1" style="min-height: 0;">
-                    <div class="row g-0 flex-grow-1" style="min-height: 0;">
+            <div class="modal-body p-0" style="background-color: #f8fafc;">
+                <div class="container-fluid p-0">
+                    <div class="row g-0">
                         <!-- Left side: Details & Description -->
-                        <div class="col-12 col-md-4 p-4 border-end" style="background-color: #ffffff; height: 100%; overflow-y: auto; overflow-x: hidden;">
+                        <div class="col-12 col-lg-4 p-4 border-end" style="background-color: #ffffff;">
                             <div class="mb-4">
                                 <h6 class="text-muted small" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-en="Competence">Compétence</h6>
                                 <div class="d-flex align-items-center gap-2 mt-2">
@@ -1700,8 +1700,8 @@
                         </div>
                         
                         <!-- Right side: Document / Images Viewer -->
-                        <div class="col-12 col-md-8 d-flex flex-column" style="height: 100%;">
-                            <div class="bg-white border-bottom p-3 d-flex justify-content-between align-items-center flex-shrink-0">
+                        <div class="col-12 col-lg-8 d-flex flex-column" style="min-height: 500px; max-height: 80vh;">
+                            <div class="bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
                                 <!-- Document Switch Tabs (Preuve vs Analyse) -->
                                 <ul class="nav nav-pills card-header-pills" id="acModalViewerTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -1716,23 +1716,23 @@
                                 </ul>
                                 <span class="text-muted small" data-en="Preview Document"><i class="fas fa-eye me-1"></i> Aperçu du document</span>
                             </div>
-                            <div class="flex-grow-1 p-3" style="background-color: #f1f5f9; position: relative; min-height: 0;">
+                            <div class="flex-grow-1 p-3 d-flex flex-row gap-3 align-items-center justify-content-center" style="background-color: #f1f5f9; position: relative;">
                                 <!-- Resume Pane -->
-                                <div id="acModalResumePane" class="bg-white p-4 shadow-sm" style="display: block; position: absolute; top: 1rem; bottom: 1rem; left: 1rem; right: 1rem; overflow-y: auto; border-radius: 8px; z-index: 3;">
+                                <div id="acModalResumePane" class="bg-white p-4 shadow-sm flex-fill" style="display: block; width: 100%; height: 100%; overflow-y: auto; border-radius: 8px; z-index: 3;">
                                 </div>
                                 <!-- Preuve Pane -->
-                                <div id="acModalPreuvePane" class="shadow-sm" style="display: none; position: absolute; top: 1rem; bottom: 1rem; left: 1rem; right: 1rem; border-radius: 8px; background-color: #ffffff;">
+                                <div id="acModalPreuvePane" class="flex-fill position-relative shadow-sm" style="display: none; width: 100%; height: 100%; border-radius: 8px;">
                                     <div id="acModalPreuveSpinner" class="spinner-border text-primary position-absolute top-50 start-50 translate-middle" role="status" style="z-index: 1;"><span class="visually-hidden">Loading...</span></div>
-                                    <iframe id="acModalPreuveIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: transparent; z-index: 2; display: block;" onload="document.getElementById('acModalPreuveSpinner').style.display='none';"></iframe>
-                                    <div id="acModalPreuveNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3; top: 0; left: 0;">
+                                    <iframe id="acModalPreuveIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px;" onload="document.getElementById('acModalPreuveSpinner').style.display='none';"></iframe>
+                                    <div id="acModalPreuveNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3;">
                                         <i class="fas fa-file-excel text-muted fa-3x mb-3"></i><p class="text-muted">Aucun document preuve disponible.</p>
                                     </div>
                                 </div>
                                 <!-- Analyse Pane -->
-                                <div id="acModalAnalysePane" class="shadow-sm" style="display: none; position: absolute; top: 1rem; bottom: 1rem; left: 1rem; right: 1rem; border-radius: 8px; background-color: #ffffff;">
+                                <div id="acModalAnalysePane" class="flex-fill position-relative shadow-sm" style="display: none; width: 100%; height: 100%; border-radius: 8px;">
                                     <div id="acModalAnalyseSpinner" class="spinner-border text-primary position-absolute top-50 start-50 translate-middle" role="status" style="z-index: 1;"><span class="visually-hidden">Loading...</span></div>
-                                    <iframe id="acModalAnalyseIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: transparent; z-index: 2; display: block;" onload="document.getElementById('acModalAnalyseSpinner').style.display='none';"></iframe>
-                                    <div id="acModalAnalyseNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3; top: 0; left: 0;">
+                                    <iframe id="acModalAnalyseIframe" src="" width="100%" height="100%" style="border: none; border-radius: 8px; background-color: #ffffff; z-index: 2; min-height: 480px;" onload="document.getElementById('acModalAnalyseSpinner').style.display='none';"></iframe>
+                                    <div id="acModalAnalyseNoDoc" class="text-center p-5 d-none position-absolute w-100 h-100 bg-light rounded d-flex flex-column justify-content-center align-items-center" style="z-index: 3;">
                                         <i class="fas fa-file-excel text-muted fa-3x mb-3"></i><p class="text-muted">Aucune analyse disponible.</p>
                                     </div>
                                 </div>
