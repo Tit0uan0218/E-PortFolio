@@ -3383,10 +3383,12 @@
                     description_en: items[0] && items[0].description ? items[0].description : ''
                 };
                 
-                // Calculate competence level dynamically as the minimum of its AC levels (stable calculation)
+                // Calculate competence level dynamically as the floor of the average of its AC levels
                 const allCompItems = itemsList.filter(item => item.competence === comp);
                 const acLevels = allCompItems.map(item => Math.round(avg(item.levels)));
-                const calculatedLevel = acLevels.length > 0 ? Math.min(...acLevels) : (year === 'rt3' ? (comp.startsWith('ROM') ? 2 : 3) : meta.level);
+                const sumLevels = acLevels.reduce((a, b) => a + b, 0);
+                const avgLevel = acLevels.length > 0 ? (sumLevels / acLevels.length) : 0;
+                const calculatedLevel = acLevels.length > 0 ? Math.floor(avgLevel) : (year === 'rt3' ? (comp.startsWith('ROM') ? 2 : 3) : meta.level);
                 const levelDisplay = calculatedLevel;
 
                 const displayTitle = isFrench ? meta.title : (meta.title_en || meta.title);
