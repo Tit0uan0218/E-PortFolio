@@ -111,15 +111,17 @@ def fetch_and_parse_sheet(gid):
     for row in parser.rows:
 
         # Extract competence metadata if present in this row
-        if len(row) >= 4:
-            txt0 = row[0]["text"].strip()
-            if re.match(r"^(RT|ROM)\d+$", txt0, re.IGNORECASE):
-                current_comp_id = txt0.upper()
-                current_comp_title = row[1]["text"].strip()
-                lvl_match = re.search(r"(\d+)", row[2]["text"])
-                if lvl_match:
-                    current_comp_level = int(lvl_match.group(1))
-                current_comp_desc = row[3]["text"].strip()
+        for c_idx, cell in enumerate(row):
+            txt = cell["text"].strip()
+            if re.match(r"^(RT|ROM)\d+$", txt, re.IGNORECASE):
+                if c_idx + 3 < len(row):
+                    current_comp_id = txt.upper()
+                    current_comp_title = row[c_idx + 1]["text"].strip()
+                    lvl_match = re.search(r"(\d+)", row[c_idx + 2]["text"])
+                    if lvl_match:
+                        current_comp_level = int(lvl_match.group(1))
+                    current_comp_desc = row[c_idx + 3]["text"].strip()
+                break
 
         # Find cell containing the AC code
         ac_idx = -1
