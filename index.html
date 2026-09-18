@@ -1750,7 +1750,7 @@
     <img id="lightboxImg" src="" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 5px 25px rgba(0,0,0,0.5);">
 </div>
 
-<script src="acSummaries.js?v=8"></script>
+<script src="acSummaries.js?v=9"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -2514,11 +2514,13 @@
                             ROM2: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
                         };
 
-                        newAcItems.push({
+                                                newAcItems.push({
                             code,
                             title,
-                            competence,
-                            description: competenceMetaDesc[competence] || "",
+                            competence: typeof currentCompId !== 'undefined' ? currentCompId : competence,
+                            comp_title: typeof currentCompTitle !== 'undefined' ? currentCompTitle : "",
+                            comp_level: typeof currentCompLevel !== 'undefined' ? currentCompLevel : 1,
+                            description: typeof currentCompDesc !== 'undefined' ? currentCompDesc : (typeof competenceMetaDesc !== 'undefined' ? competenceMetaDesc[competence] : ""),
                             levels: [level],
                             proof,
                             analysis,
@@ -2599,8 +2601,28 @@
                     const newAcItems = [];
                     const parsedStrongCodes = new Set();
 
-                    rows.forEach(row => {
+                                        let currentCompId = "RT1";
+                    let currentCompTitle = "";
+                    let currentCompLevel = 1;
+                    let currentCompDesc = "";
+
+rows.forEach(row => {
                         const cells = row.querySelectorAll("td");
+                        // Look for competence info
+                        for (let i = 0; i < cells.length; i++) {
+                            const txt = cells[i].textContent.trim();
+                            if (/^(RT|ROM)\d+$/i.test(txt)) {
+                                if (i + 3 < cells.length) {
+                                    currentCompId = txt.toUpperCase();
+                                    currentCompTitle = cells[i+1].textContent.trim();
+                                    const lvlMatch = cells[i+2].textContent.match(/(\d+)/);
+                                    if (lvlMatch) currentCompLevel = parseInt(lvlMatch[1], 10);
+                                    currentCompDesc = cells[i+3].textContent.trim();
+                                }
+                                break;
+                            }
+                        }
+
                         let acIndex = -1;
                         let acText = "";
                         for (let i = 0; i < cells.length; i++) {
@@ -2676,16 +2698,18 @@
                                 ROM2: 'Mettre en oeuvre le système de téléphonie de l’entreprise'
                             };
 
-                            newAcItems.push({
-                                code,
-                                title,
-                                competence,
-                                description: competenceMetaDesc[competence] || "",
-                                levels: [level],
-                                proof,
-                                analysis,
-                                resources
-                            });
+                                                    newAcItems.push({
+                            code,
+                            title,
+                            competence: typeof currentCompId !== 'undefined' ? currentCompId : competence,
+                            comp_title: typeof currentCompTitle !== 'undefined' ? currentCompTitle : "",
+                            comp_level: typeof currentCompLevel !== 'undefined' ? currentCompLevel : 1,
+                            description: typeof currentCompDesc !== 'undefined' ? currentCompDesc : (typeof competenceMetaDesc !== 'undefined' ? competenceMetaDesc[competence] : ""),
+                            levels: [level],
+                            proof,
+                            analysis,
+                            resources
+                        });
                         }
                     });
 
