@@ -86,13 +86,6 @@ def fetch_and_parse_sheet(gid):
     new_ac_items = []
     strong_codes = []
 
-    competence_meta = {
-        "RT1": "Administrer un réseau",
-        "RT2": "Maîtriser les différentes composantes des solutions de connexion des entreprises et des usagers",
-        "RT3": "Développer une application R&T",
-        "ROM1": "Gérer les infrastructures des réseaux opérateurs",
-        "ROM2": "Mettre en oeuvre le système de téléphonie de l’entreprise"
-    }
 
     def parse_resources(text):
         if not text:
@@ -109,7 +102,25 @@ def fetch_and_parse_sheet(gid):
             if char == '5': return 'ROM2'
         return 'RT1'
 
+
+    current_comp_id = "RT1"
+    current_comp_title = ""
+    current_comp_level = 1
+    current_comp_desc = ""
+
     for row in parser.rows:
+
+        # Extract competence metadata if present in this row
+        if len(row) >= 4:
+            txt0 = row[0]["text"].strip()
+            if re.match(r"^(RT|ROM)\d+$", txt0, re.IGNORECASE):
+                current_comp_id = txt0.upper()
+                current_comp_title = row[1]["text"].strip()
+                lvl_match = re.search(r"(\d+)", row[2]["text"])
+                if lvl_match:
+                    current_comp_level = int(lvl_match.group(1))
+                current_comp_desc = row[3]["text"].strip()
+
         # Find cell containing the AC code
         ac_idx = -1
         ac_text = ""
@@ -181,8 +192,10 @@ def fetch_and_parse_sheet(gid):
             new_ac_items.append({
                 "code": code,
                 "title": title,
-                "competence": competence,
-                "description": competence_meta.get(competence, ""),
+                "competence": current_comp_id,
+                "comp_title": current_comp_title,
+                "comp_level": current_comp_level,
+                "description": current_comp_desc,
                 "levels": [level],
                 "proof": proof,
                 "analysis": analysis,
@@ -206,8 +219,10 @@ def make_js_fallback(var_name, items):
     for i, item in enumerate(items):
         comma = "," if i < len(items) - 1 else ""
         escaped_title = item['title'].replace("'", "\\'")
-        escaped_desc = item['description'].replace("'", "\\'")
-        js_str += f"            {{ code: '{item['code']}', title: '{escaped_title}', competence: '{item['competence']}', description: '{escaped_desc}', levels: {item['levels']}, proof: '{item['proof']}', analysis: '{item['analysis']}', resources: {item['resources']} }}{comma}\n"
+        escaped_comp_title = item.get('comp_title', '').replace("'", "\\'")
+        escaped_desc = item.get('description', '').replace("'", "\\'")
+        comp_level = item.get('comp_level', 1)
+        js_str += f"            {{ code: '{item['code']}', title: '{escaped_title}', competence: '{item['competence']}', comp_title: '{escaped_comp_title}', comp_level: {comp_level}, description: '{escaped_desc}', levels: {item['levels']}, proof: '{item['proof']}', analysis: '{item['analysis']}', resources: {item['resources']} }}{comma}\n"
     js_str += "        ];"
     return js_str
 
