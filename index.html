@@ -3386,8 +3386,15 @@
                     description_en: items[0] && items[0].description ? items[0].description : ''
                 };
                 
-                // Niveaux fixes selon le type de compétence (RT = 2, ROM = 1)
-                const calculatedLevel = comp.startsWith('RT') ? 2 : (comp.startsWith('ROM') ? 1 : meta.level);
+                // Niveaux fixes selon le type de compétence et l'année du BUT
+                let calculatedLevel = meta.level;
+                if (year === 'rt3') {
+                    calculatedLevel = comp.startsWith('RT') ? 3 : (comp.startsWith('ROM') ? 2 : meta.level);
+                } else if (year === 'rt2') {
+                    calculatedLevel = comp.startsWith('RT') ? 2 : (comp.startsWith('ROM') ? 1 : meta.level);
+                } else if (year === 'rt1') {
+                    calculatedLevel = comp.startsWith('RT') ? 1 : meta.level;
+                }
                 const levelDisplay = calculatedLevel;
 
                 const displayTitle = isFrench ? meta.title : (meta.title_en || meta.title);
